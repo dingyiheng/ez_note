@@ -7,6 +7,8 @@
 //
 
 #import "ViewController.h"
+#import "AudioView.h"
+#import "AudioFactory.h"
 
 @interface ViewController ()
 
