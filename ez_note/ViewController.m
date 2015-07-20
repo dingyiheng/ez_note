@@ -7,15 +7,30 @@
 //
 
 #import "ViewController.h"
+
+#import "AudioView.h"
+#import "AudioFactory.h"
+
+
+#import "EZImageViewFactory.h"
+#import "EZImageScrollViewController.h"
+
 #import "TextViewFactory.h"
-#import "ToolBarView.h"
 #import "EZTextView.h"
+
+#import "ToolBarView.h"
 
 @interface ViewController (){
     
     ToolBarView *toolbar;
     EZTextView *currentTextView;
     EZTextView *bottomTextView;
+    
+    AudioFactory *audioFactory;
+    
+    EZImageViewFactory *imageFactory;
+    
+    
     TextViewFactory *textViewFactory;
     float scrollViewHeight;
     float scrollViewWidth;
@@ -50,6 +65,11 @@
     textViewFactory.bottomBlankHeight = scrollViewHeight-100;
     
     
+    audioFactory = [[AudioFactory alloc] init];
+    
+    imageFactory = [[EZImageViewFactory alloc] init];
+    
+    
     
     [self getFirstTextView];
     
@@ -57,8 +77,14 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardButtonTouched:) name:@"keyboardButtonTouched" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(imageButtonTouched:) name:@"imageButtonTouched" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(audioButtonTouched:) name:@"audioButtonTouched" object:nil];
+    
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textViewHeightChanged:) name:@"textViewHeightChanged" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textViewFocused:) name:@"textViewFocused" object:nil];
+    
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(imageViewTouched:) name:@"imageViewTouched" object:nil];
     
     
     
@@ -69,12 +95,7 @@
     
     
     
-    AudioFactory *af = [[AudioFactory alloc]init];
-    AudioView *av = [af createViewWithSettings];
-    av.center = CGPointMake(100, 200);
-    [self.view addSubview:av];
     
-    [av startRecording];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -271,9 +292,17 @@
 //  ---------- Notification Handlers ------------------
 
 -(void)imageButtonTouched:(NSNotification*)notification {
-    unsigned rand = arc4random_uniform(3);
-    NSString *imageName = [NSString stringWithFormat:@"test%u",rand+1];
-    UIImageView *imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:imageName]];
+//    unsigned rand = arc4random_uniform(3);
+    
+    
+    
+//    NSString *imageName = [NSString stringWithFormat:@"test%u",rand+1];
+//    UIImageView *imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:imageName]];
+    
+    UIView *imageView = [imageFactory createEZImageViewWithURL:nil];
+    
+    
+    
     EZTextView *curV = currentTextView;
     [self splitTextView: curV];
     float insertOffset = curV.frame.size.height+curV.frame.origin.y;
@@ -300,6 +329,54 @@
 -(void)keyboardButtonTouched:(NSNotification*)notification {
     [currentTextView resignFirstResponder];
 }
+
+
+-(void)audioButtonTouched:(NSNotification*)notification {
+    
+    
+    //    unsigned rand = arc4random_uniform(3);
+    //    NSString *imageName = [NSString stringWithFormat:@"test%u",rand+1];
+    //    UIImageView *imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:imageName]];
+    
+    AudioView *av = [audioFactory createViewWithSettings];
+    
+    EZTextView *curV = currentTextView;
+    [self splitTextView: curV];
+    float insertOffset = curV.frame.size.height+curV.frame.origin.y;
+    av.frame = CGRectMake(0, insertOffset, 200, 100);
+    NSLog(@"insertOffset: %f", insertOffset);
+    //    imageView.center = CGPointMake(scrollViewWidth/2, insertOffset);
+    CGPoint newCenter = av.center;
+    newCenter.x = scrollViewWidth/2;
+    av.center = newCenter;
+    [self moveDownViews:insertOffset dis:av.frame.size.height];
+    [self.myViews addObject:av];
+    [self.scrollView addSubview:av];
+    [self resizeContent];
+    CGPoint p3 = CGPointMake(0, av.frame.origin.y+av.frame.size.height-100);
+    [self.scrollView setContentOffset:p3 animated:YES];
+    
+    [av startRecording];
+    [toolbar showRecording];
+    
+    
+    //
+    //
+    //    AudioView *av = [audioFactory createViewWithSettings];
+    //    av.center = CGPointMake(100, 200);
+    //    self insertViewAtOffset:currentTextView offset:<#(float)#>
+    //    [self.scrollView addSubview:av];
+    //
+    //    [av startRecording];
+}
+
+
+-(void)imageViewTouched:(NSNotification*)notification {
+    UIImage *img = notification.userInfo[@"img"];
+    EZImageScrollViewController *vc = [[EZImageScrollViewController alloc] initWithImage:img];
+    [self.navigationController pushViewController:vc animated:NO];
+}
+
 
 -(void)textViewHeightChanged:(NSNotification*)notification {
     [self resizeContent];

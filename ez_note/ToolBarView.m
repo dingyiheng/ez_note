@@ -43,6 +43,16 @@
     
     return self;
 }
+
+
+- (void)showRecording{
+    self.audioButton.tintColor = [UIColor redColor];
+}
+//
+//- (void)showRecording{
+//    self.audioButton.tintColor = [UIColor redColor];
+//}
+
 - (IBAction)imageButtonTouched:(id)sender {
     NSLog(@"Image Button Touched");
     [[NSNotificationCenter defaultCenter] postNotificationName:@"imageButtonTouched" object:self userInfo:nil];
