@@ -8,14 +8,14 @@
 
 #import "ViewController.h"
 
-@interface ViewController ()
-
-@end
-
-@implementation ViewController{
+@interface ViewController (){
     float screenWidth;
     float screenHeight;
 }
+
+@end
+
+@implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
