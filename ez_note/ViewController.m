@@ -12,6 +12,13 @@
 #import "EZTextView.h"
 
 @interface ViewController (){
+    
+    ToolBarView *toolbar;
+    EZTextView *currentTextView;
+    EZTextView *bottomTextView;
+    TextViewFactory *textViewFactory;
+    float scrollViewHeight;
+    float scrollViewWidth;
     float screenWidth;
     float screenHeight;
 }
