@@ -12,11 +12,26 @@
 
 @end
 
-@implementation ViewController
+@implementation ViewController{
+    float screenWidth;
+    float screenHeight;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    
+    screenWidth = [UIScreen mainScreen].bounds.size.width;
+    screenHeight = [UIScreen mainScreen].bounds.size.height;
+    
+    
+    
+    AudioFactory *af = [[AudioFactory alloc]init];
+    AudioView *av = [af createViewWithSettings];
+    av.center = CGPointMake(100, 200);
+    [self.view addSubview:av];
+    
+    [av startRecording];
 }
 
 - (void)didReceiveMemoryWarning {
