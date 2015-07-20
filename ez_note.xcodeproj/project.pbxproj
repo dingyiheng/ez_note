@@ -13,11 +13,11 @@
 		35D098581B5B671200550EB3 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 35D098571B5B671200550EB3 /* Images.xcassets */; };
 		35D0985B1B5B671200550EB3 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 35D098591B5B671200550EB3 /* LaunchScreen.xib */; };
 		35D098671B5B671200550EB3 /* ez_noteTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D098661B5B671200550EB3 /* ez_noteTests.m */; };
-		B65F9C961B5D89E400FB53E7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B65F9C941B5D89E400FB53E7 /* Main.storyboard */; };
 		B65F9CA91B5D904A00FB53E7 /* EZTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = B65F9CA31B5D904A00FB53E7 /* EZTextView.m */; };
 		B65F9CAA1B5D904A00FB53E7 /* TextViewFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = B65F9CA51B5D904A00FB53E7 /* TextViewFactory.m */; };
 		B65F9CAB1B5D904A00FB53E7 /* ToolBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = B65F9CA71B5D904A00FB53E7 /* ToolBarView.m */; };
 		B65F9CAC1B5D904A00FB53E7 /* ToolBarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B65F9CA81B5D904A00FB53E7 /* ToolBarView.xib */; };
+		B65F9CAE1B5D921B00FB53E7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B65F9CAD1B5D921B00FB53E7 /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,7 +43,6 @@
 		35D098601B5B671200550EB3 /* ez_noteTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ez_noteTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		35D098651B5B671200550EB3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		35D098661B5B671200550EB3 /* ez_noteTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ez_noteTests.m; sourceTree = "<group>"; };
-		B65F9C951B5D89E400FB53E7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = ../../../EZNote/EZNote/Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		B65F9CA21B5D904A00FB53E7 /* EZTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZTextView.h; sourceTree = "<group>"; };
 		B65F9CA31B5D904A00FB53E7 /* EZTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZTextView.m; sourceTree = "<group>"; };
 		B65F9CA41B5D904A00FB53E7 /* TextViewFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextViewFactory.h; sourceTree = "<group>"; };
@@ -51,6 +50,7 @@
 		B65F9CA61B5D904A00FB53E7 /* ToolBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ToolBarView.h; sourceTree = "<group>"; };
 		B65F9CA71B5D904A00FB53E7 /* ToolBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ToolBarView.m; sourceTree = "<group>"; };
 		B65F9CA81B5D904A00FB53E7 /* ToolBarView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ToolBarView.xib; sourceTree = "<group>"; };
+		B65F9CAD1B5D921B00FB53E7 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,6 +92,7 @@
 		35D098491B5B671100550EB3 /* ez_note */ = {
 			isa = PBXGroup;
 			children = (
+				B65F9CAD1B5D921B00FB53E7 /* Main.storyboard */,
 				B65F9CA21B5D904A00FB53E7 /* EZTextView.h */,
 				B65F9CA31B5D904A00FB53E7 /* EZTextView.m */,
 				B65F9CA41B5D904A00FB53E7 /* TextViewFactory.h */,
@@ -101,7 +102,6 @@
 				B65F9CA81B5D904A00FB53E7 /* ToolBarView.xib */,
 				35D0984E1B5B671100550EB3 /* AppDelegate.h */,
 				35D0984F1B5B671100550EB3 /* AppDelegate.m */,
-				B65F9C941B5D89E400FB53E7 /* Main.storyboard */,
 				35D098511B5B671200550EB3 /* ViewController.h */,
 				35D098521B5B671200550EB3 /* ViewController.m */,
 				35D098571B5B671200550EB3 /* Images.xcassets */,
@@ -217,10 +217,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B65F9C961B5D89E400FB53E7 /* Main.storyboard in Resources */,
 				35D0985B1B5B671200550EB3 /* LaunchScreen.xib in Resources */,
 				B65F9CAC1B5D904A00FB53E7 /* ToolBarView.xib in Resources */,
 				35D098581B5B671200550EB3 /* Images.xcassets in Resources */,
+				B65F9CAE1B5D921B00FB53E7 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -272,14 +272,6 @@
 				35D0985A1B5B671200550EB3 /* Base */,
 			);
 			name = LaunchScreen.xib;
-			sourceTree = "<group>";
-		};
-		B65F9C941B5D89E400FB53E7 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				B65F9C951B5D89E400FB53E7 /* Base */,
-			);
-			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
