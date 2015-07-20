@@ -22,6 +22,7 @@
 @property UIColor *backgroundColor;
 
 @property NSString *title;
+@property float timeLimit;
 
 - (AudioView *)createViewWithSettings;
 

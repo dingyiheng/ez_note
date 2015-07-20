@@ -12,6 +12,7 @@
 @interface AudioView : UIView<AVAudioRecorderDelegate, AVAudioPlayerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *AudioButton;
+@property (weak, nonatomic) IBOutlet UILabel *AudioLabel;
 
 - (void) addsubviewFromNib;
 - (UIView *) viewFromNib;
@@ -21,6 +22,9 @@
 - (void) stopRecording;
 - (void) startPlaying;
 - (void) stopPlaying;
+- (void) pauseRecording;
+- (void) resumeRecording;
 
+- (void) timerResponse;
 
 @end

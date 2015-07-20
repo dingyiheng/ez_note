@@ -15,7 +15,7 @@
 
 - (NSMutableDictionary *)settings{
     if(!settings){
-        settings = [[NSMutableDictionary alloc]initWithObjectsAndKeys:[NSNumber numberWithFloat: self.height],@"height",[NSNumber numberWithFloat: self.width] ,@"width",self.outputFileURL,@"outputFileURL",self.recordSetting,@"recordSetting",self.title,@"title",self.backgroundColor,@"backgroundColor", nil];
+        settings = [[NSMutableDictionary alloc]initWithObjectsAndKeys:[NSNumber numberWithFloat: self.height],@"height",[NSNumber numberWithFloat: self.width] ,@"width",self.outputFileURL,@"outputFileURL",self.recordSetting,@"recordSetting",self.title,@"title",self.backgroundColor,@"backgroundColor",[NSNumber numberWithFloat:self.timeLimit],@"timeLimit" ,nil];
         
     }
     return settings;
@@ -26,9 +26,10 @@
     
     if(self){
         self.height = 50;
-        self.width = 150;
+        self.width = 160;
         self.backgroundColor = [UIColor whiteColor];
         self.title = @"Audio Record";
+        self.timeLimit = 3600.0f;
         
         NSArray *pathComponents = [NSArray arrayWithObjects:
                                    [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject],

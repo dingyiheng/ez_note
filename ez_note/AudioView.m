@@ -11,6 +11,7 @@
 @implementation AudioView{
     AVAudioRecorder *recorder;
     AVAudioPlayer *player;
+    float recordTimeLimit;
 }
 
 /*
@@ -45,6 +46,8 @@
     if(self){
         [self addsubviewFromNib];
         [self.AudioButton setTitle:settings[@"title"] forState:UIControlStateNormal];
+        self.AudioLabel.text = @"";
+        recordTimeLimit = [settings[@"timeLimit"] floatValue];
         
         
         //this background color is not subview's background color, don't mess up
@@ -76,12 +79,33 @@
 }
 
 
+- (void) timerResponse{
+    if (recorder.recording) {
+        if (recorder.currentTime < recordTimeLimit) {
+            self.AudioLabel.text = [[NSString stringWithFormat:@"%.0f",recorder.currentTime] stringByAppendingString:@"s"];
+        }
+        else{
+            [self stopRecording];
+        }
+        
+    }
+    else if (player.playing){
+        self.AudioLabel.text = [[NSString stringWithFormat:@"%.0f",player.currentTime] stringByAppendingString:@"s"];
+    }
+}
+
 - (void) startRecording{
     AVAudioSession *session = [AVAudioSession sharedInstance];
     [session setActive:YES error:nil];
     
     [recorder record];
     [self.AudioButton setTitle:@"Recording" forState:UIControlStateNormal];
+    
+    // set a timer
+    [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(timerResponse) userInfo:nil repeats:YES];
+    
+    // notification
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"startRecording" object:self userInfo:nil];
 }
 
 - (void) stopRecording{
@@ -90,6 +114,10 @@
     
     [recorder stop];
     [self.AudioButton setTitle:@"Play" forState:UIControlStateNormal];
+    self.AudioLabel.text = @"";
+    
+    // notification
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"stopRecording" object:self userInfo:nil];
 }
 
 - (void) startPlaying{
@@ -98,13 +126,45 @@
         [player setDelegate:self];
         [player play];
         [self.AudioButton setTitle:@"Playing" forState:UIControlStateNormal];
+        
+        //nitification
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"startPlaying" object:self userInfo:nil];
     }
 }
 
 - (void) stopPlaying{
     [player stop];
     [self.AudioButton setTitle:@"Play" forState:UIControlStateNormal];
+    self.AudioLabel.text = @"";
+    
+    // nitification
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"stopPlaying" object:self userInfo:nil];
 }
 
+
+- (void) pauseRecording{
+    [recorder pause];
+    [self.AudioButton setTitle:@"Pause" forState:UIControlStateNormal];
+    
+    // nitification
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"pauseRecording" object:self userInfo:nil];
+}
+
+- (void) resumeRecording{
+    AVAudioSession *session = [AVAudioSession sharedInstance];
+    [session setActive:YES error:nil];
+    [recorder record];
+    [self.AudioButton setTitle:@"Recording" forState:UIControlStateNormal];
+    
+    // notification
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"resumeRecording" object:self userInfo:nil];
+}
+
+- (void) audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag{
+    [self stopPlaying];
+    
+    // notification
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"stopPlaying" object:self userInfo:nil];
+}
 
 @end
