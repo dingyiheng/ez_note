@@ -20,6 +20,10 @@
 		35FEF8DA1B5D916300A96076 /* ToolBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 35FEF8D71B5D916300A96076 /* ToolBarView.m */; };
 		35FEF8DB1B5D916300A96076 /* ToolBarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 35FEF8D81B5D916300A96076 /* ToolBarView.xib */; };
 		35FEF8DE1B5D917A00A96076 /* EZTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 35FEF8DD1B5D917A00A96076 /* EZTextView.m */; };
+		683E407A1B5D959A00CCDAF3 /* EZImageScrollViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 683E40721B5D959A00CCDAF3 /* EZImageScrollViewController.m */; };
+		683E407B1B5D959A00CCDAF3 /* EZImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 683E40741B5D959A00CCDAF3 /* EZImageView.m */; };
+		683E407C1B5D959A00CCDAF3 /* EZImageViewFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 683E40761B5D959A00CCDAF3 /* EZImageViewFactory.m */; };
+		683E407D1B5D959A00CCDAF3 /* EZOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 683E40781B5D959A00CCDAF3 /* EZOptions.m */; };
 		B65F9CB01B5D928D00FB53E7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B65F9CAF1B5D928D00FB53E7 /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -58,6 +62,15 @@
 		35FEF8D81B5D916300A96076 /* ToolBarView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ToolBarView.xib; sourceTree = "<group>"; };
 		35FEF8DC1B5D917A00A96076 /* EZTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZTextView.h; sourceTree = "<group>"; };
 		35FEF8DD1B5D917A00A96076 /* EZTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZTextView.m; sourceTree = "<group>"; };
+		683E40711B5D959A00CCDAF3 /* EZImageScrollViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZImageScrollViewController.h; sourceTree = "<group>"; };
+		683E40721B5D959A00CCDAF3 /* EZImageScrollViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZImageScrollViewController.m; sourceTree = "<group>"; };
+		683E40731B5D959A00CCDAF3 /* EZImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZImageView.h; sourceTree = "<group>"; };
+		683E40741B5D959A00CCDAF3 /* EZImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZImageView.m; sourceTree = "<group>"; };
+		683E40751B5D959A00CCDAF3 /* EZImageViewFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZImageViewFactory.h; sourceTree = "<group>"; };
+		683E40761B5D959A00CCDAF3 /* EZImageViewFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZImageViewFactory.m; sourceTree = "<group>"; };
+		683E40771B5D959A00CCDAF3 /* EZOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZOptions.h; sourceTree = "<group>"; };
+		683E40781B5D959A00CCDAF3 /* EZOptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZOptions.m; sourceTree = "<group>"; };
+		683E40791B5D959A00CCDAF3 /* utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utilities.h; sourceTree = "<group>"; };
 		B65F9CAF1B5D928D00FB53E7 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -100,6 +113,15 @@
 		35D098491B5B671100550EB3 /* ez_note */ = {
 			isa = PBXGroup;
 			children = (
+				683E40711B5D959A00CCDAF3 /* EZImageScrollViewController.h */,
+				683E40721B5D959A00CCDAF3 /* EZImageScrollViewController.m */,
+				683E40731B5D959A00CCDAF3 /* EZImageView.h */,
+				683E40741B5D959A00CCDAF3 /* EZImageView.m */,
+				683E40751B5D959A00CCDAF3 /* EZImageViewFactory.h */,
+				683E40761B5D959A00CCDAF3 /* EZImageViewFactory.m */,
+				683E40771B5D959A00CCDAF3 /* EZOptions.h */,
+				683E40781B5D959A00CCDAF3 /* EZOptions.m */,
+				683E40791B5D959A00CCDAF3 /* utilities.h */,
 				B65F9CAF1B5D928D00FB53E7 /* Main.storyboard */,
 				35FEF8DC1B5D917A00A96076 /* EZTextView.h */,
 				35FEF8DD1B5D917A00A96076 /* EZTextView.m */,
@@ -253,11 +275,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				35D098531B5B671200550EB3 /* ViewController.m in Sources */,
+				683E407D1B5D959A00CCDAF3 /* EZOptions.m in Sources */,
 				35FEF8D21B5D89AE00A96076 /* AudioView.m in Sources */,
+				683E407A1B5D959A00CCDAF3 /* EZImageScrollViewController.m in Sources */,
 				35FEF8DA1B5D916300A96076 /* ToolBarView.m in Sources */,
+				683E407C1B5D959A00CCDAF3 /* EZImageViewFactory.m in Sources */,
 				35D098501B5B671100550EB3 /* AppDelegate.m in Sources */,
 				35D0984D1B5B671100550EB3 /* main.m in Sources */,
 				35FEF8D91B5D916300A96076 /* TextViewFactory.m in Sources */,
+				683E407B1B5D959A00CCDAF3 /* EZImageView.m in Sources */,
 				35FEF8DE1B5D917A00A96076 /* EZTextView.m in Sources */,
 				35FEF8D11B5D89AE00A96076 /* AudioFactory.m in Sources */,
 			);
