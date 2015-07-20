@@ -343,8 +343,8 @@
     EZTextView *curV = currentTextView;
     [self splitTextView: curV];
     float insertOffset = curV.frame.size.height+curV.frame.origin.y;
-    av.frame = CGRectMake(0, insertOffset, 200, 100);
-    NSLog(@"insertOffset: %f", insertOffset);
+    //av.frame = CGRectMake(0, insertOffset, 200, 100);
+    //NSLog(@"insertOffset: %f", insertOffset);
     //    imageView.center = CGPointMake(scrollViewWidth/2, insertOffset);
     CGPoint newCenter = av.center;
     newCenter.x = scrollViewWidth/2;
