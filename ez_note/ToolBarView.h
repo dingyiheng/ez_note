@@ -13,4 +13,7 @@
 @property (strong, nonatomic) IBOutlet UIButton *audioButton;
 @property (strong, nonatomic) IBOutlet UIButton *keyboardButton;
 
+
+- (void)showRecording;
+
 @end

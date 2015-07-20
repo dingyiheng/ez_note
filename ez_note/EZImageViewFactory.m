@@ -19,9 +19,15 @@
     return self;
 }
 
-- (EZImageView *) createEZImageView
+- (EZImageView *) createEZImageViewWithURL:(NSURL *)url
 {
-    return [[EZImageView alloc] initWithImage:nil Image:[UIImage imageNamed:@"FOB_small.png"]];
+    if(!url){
+        return [[EZImageView alloc] initWithImage:nil Image:[UIImage imageNamed:@"test1"]];
+    }else{
+        NSData *data =[NSData dataWithContentsOfURL:url];
+        UIImage *img = [UIImage imageWithData:data];
+        return [[EZImageView alloc] initWithImage:nil Image:img];
+    }
 }
 
 

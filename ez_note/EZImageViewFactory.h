@@ -14,6 +14,7 @@
 
 @property EZOptions* options;
 
-- (EZImageView *) createEZImageView;
+//- (EZImageView *) createEZImageView;
+- (EZImageView *) createEZImageViewWithURL:(NSURL *)url;
 
 @end

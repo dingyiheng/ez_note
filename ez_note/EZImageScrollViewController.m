@@ -24,6 +24,17 @@
     return self;
 }
 
+- (id) initWithImageURL: (NSURL*) url {
+    self = [super init];
+    if(self){
+        NSData *data =[NSData dataWithContentsOfURL:url];
+        UIImage *img = [UIImage imageWithData:data];
+        self.img = img;
+    }
+    return self;
+}
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.

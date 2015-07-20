@@ -113,6 +113,8 @@
     
 //    [self.navigationController pushViewController:playboard animated:YES];
     NSLog(@"Pressed");
+    NSDictionary *info = @{@"img": self.img};
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"imageViewTouched" object:self userInfo:info];
 }
 
 

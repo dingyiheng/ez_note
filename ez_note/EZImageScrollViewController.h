@@ -29,5 +29,6 @@
 @property UIImage *img;
 
 - (id) initWithImage: (UIImage*) image;
+- (id) initWithImageURL: (NSURL*) url;
 
 @end
