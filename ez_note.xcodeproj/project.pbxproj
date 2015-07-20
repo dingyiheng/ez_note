@@ -218,7 +218,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				35D0985B1B5B671200550EB3 /* LaunchScreen.xib in Resources */,
-				B65F9CAC1B5D904A00FB53E7 /* ToolBarView.xib in Resources */,
 				35D098581B5B671200550EB3 /* Images.xcassets in Resources */,
 				B65F9CAE1B5D921B00FB53E7 /* Main.storyboard in Resources */,
 			);
@@ -238,12 +237,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B65F9CAB1B5D904A00FB53E7 /* ToolBarView.m in Sources */,
 				35D098531B5B671200550EB3 /* ViewController.m in Sources */,
+				35FEF8D21B5D89AE00A96076 /* AudioView.m in Sources */,
+				35FEF8DA1B5D916300A96076 /* ToolBarView.m in Sources */,
 				35D098501B5B671100550EB3 /* AppDelegate.m in Sources */,
-				B65F9CA91B5D904A00FB53E7 /* EZTextView.m in Sources */,
-				B65F9CAA1B5D904A00FB53E7 /* TextViewFactory.m in Sources */,
 				35D0984D1B5B671100550EB3 /* main.m in Sources */,
+				35FEF8D91B5D916300A96076 /* TextViewFactory.m in Sources */,
+				35FEF8DE1B5D917A00A96076 /* EZTextView.m in Sources */,
+				35FEF8D11B5D89AE00A96076 /* AudioFactory.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
