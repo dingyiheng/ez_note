@@ -57,6 +57,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.scrollView.pagingEnabled = NO;
+    
     scrollViewHeight = self.view.frame.size.height;
     scrollViewWidth = self.view.frame.size.width;
     
@@ -223,7 +225,7 @@
     [self moveDownViews:v2.frame.origin.y+v2.frame.size.height dis:v2.frame.size.height];
     
     
-    NSLog(@"WTF:%@", bottomTextView);
+//    NSLog(@"WTF:%@", bottomTextView);
     
     
     //    float nH = currentTextView.frame.size.height;
@@ -313,18 +315,38 @@
     bottomTextView = botView;
 }
 
+-(void)scrollAfterInsert:(float)offset{
+    NSLog(@"offset:%f",offset);
+    float spaceToBottom = 100;
+    float inset = self.scrollView.contentInset.top;
+    float contentOffset = self.scrollView.contentOffset.y;
+
+    if(offset > scrollViewHeight + contentOffset - inset - spaceToBottom){
+//    if(1){
+        float scrollTo = offset -scrollViewHeight + inset + spaceToBottom; //offset - scrollViewHeight;
+        NSLog(@"scrollViewHeight:%f",scrollViewHeight);
+        CGPoint scrollToPoint = CGPointMake(0, scrollTo);
+//        [self.scrollView setContentOffset:scrollToPoint animated:YES];
+        [UIView animateWithDuration:.5 animations:^{
+            self.scrollView.contentOffset = scrollToPoint;
+        }];
+    }else{
+        NSLog(@"Not scroll");
+    }
+}
+
 
 //  ---------- Notification Handlers ------------------
 
 -(void)imageButtonTouched:(NSNotification*)notification {
-//    unsigned rand = arc4random_uniform(3);
+    unsigned rand = arc4random_uniform(3);
     
     
     
-//    NSString *imageName = [NSString stringWithFormat:@"test%u",rand+1];
-//    UIImageView *imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:imageName]];
+    NSString *imageName = [NSString stringWithFormat:@"test%u",rand+1];
+    UIImageView *imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:imageName]];
     
-    UIView *imageView = [imageFactory createEZImageViewWithURL:nil];
+//    UIView *imageView = [imageFactory createEZImageViewWithURL:nil];
     
     
     
@@ -341,8 +363,11 @@
     [self.myViews addObject:imageView];
     [self.scrollView addSubview:imageView];
     [self resizeContent];
-    CGPoint p3 = CGPointMake(0, imageView.frame.origin.y+imageView.frame.size.height-100);
-    [self.scrollView setContentOffset:p3 animated:YES];
+    
+    
+    [self scrollAfterInsert: imageView.frame.origin.y+imageView.frame.size.height];
+//    CGPoint p3 = CGPointMake(0, imageView.frame.origin.y+imageView.frame.size.height-100);
+    
     //    self.scrollView.contentOffset = p3;
     
     //    NSLog(@"count: %lu", (unsigned long)[self.myViews count]);
@@ -380,8 +405,8 @@
         [self.myViews addObject:av];
         [self.scrollView addSubview:av];
         [self resizeContent];
-        CGPoint p3 = CGPointMake(0, av.frame.origin.y+av.frame.size.height-100);
-        [self.scrollView setContentOffset:p3 animated:YES];
+        
+        [self scrollAfterInsert: av.frame.origin.y+av.frame.size.height];
         
         [av startRecording];
         currentAudioView = av;
@@ -412,6 +437,7 @@
 
 
 -(void)textViewHeightChanged:(NSNotification*)notification {
+    NSLog(@"co off%f", self.scrollView.contentOffset.y);
     [self resizeContent];
     NSNumber *deltaHeight = notification.userInfo[@"deltaHeight"];
     //    NSLog(@"%f", [deltaHeight floatValue]);
@@ -441,9 +467,17 @@
     NSLog(@"Clear Button Touched");
     self.myViews = nil;
     [self getFirstTextView];
-    
+//    float inset = self.scrollView.contentInset.top;
+//    float offset = self.scrollView.contentOffset.y;
+//    float frame = self.scrollView.frame.origin.y;
+//    float bound = self.scrollView.bounds.origin.y;
+//    NSLog(@"Inset: %f Offset:%f frame:%f bound:%f", inset, offset, frame, bound);
 }
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 
 
