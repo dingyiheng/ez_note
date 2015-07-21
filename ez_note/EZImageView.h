@@ -18,8 +18,8 @@
 @property CGFloat width_height_ratio;
 
 
-@property CGFloat x;
-@property CGFloat y;
+// @property CGFloat x;
+// @property CGFloat y;
 
 @property EZOptions *options;
 

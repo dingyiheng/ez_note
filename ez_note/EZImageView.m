@@ -61,16 +61,14 @@
     NSLog (@"Button Width: %f  Button Height  %f", button_Width, button_Height);
     
     
-    CGRect screenRect = [[UIScreen mainScreen] bounds];
-    CGFloat screenWidth = screenRect.size.width;    // 375
-    self.x = (screenWidth - button_Width) / 2;
+//    screenWidth = screenRect.size.width;    // 375
+//    self.x = (screenWidth - button_Width) / 2;
     
-    self = [super initWithFrame:CGRectMake(self.x, 0, button_Width, button_Height)];
+    self = [super initWithFrame:CGRectMake(0, 0, button_Width, button_Height)];
     [self setImage:buttonImage forState:UIControlStateNormal];
     [self addTarget:self action:@selector(imgPressed:) forControlEvents:UIControlEventTouchUpInside];
     
     return self;
-
 }
 
 - (UIImage *) cropImage {
@@ -110,8 +108,6 @@
 }
 
 - (void) imgPressed:(EZImageView *) EZIV {
-    
-//    [self.navigationController pushViewController:playboard animated:YES];
     NSLog(@"Pressed");
     NSDictionary *info = @{@"img": self.img};
     [[NSNotificationCenter defaultCenter] postNotificationName:@"imageViewTouched" object:self userInfo:info];

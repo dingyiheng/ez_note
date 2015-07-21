@@ -11,19 +11,15 @@
 @interface EZImageScrollViewController : UIViewController <UIScrollViewDelegate>
 {
     UIScrollView *sView;
-    UIView *containerView;
     UIImageView *imageView;
     CGFloat img_width;
     CGFloat img_height;
     CGFloat img_ratio;
-//    CGFloat screen_width;
-//    CGFloat screen_height;
-//    CGFloat screen_ratio;
-    CGFloat content_offset_x;
-    CGFloat content_offset_y;
-    CGFloat content_width;
-    CGFloat content_height;
-    CGFloat content_ratio;
+    
+    CGFloat imgview_start_x;
+    CGFloat imgview_start_y;
+    CGFloat imgview_width;
+    CGFloat imgview_height;
 }
 
 @property UIImage *img;
