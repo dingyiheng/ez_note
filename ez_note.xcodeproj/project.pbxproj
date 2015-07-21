@@ -24,6 +24,9 @@
 		683E407B1B5D959A00CCDAF3 /* EZImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 683E40741B5D959A00CCDAF3 /* EZImageView.m */; };
 		683E407C1B5D959A00CCDAF3 /* EZImageViewFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 683E40761B5D959A00CCDAF3 /* EZImageViewFactory.m */; };
 		683E407D1B5D959A00CCDAF3 /* EZOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 683E40781B5D959A00CCDAF3 /* EZOptions.m */; };
+		B656AF0D1B5DB5E4007538B8 /* KeyBindings.plist in Resources */ = {isa = PBXBuildFile; fileRef = B656AF0C1B5DB5E4007538B8 /* KeyBindings.plist */; };
+		B656AF121B5DB700007538B8 /* KeyBindingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B656AF0F1B5DB700007538B8 /* KeyBindingsViewController.m */; };
+		B656AF131B5DB700007538B8 /* KeyBindingTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = B656AF111B5DB700007538B8 /* KeyBindingTextField.m */; };
 		B65F9CB01B5D928D00FB53E7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B65F9CAF1B5D928D00FB53E7 /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -71,6 +74,11 @@
 		683E40771B5D959A00CCDAF3 /* EZOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZOptions.h; sourceTree = "<group>"; };
 		683E40781B5D959A00CCDAF3 /* EZOptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZOptions.m; sourceTree = "<group>"; };
 		683E40791B5D959A00CCDAF3 /* utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utilities.h; sourceTree = "<group>"; };
+		B656AF0C1B5DB5E4007538B8 /* KeyBindings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = KeyBindings.plist; sourceTree = "<group>"; };
+		B656AF0E1B5DB700007538B8 /* KeyBindingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyBindingsViewController.h; sourceTree = "<group>"; };
+		B656AF0F1B5DB700007538B8 /* KeyBindingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyBindingsViewController.m; sourceTree = "<group>"; };
+		B656AF101B5DB700007538B8 /* KeyBindingTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyBindingTextField.h; sourceTree = "<group>"; };
+		B656AF111B5DB700007538B8 /* KeyBindingTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyBindingTextField.m; sourceTree = "<group>"; };
 		B65F9CAF1B5D928D00FB53E7 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -113,6 +121,11 @@
 		35D098491B5B671100550EB3 /* ez_note */ = {
 			isa = PBXGroup;
 			children = (
+				B656AF0E1B5DB700007538B8 /* KeyBindingsViewController.h */,
+				B656AF0F1B5DB700007538B8 /* KeyBindingsViewController.m */,
+				B656AF101B5DB700007538B8 /* KeyBindingTextField.h */,
+				B656AF111B5DB700007538B8 /* KeyBindingTextField.m */,
+				B656AF0C1B5DB5E4007538B8 /* KeyBindings.plist */,
 				683E40711B5D959A00CCDAF3 /* EZImageScrollViewController.h */,
 				683E40721B5D959A00CCDAF3 /* EZImageScrollViewController.m */,
 				683E40731B5D959A00CCDAF3 /* EZImageView.h */,
@@ -252,6 +265,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B656AF0D1B5DB5E4007538B8 /* KeyBindings.plist in Resources */,
 				35D0985B1B5B671200550EB3 /* LaunchScreen.xib in Resources */,
 				B65F9CB01B5D928D00FB53E7 /* Main.storyboard in Resources */,
 				35D098581B5B671200550EB3 /* Images.xcassets in Resources */,
@@ -275,7 +289,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				35D098531B5B671200550EB3 /* ViewController.m in Sources */,
+				B656AF121B5DB700007538B8 /* KeyBindingsViewController.m in Sources */,
 				683E407D1B5D959A00CCDAF3 /* EZOptions.m in Sources */,
+				B656AF131B5DB700007538B8 /* KeyBindingTextField.m in Sources */,
 				35FEF8D21B5D89AE00A96076 /* AudioView.m in Sources */,
 				683E407A1B5D959A00CCDAF3 /* EZImageScrollViewController.m in Sources */,
 				35FEF8DA1B5D916300A96076 /* ToolBarView.m in Sources */,

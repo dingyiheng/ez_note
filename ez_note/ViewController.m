@@ -26,6 +26,7 @@
     EZTextView *currentTextView;
     EZTextView *bottomTextView;
     
+    AudioView *currentAudioView;
     AudioFactory *audioFactory;
     
     EZImageViewFactory *imageFactory;
@@ -36,6 +37,8 @@
     float scrollViewWidth;
     float screenWidth;
     float screenHeight;
+    
+    BOOL isRecording;
 }
 
 @end
@@ -54,6 +57,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.scrollView.pagingEnabled = NO;
+    
     scrollViewHeight = self.view.frame.size.height;
     scrollViewWidth = self.view.frame.size.width;
     
@@ -69,6 +74,8 @@
     
     imageFactory = [[EZImageViewFactory alloc] init];
     
+    
+    isRecording = NO;
     
     
     [self getFirstTextView];
@@ -142,11 +149,30 @@
 
 -(void)splitTextView:(EZTextView *)v{
     
+    NSMutableAttributedString *beforeAttributedString = [[NSMutableAttributedString alloc] initWithAttributedString: v.attributedText];
+    NSMutableAttributedString *afterAttributedString = [[NSMutableAttributedString alloc] initWithAttributedString: v.attributedText];
     
-    NSString *remainingStr = [v.text substringFromIndex: v.selectedRange.location+v.selectedRange.length];
-    NSString *topString =[v.text substringToIndex: v.selectedRange.location];
-    NSLog(@"topStr: %@", topString);
-    v.text = topString;
+    NSLog(@"length: %lu", afterAttributedString.length);
+    
+   
+    
+    long beforeStringEndAt = v.selectedRange.location;
+    long afterStringStartAt = v.selectedRange.location+v.selectedRange.length;
+    long stringLength = v.text.length;
+    
+    NSLog(@"text length: %lu", stringLength);
+    
+    [beforeAttributedString replaceCharactersInRange: NSMakeRange(afterStringStartAt, stringLength-afterStringStartAt) withString:@""];
+    [afterAttributedString replaceCharactersInRange: NSMakeRange(0, beforeStringEndAt) withString:@""];
+    
+    
+    
+//    NSString *remainingStr = [v.text substringFromIndex: v.selectedRange.location+v.selectedRange.length];
+//    NSString *topString =[v.text substringToIndex: v.selectedRange.location];
+//    NSLog(@"topStr: %@", topString);
+//    v.text = topString;
+    v.attributedText = beforeAttributedString;
+    
     
     
     CGFloat fixedWidth = v.frame.size.width;
@@ -168,10 +194,11 @@
     EZTextView *v2 = [textViewFactory createTextView];
     [self.myViews addObject:v2];
     [self.scrollView addSubview:v2];
-    if ([remainingStr hasPrefix:@"\n"]){
-        remainingStr = [remainingStr substringFromIndex:1];
+    if ([v.text hasPrefix:@"\n"]){
+        v.text = [v.text substringFromIndex:1];
     }
-    v2.text = remainingStr;
+//    v2.text = remainingStr;
+    v2.attributedText = afterAttributedString;
     
     
     CGFloat fixedWidth2 = v2.frame.size.width;
@@ -198,7 +225,7 @@
     [self moveDownViews:v2.frame.origin.y+v2.frame.size.height dis:v2.frame.size.height];
     
     
-    NSLog(@"WTF:%@", bottomTextView);
+//    NSLog(@"WTF:%@", bottomTextView);
     
     
     //    float nH = currentTextView.frame.size.height;
@@ -288,18 +315,38 @@
     bottomTextView = botView;
 }
 
+-(void)scrollAfterInsert:(float)offset{
+    NSLog(@"offset:%f",offset);
+    float spaceToBottom = 100;
+    float inset = self.scrollView.contentInset.top;
+    float contentOffset = self.scrollView.contentOffset.y;
+
+    if(offset > scrollViewHeight + contentOffset - inset - spaceToBottom){
+//    if(1){
+        float scrollTo = offset -scrollViewHeight + inset + spaceToBottom; //offset - scrollViewHeight;
+        NSLog(@"scrollViewHeight:%f",scrollViewHeight);
+        CGPoint scrollToPoint = CGPointMake(0, scrollTo);
+//        [self.scrollView setContentOffset:scrollToPoint animated:YES];
+        [UIView animateWithDuration:.5 animations:^{
+            self.scrollView.contentOffset = scrollToPoint;
+        }];
+    }else{
+        NSLog(@"Not scroll");
+    }
+}
+
 
 //  ---------- Notification Handlers ------------------
 
 -(void)imageButtonTouched:(NSNotification*)notification {
-//    unsigned rand = arc4random_uniform(3);
+    unsigned rand = arc4random_uniform(3);
     
     
     
-//    NSString *imageName = [NSString stringWithFormat:@"test%u",rand+1];
-//    UIImageView *imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:imageName]];
+    NSString *imageName = [NSString stringWithFormat:@"test%u",rand+1];
+    UIImageView *imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:imageName]];
     
-    UIView *imageView = [imageFactory createEZImageViewWithURL:nil];
+//    UIView *imageView = [imageFactory createEZImageViewWithURL:nil];
     
     
     
@@ -316,8 +363,11 @@
     [self.myViews addObject:imageView];
     [self.scrollView addSubview:imageView];
     [self resizeContent];
-    CGPoint p3 = CGPointMake(0, imageView.frame.origin.y+imageView.frame.size.height-100);
-    [self.scrollView setContentOffset:p3 animated:YES];
+    
+    
+    [self scrollAfterInsert: imageView.frame.origin.y+imageView.frame.size.height];
+//    CGPoint p3 = CGPointMake(0, imageView.frame.origin.y+imageView.frame.size.height-100);
+    
     //    self.scrollView.contentOffset = p3;
     
     //    NSLog(@"count: %lu", (unsigned long)[self.myViews count]);
@@ -338,27 +388,35 @@
     //    NSString *imageName = [NSString stringWithFormat:@"test%u",rand+1];
     //    UIImageView *imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:imageName]];
     
-    AudioView *av = [audioFactory createViewWithSettings];
     
-    EZTextView *curV = currentTextView;
-    [self splitTextView: curV];
-    float insertOffset = curV.frame.size.height+curV.frame.origin.y;
-    //av.frame = CGRectMake(0, insertOffset, 200, 100);
-    //NSLog(@"insertOffset: %f", insertOffset);
-    //    imageView.center = CGPointMake(scrollViewWidth/2, insertOffset);
-    CGPoint newCenter = av.center;
-    newCenter.x = scrollViewWidth/2;
-    av.center = newCenter;
-    [self moveDownViews:insertOffset dis:av.frame.size.height];
-    [self.myViews addObject:av];
-    [self.scrollView addSubview:av];
-    [self resizeContent];
-    CGPoint p3 = CGPointMake(0, av.frame.origin.y+av.frame.size.height-100);
-    [self.scrollView setContentOffset:p3 animated:YES];
-    
-    [av startRecording];
-    [toolbar showRecording];
-    
+    if(!isRecording){
+        AudioView *av = [audioFactory createViewWithSettings];
+        
+        EZTextView *curV = currentTextView;
+        [self splitTextView: curV];
+        float insertOffset = curV.frame.size.height+curV.frame.origin.y;
+        av.frame = CGRectMake(0, insertOffset, av.frame.size.width, av.frame.size.height);
+        //NSLog(@"insertOffset: %f", insertOffset);
+        //    imageView.center = CGPointMake(scrollViewWidth/2, insertOffset);
+        CGPoint newCenter = av.center;
+        newCenter.x = scrollViewWidth/2;
+        av.center = newCenter;
+        [self moveDownViews:insertOffset dis:av.frame.size.height];
+        [self.myViews addObject:av];
+        [self.scrollView addSubview:av];
+        [self resizeContent];
+        
+        [self scrollAfterInsert: av.frame.origin.y+av.frame.size.height];
+        
+        [av startRecording];
+        currentAudioView = av;
+        [toolbar showRecording];
+        isRecording = YES;
+    }else{
+        [currentAudioView stopRecording];
+        [toolbar finishRecording];
+        isRecording = NO;
+    }
     
     //
     //
@@ -379,6 +437,7 @@
 
 
 -(void)textViewHeightChanged:(NSNotification*)notification {
+    NSLog(@"co off%f", self.scrollView.contentOffset.y);
     [self resizeContent];
     NSNumber *deltaHeight = notification.userInfo[@"deltaHeight"];
     //    NSLog(@"%f", [deltaHeight floatValue]);
@@ -408,9 +467,17 @@
     NSLog(@"Clear Button Touched");
     self.myViews = nil;
     [self getFirstTextView];
-    
+//    float inset = self.scrollView.contentInset.top;
+//    float offset = self.scrollView.contentOffset.y;
+//    float frame = self.scrollView.frame.origin.y;
+//    float bound = self.scrollView.bounds.origin.y;
+//    NSLog(@"Inset: %f Offset:%f frame:%f bound:%f", inset, offset, frame, bound);
 }
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 
 
