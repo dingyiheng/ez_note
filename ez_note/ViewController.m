@@ -26,6 +26,7 @@
     EZTextView *currentTextView;
     EZTextView *bottomTextView;
     
+    AudioView *currentAudioView;
     AudioFactory *audioFactory;
     
     EZImageViewFactory *imageFactory;
@@ -36,6 +37,8 @@
     float scrollViewWidth;
     float screenWidth;
     float screenHeight;
+    
+    BOOL isRecording;
 }
 
 @end
@@ -69,6 +72,8 @@
     
     imageFactory = [[EZImageViewFactory alloc] init];
     
+    
+    isRecording = NO;
     
     
     [self getFirstTextView];
@@ -142,11 +147,30 @@
 
 -(void)splitTextView:(EZTextView *)v{
     
+    NSMutableAttributedString *beforeAttributedString = [[NSMutableAttributedString alloc] initWithAttributedString: v.attributedText];
+    NSMutableAttributedString *afterAttributedString = [[NSMutableAttributedString alloc] initWithAttributedString: v.attributedText];
     
-    NSString *remainingStr = [v.text substringFromIndex: v.selectedRange.location+v.selectedRange.length];
-    NSString *topString =[v.text substringToIndex: v.selectedRange.location];
-    NSLog(@"topStr: %@", topString);
-    v.text = topString;
+    NSLog(@"length: %lu", afterAttributedString.length);
+    
+   
+    
+    long beforeStringEndAt = v.selectedRange.location;
+    long afterStringStartAt = v.selectedRange.location+v.selectedRange.length;
+    long stringLength = v.text.length;
+    
+    NSLog(@"text length: %lu", stringLength);
+    
+    [beforeAttributedString replaceCharactersInRange: NSMakeRange(afterStringStartAt, stringLength-afterStringStartAt) withString:@""];
+    [afterAttributedString replaceCharactersInRange: NSMakeRange(0, beforeStringEndAt) withString:@""];
+    
+    
+    
+//    NSString *remainingStr = [v.text substringFromIndex: v.selectedRange.location+v.selectedRange.length];
+//    NSString *topString =[v.text substringToIndex: v.selectedRange.location];
+//    NSLog(@"topStr: %@", topString);
+//    v.text = topString;
+    v.attributedText = beforeAttributedString;
+    
     
     
     CGFloat fixedWidth = v.frame.size.width;
@@ -168,10 +192,11 @@
     EZTextView *v2 = [textViewFactory createTextView];
     [self.myViews addObject:v2];
     [self.scrollView addSubview:v2];
-    if ([remainingStr hasPrefix:@"\n"]){
-        remainingStr = [remainingStr substringFromIndex:1];
+    if ([v.text hasPrefix:@"\n"]){
+        v.text = [v.text substringFromIndex:1];
     }
-    v2.text = remainingStr;
+//    v2.text = remainingStr;
+    v2.attributedText = afterAttributedString;
     
     
     CGFloat fixedWidth2 = v2.frame.size.width;
@@ -338,27 +363,35 @@
     //    NSString *imageName = [NSString stringWithFormat:@"test%u",rand+1];
     //    UIImageView *imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:imageName]];
     
-    AudioView *av = [audioFactory createViewWithSettings];
     
-    EZTextView *curV = currentTextView;
-    [self splitTextView: curV];
-    float insertOffset = curV.frame.size.height+curV.frame.origin.y;
-    //av.frame = CGRectMake(0, insertOffset, 200, 100);
-    //NSLog(@"insertOffset: %f", insertOffset);
-    //    imageView.center = CGPointMake(scrollViewWidth/2, insertOffset);
-    CGPoint newCenter = av.center;
-    newCenter.x = scrollViewWidth/2;
-    av.center = newCenter;
-    [self moveDownViews:insertOffset dis:av.frame.size.height];
-    [self.myViews addObject:av];
-    [self.scrollView addSubview:av];
-    [self resizeContent];
-    CGPoint p3 = CGPointMake(0, av.frame.origin.y+av.frame.size.height-100);
-    [self.scrollView setContentOffset:p3 animated:YES];
-    
-    [av startRecording];
-    [toolbar showRecording];
-    
+    if(!isRecording){
+        AudioView *av = [audioFactory createViewWithSettings];
+        
+        EZTextView *curV = currentTextView;
+        [self splitTextView: curV];
+        float insertOffset = curV.frame.size.height+curV.frame.origin.y;
+        av.frame = CGRectMake(0, insertOffset, av.frame.size.width, av.frame.size.height);
+        //NSLog(@"insertOffset: %f", insertOffset);
+        //    imageView.center = CGPointMake(scrollViewWidth/2, insertOffset);
+        CGPoint newCenter = av.center;
+        newCenter.x = scrollViewWidth/2;
+        av.center = newCenter;
+        [self moveDownViews:insertOffset dis:av.frame.size.height];
+        [self.myViews addObject:av];
+        [self.scrollView addSubview:av];
+        [self resizeContent];
+        CGPoint p3 = CGPointMake(0, av.frame.origin.y+av.frame.size.height-100);
+        [self.scrollView setContentOffset:p3 animated:YES];
+        
+        [av startRecording];
+        currentAudioView = av;
+        [toolbar showRecording];
+        isRecording = YES;
+    }else{
+        [currentAudioView stopRecording];
+        [toolbar finishRecording];
+        isRecording = NO;
+    }
     
     //
     //

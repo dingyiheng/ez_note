@@ -9,10 +9,35 @@
 #import <UIKit/UIKit.h>
 
 
-@interface EZTextView : UITextView <UITextViewDelegate>
+@interface EZTextView : UITextView <UITextViewDelegate>{
+    NSMutableDictionary *keyNameproperties;
+    unsigned functionCharLen;
+}
 
 
 @property BOOL isBottomTextView;
+
+
+typedef enum {
+    FormatTypeH1,
+    FormatTypeH2,
+    FormatTypeH3,
+    FormatTypeBold,
+    FormatTypeItalic,
+    FormatTypeUnderlined,
+    FormatTypeHighlighted,
+    FormatTypeCenter,
+    FormatTypeNone
+} FormatType;
+
+
+typedef enum {
+    FormatScopeCharacter,
+    FormatScopeWord,
+    FormatScopeLine,
+    FormatScopeNone
+} FormatScope;
+
 
 - (instancetype)initWithSettings:(NSDictionary *)settings;
 

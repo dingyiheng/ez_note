@@ -47,6 +47,32 @@
 
 - (void)showRecording{
     self.audioButton.tintColor = [UIColor redColor];
+//    [UIView animateWithDuration:5.0f animations:^{
+//        self.audioButton.tintColor = [UIColor redColor];
+//    } completion:^(BOOL finished) {
+//    }];
+    
+//    [UIView animateWithDuration:1.0 delay:0.0 options:UIViewAnimationOptionCurveLinear | UIViewAnimationOptionAllowUserInteraction animations:^(void) { self.audioButton.tintColor = [UIColor redColor]; } completion:^(BOOL finished) {
+//                             __weak id weakSelf = self;
+//                             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+//                                 [weakSelf showRecording];
+//                             }];
+//                         }
+//
+//     ];
+//    
+//    CABasicAnimation *theAnimation;
+//    theAnimation=[CABasicAnimation animationWithKeyPath:@"backgroundColor"];
+//    theAnimation.duration=1;
+//    theAnimation.repeatCount= UINT32_MAX;
+//    theAnimation.autoreverses = YES;
+//    theAnimation.fromValue= [UIColor redColor];
+//    theAnimation.toValue= [UIColor colorWithRed:0.21 green:0.43 blue:0.12 alpha:1];
+//    [self.audioButton.layer addAnimation:theAnimation forKey:@"animateLayer"];
+}
+
+- (void)finishRecording{
+    self.audioButton.tintColor = [UIColor colorWithRed:0.21 green:0.43 blue:0.12 alpha:1];
 }
 //
 //- (void)showRecording{

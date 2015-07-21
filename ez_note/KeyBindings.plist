@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>functional_char</key>
+	<string>/</string>
+	<key>escape_char</key>
+	<string>\</string>
+	<key>scope_character</key>
+	<string>c</string>
+	<key>scope_word</key>
+	<string>w</string>
+	<key>scope_paragraph</key>
+	<string>p</string>
+	<key>style_bold</key>
+	<string>b</string>
+	<key>style_italic</key>
+	<string>i</string>
+	<key>style_underlined</key>
+	<string>u</string>
+	<key>style_highlighted</key>
+	<string>h</string>
+	<key>heading_h1</key>
+	<string>1</string>
+	<key>heading_h2</key>
+	<string>2</string>
+	<key>heading_h3</key>
+	<string>3</string>
+	<key>alignment_left</key>
+	<string>l</string>
+	<key>alignment_center</key>
+	<string>c</string>
+	<key>alignment_right</key>
+	<string>r</string>
+</dict>
+</plist>
