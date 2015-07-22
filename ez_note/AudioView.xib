@@ -2,7 +2,6 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="AudioView">
@@ -41,15 +40,13 @@
             </subviews>
             <color key="backgroundColor" red="0.61108474901765275" green="1" blue="0.5351131422168216" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
-                <constraint firstItem="Ehf-j8-e26" firstAttribute="width" secondItem="7tc-K2-Xt0" secondAttribute="height" multiplier="23:15" id="5ZG-hM-I60"/>
-                <constraint firstItem="Ehf-j8-e26" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="24" id="6So-tg-fMw"/>
-                <constraint firstAttribute="centerY" secondItem="7tc-K2-Xt0" secondAttribute="centerY" id="B8f-gN-yfJ"/>
-                <constraint firstAttribute="centerY" secondItem="XcY-Kg-yCs" secondAttribute="centerY" constant="0.5" id="Fg5-gt-KOk"/>
-                <constraint firstAttribute="centerY" secondItem="Ehf-j8-e26" secondAttribute="centerY" id="LW7-sm-3AQ"/>
-                <constraint firstAttribute="trailing" secondItem="7tc-K2-Xt0" secondAttribute="trailing" constant="23" id="Pmk-F4-4sh"/>
-                <constraint firstItem="7tc-K2-Xt0" firstAttribute="leading" secondItem="XcY-Kg-yCs" secondAttribute="trailing" constant="20" id="UrY-dv-ABX"/>
-                <constraint firstItem="Ehf-j8-e26" firstAttribute="leading" secondItem="XcY-Kg-yCs" secondAttribute="leading" constant="-81" id="oHD-6f-Lfy"/>
-                <constraint firstItem="XcY-Kg-yCs" firstAttribute="leading" secondItem="7tc-K2-Xt0" secondAttribute="leading" constant="-62" id="z0O-76-uqh"/>
+                <constraint firstAttribute="trailing" secondItem="7tc-K2-Xt0" secondAttribute="trailing" constant="23" id="6jJ-rU-4Vp"/>
+                <constraint firstItem="Ehf-j8-e26" firstAttribute="top" secondItem="XcY-Kg-yCs" secondAttribute="top" constant="-4" id="Mls-sx-ecI"/>
+                <constraint firstItem="7tc-K2-Xt0" firstAttribute="leading" secondItem="XcY-Kg-yCs" secondAttribute="trailing" constant="20" id="NuY-e2-He2"/>
+                <constraint firstItem="7tc-K2-Xt0" firstAttribute="top" secondItem="XcY-Kg-yCs" secondAttribute="top" constant="-4" id="WcR-vy-GUK"/>
+                <constraint firstAttribute="centerY" secondItem="Ehf-j8-e26" secondAttribute="centerY" id="a8H-z1-6fH"/>
+                <constraint firstItem="XcY-Kg-yCs" firstAttribute="leading" secondItem="Ehf-j8-e26" secondAttribute="trailing" constant="35" id="eFf-BU-kCw"/>
+                <constraint firstItem="Ehf-j8-e26" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="24" id="poW-IN-HtE"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>

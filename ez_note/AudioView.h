@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
+#import "EZnoteProtocol.h"
 
-@interface AudioView : UIView<AVAudioRecorderDelegate, AVAudioPlayerDelegate>
+@interface AudioView : UIView<AVAudioRecorderDelegate, AVAudioPlayerDelegate,EZnoteProtocol>
 
 @property (weak, nonatomic) IBOutlet UIButton *AudioButton;
 @property (weak, nonatomic) IBOutlet UILabel *AudioLabel;
@@ -19,6 +20,7 @@
 - (UIView *) viewFromNib;
 - (instancetype)initWithFactorySettings:(NSDictionary *)settings;
 
+//function methods
 - (void) startRecording;
 - (void) stopRecording;
 - (void) startPlaying;
@@ -26,7 +28,10 @@
 - (void) pauseRecording;
 - (void) resumeRecording;
 
+//timer methods
 - (void) timerResponse;
 - (void) updateSlierTime;
+
+
 
 @end

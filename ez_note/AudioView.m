@@ -25,6 +25,10 @@
  */
 //
 
+- (id) getOutput{
+    return recorder.url;
+}
+
 - (UIView *)viewFromNib{
     Class class = [self class];
     NSString *nibName = NSStringFromClass(class);
