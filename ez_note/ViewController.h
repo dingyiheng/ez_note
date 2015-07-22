@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-@interface ViewController : UIViewController
+@interface ViewController : UIViewController <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
+
 
 @property (strong, nonatomic) NSMutableArray *myViews;
 

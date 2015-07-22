@@ -10,6 +10,7 @@
 
 @interface ToolBarView : UIToolbar
 
+@property (strong, nonatomic) IBOutlet UIButton *cameraButton;
 @property (strong, nonatomic) IBOutlet UIButton *imageButton;
 @property (strong, nonatomic) IBOutlet UIButton *audioButton;
 @property (strong, nonatomic) IBOutlet UIButton *keyboardButton;

@@ -79,6 +79,12 @@
 //    self.audioButton.tintColor = [UIColor redColor];
 //}
 
+
+- (IBAction)cameraButtonTouched:(id)sender {
+    NSLog(@"Camera Button Touched");
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"cameraButtonTouched" object:self userInfo:nil];
+}
+
 - (IBAction)imageButtonTouched:(id)sender {
     NSLog(@"Image Button Touched");
     [[NSNotificationCenter defaultCenter] postNotificationName:@"imageButtonTouched" object:self userInfo:nil];
