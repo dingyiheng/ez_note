@@ -8,9 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
-#import "EZnoteProtocol.h"
+#import "Ezview.h"
 
-@interface AudioView : UIView<AVAudioRecorderDelegate, AVAudioPlayerDelegate,EZnoteProtocol>
+@interface AudioView : Ezview<AVAudioRecorderDelegate, AVAudioPlayerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *AudioButton;
 @property (weak, nonatomic) IBOutlet UILabel *AudioLabel;
