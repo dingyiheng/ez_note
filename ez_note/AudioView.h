@@ -13,6 +13,7 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *AudioButton;
 @property (weak, nonatomic) IBOutlet UILabel *AudioLabel;
+@property (weak, nonatomic) IBOutlet UISlider *progressSlider;
 
 - (void) addsubviewFromNib;
 - (UIView *) viewFromNib;
@@ -26,5 +27,6 @@
 - (void) resumeRecording;
 
 - (void) timerResponse;
+- (void) updateSlierTime;
 
 @end

@@ -12,6 +12,8 @@
     AVAudioRecorder *recorder;
     AVAudioPlayer *player;
     float recordTimeLimit;
+    NSTimer *responseTimer;
+    NSTimer *updateTimer;
 }
 
 /*
@@ -47,6 +49,7 @@
         [self addsubviewFromNib];
         [self.AudioButton setTitle:settings[@"title"] forState:UIControlStateNormal];
         self.AudioLabel.text = @"";
+        self.progressSlider.value = 0.0f;
         recordTimeLimit = [settings[@"timeLimit"] floatValue];
         
         
@@ -58,6 +61,10 @@
         recorder.delegate = self;
         recorder.meteringEnabled = YES;
         [recorder prepareToRecord];
+        
+        //set up timer
+        responseTimer = [[NSTimer alloc] init];
+        updateTimer = [[NSTimer alloc] init];
         
     }
     return self;
@@ -78,6 +85,12 @@
     }
 }
 
+- (void) stopTimer: (NSTimer *)timer{
+    if (timer) {
+        [timer invalidate];
+        timer = nil;
+    }
+}
 
 - (void) timerResponse{
     if (recorder.recording) {
@@ -102,7 +115,7 @@
     [self.AudioButton setTitle:@"Recording" forState:UIControlStateNormal];
     
     // set a timer
-    [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(timerResponse) userInfo:nil repeats:YES];
+    responseTimer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(timerResponse) userInfo:nil repeats:YES];
     
     // notification
     [[NSNotificationCenter defaultCenter] postNotificationName:@"startRecording" object:self userInfo:nil];
@@ -118,19 +131,46 @@
     
     // notification
     [[NSNotificationCenter defaultCenter] postNotificationName:@"stopRecording" object:self userInfo:nil];
+    
+    // stop response timer
+    [self stopTimer:responseTimer];
 }
 
 - (void) startPlaying{
     if (!recorder.recording){
         player = [[AVAudioPlayer alloc] initWithContentsOfURL:recorder.url error:nil];
         [player setDelegate:self];
-        [player play];
+        [player prepareToPlay];
         [self.AudioButton setTitle:@"Playing" forState:UIControlStateNormal];
         
-        //nitification
+        //set up the responsetimer
+        responseTimer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(timerResponse) userInfo:nil repeats:YES];
+        
+        //notification
         [[NSNotificationCenter defaultCenter] postNotificationName:@"startPlaying" object:self userInfo:nil];
+        
+        //set up the progressSlider
+        self.progressSlider.maximumValue = [player duration];
+        updateTimer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(updateSlierTime) userInfo:nil repeats:YES];
+        
+        
+        //start play
+        [player play];
     }
 }
+
+- (void) updateSlierTime{
+    if (player.playing) {
+        self.progressSlider.value = player.currentTime;
+    }
+}
+
+- (IBAction)progressSliderMoved:(id)sender {
+    if (player.playing) {
+        player.currentTime = self.progressSlider.value;
+    }
+}
+
 
 - (void) stopPlaying{
     [player stop];
@@ -139,6 +179,13 @@
     
     // nitification
     [[NSNotificationCenter defaultCenter] postNotificationName:@"stopPlaying" object:self userInfo:nil];
+    
+    // resumre the progressslider
+    self.progressSlider.value = 0.0f;
+    
+    // stop updatetimer and responsetimer
+    [self stopTimer:updateTimer];
+    [self stopTimer:responseTimer];
 }
 
 
@@ -165,6 +212,13 @@
     
     // notification
     [[NSNotificationCenter defaultCenter] postNotificationName:@"stopPlaying" object:self userInfo:nil];
+    
+    // resumre the progressslider
+    self.progressSlider.value = 0.0f;
+    
+    // stop updateTimer
+    [self stopTimer:updateTimer];
+    [self stopTimer:responseTimer];    
 }
 
 @end

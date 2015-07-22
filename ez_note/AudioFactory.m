@@ -26,7 +26,7 @@
     
     if(self){
         self.height = 50;
-        self.width = 160;
+        self.width = 360;
         self.backgroundColor = [UIColor whiteColor];
         self.title = @"Audio Record";
         self.timeLimit = 3600.0f;
