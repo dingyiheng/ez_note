@@ -152,7 +152,7 @@
     NSMutableAttributedString *beforeAttributedString = [[NSMutableAttributedString alloc] initWithAttributedString: v.attributedText];
     NSMutableAttributedString *afterAttributedString = [[NSMutableAttributedString alloc] initWithAttributedString: v.attributedText];
     
-    NSLog(@"length: %lu", afterAttributedString.length);
+//    NSLog(@"length: %lu", afterAttributedString.length);
     
    
     
@@ -212,7 +212,12 @@
     NSLog(@"v2:offset:%f", v.frame.origin.y+v.frame.size.height);
     v2.frame = CGRectMake(0,v.frame.origin.y+v.frame.size.height, fixedWidth2, newSize2.height);
     NSLog(@"v2 height:%f", v2.contentSize.height);
+    
+    
+    //check if the second part of the splitted textview is the bottom view, if true, set extra blank for it
     if(v2 == [self getBottomView]){
+        
+        NSLog(@"new text view is bottom view");
         //        bottomTextView.isBottomTextView = NO;
         //        v2.isBottomTextView = YES;
         //        bottomTextView = v2;
@@ -222,7 +227,11 @@
     v2.inputAccessoryView = toolbar;
     [v2 becomeFirstResponder];
     v2.selectedRange = NSMakeRange(0, 0);
-    [self moveDownViews:v2.frame.origin.y+v2.frame.size.height dis:v2.frame.size.height];
+    
+    
+    float moveDownDis = v2.frame.size.height;
+    NSLog(@"insert: move down %f", moveDownDis);
+    [self moveDownViewsExcept:v2.frame.origin.y dis:moveDownDis except:v2];
     
     
 //    NSLog(@"WTF:%@", bottomTextView);
@@ -261,10 +270,22 @@
 //}
 
 - (void)moveDownViews:(float)oY dis:(float)dis{
-    NSLog(@"offset: %f",oY);
+//    NSLog(@"offset: %f",oY);
     for(UIView *v in self.myViews){
         float originY = v.frame.origin.y;
-        NSLog(@"view offset: %f",originY);
+//        NSLog(@"view offset: %f",originY);
+        if (originY>=oY){
+            v.center = CGPointMake(v.center.x, v.center.y+dis);
+        }
+    }
+}
+
+- (void)moveDownViewsExcept:(float)oY dis:(float)dis except:(UIView *)exV{
+    for(UIView *v in self.myViews){
+        if(v == exV){
+            continue;
+        }
+        float originY = v.frame.origin.y;
         if (originY>=oY){
             v.center = CGPointMake(v.center.x, v.center.y+dis);
         }
@@ -272,7 +293,9 @@
 }
 
 
+
 -(void)showViewInfo{
+    NSLog(@"Show View Info:");
     unsigned index=0;
     for(UIView *v in self.myViews){
         NSLog(@"%u: %@",index, v);
@@ -287,6 +310,7 @@
     for(UIView *v in self.myViews){
         if (v.frame.origin.y > maxOffset){
             bottomView = v;
+            maxOffset = v.frame.origin.y;
         }else{
         }
     }
@@ -336,13 +360,30 @@
 }
 
 
+
+-(NSArray *)sortViews{
+    id sortByPosition = ^(UIView * v1, UIView * v2){
+        return v1.frame.origin.y >= v2.frame.origin.y;
+    };
+    
+    NSArray * sortedMyViews = [self.myViews sortedArrayUsingComparator:sortByPosition];
+    
+    NSLog(@"%@",sortedMyViews);
+    return sortedMyViews;
+    
+}
+
+
+-(void)viewToDict: (NSArray *)views{
+    
+}
+
+
+
 //  ---------- Notification Handlers ------------------
 
 -(void)imageButtonTouched:(NSNotification*)notification {
     unsigned rand = arc4random_uniform(3);
-    
-    
-    
     NSString *imageName = [NSString stringWithFormat:@"test%u",rand+1];
     UIImageView *imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:imageName]];
     
@@ -354,12 +395,14 @@
     [self splitTextView: curV];
     float insertOffset = curV.frame.size.height+curV.frame.origin.y;
     imageView.frame = CGRectMake(0, insertOffset, 300, 200);
-    NSLog(@"insertOffset: %f", insertOffset);
+//    NSLog(@"insertOffset: %f", insertOffset);
     //    imageView.center = CGPointMake(scrollViewWidth/2, insertOffset);
     CGPoint newCenter = imageView.center;
     newCenter.x = scrollViewWidth/2;
     imageView.center = newCenter;
-    [self moveDownViews:insertOffset dis:imageView.frame.size.height];
+    float moveDownDis = imageView.frame.size.height;
+    NSLog(@"move down %f", moveDownDis);
+    [self moveDownViews:insertOffset dis:moveDownDis];
     [self.myViews addObject:imageView];
     [self.scrollView addSubview:imageView];
     [self resizeContent];
@@ -371,7 +414,7 @@
     //    self.scrollView.contentOffset = p3;
     
     //    NSLog(@"count: %lu", (unsigned long)[self.myViews count]);
-    //    [self showViewInfo];
+        [self showViewInfo];
 }
 
 
@@ -448,6 +491,23 @@
 
 -(void)textViewFocused:(NSNotification*)notification {
     currentTextView = notification.object;
+    NSLog(@"Current is:%@", currentTextView);
+//    NSArray * exclude = [NSArray arrayWithObjects:@"doctype",
+//                         @"html",
+//                         @"head",
+//                         @"body",
+//                         @"xml",
+//                         nil
+//                         ];
+    
+    
+//    NSDictionary * htmlAtt = [NSDictionary dictionaryWithObjectsAndKeys: NSHTMLTextDocumentType, NSDocumentTypeDocumentAttribute, nil];
+//    NSError * error;
+//    NSData * htmlData = [currentTextView.attributedText dataFromRange:NSMakeRange(0, [currentTextView.attributedText length])
+//                               documentAttributes:htmlAtt error:&error
+//                         ];
+//    NSString * htmlString = [[NSString alloc] initWithData:htmlData encoding:NSUTF8StringEncoding];
+//    NSLog(@"%@",htmlString);
 }
 
 
@@ -465,8 +525,11 @@
 
 - (IBAction)clearButtonTouched:(id)sender {
     NSLog(@"Clear Button Touched");
-    self.myViews = nil;
-    [self getFirstTextView];
+    
+    [self sortViews];
+    
+//    self.myViews = nil;
+//    [self getFirstTextView];
 //    float inset = self.scrollView.contentInset.top;
 //    float offset = self.scrollView.contentOffset.y;
 //    float frame = self.scrollView.frame.origin.y;
