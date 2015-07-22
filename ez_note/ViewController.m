@@ -31,6 +31,8 @@
     
     EZImageViewFactory *imageFactory;
     
+    UIImagePickerController *imagePicker;
+    
     
     TextViewFactory *textViewFactory;
     float scrollViewHeight;
@@ -57,7 +59,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    
+    imagePicker = [[UIImagePickerController alloc] init];
+    imagePicker.delegate = self;
+    imagePicker.allowsEditing = YES;
+    
+    
     self.scrollView.pagingEnabled = NO;
+//    self.scrollView.contentInset = UIEdgeInsetsMake(-100.0, 0.0, 0, 0.0);
     
     scrollViewHeight = self.view.frame.size.height;
     scrollViewWidth = self.view.frame.size.width;
@@ -81,9 +90,10 @@
     [self getFirstTextView];
     
     
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardButtonTouched:) name:@"keyboardButtonTouched" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cameraButtonTouched:) name:@"cameraButtonTouched" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(imageButtonTouched:) name:@"imageButtonTouched" object:nil];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(audioButtonTouched:) name:@"audioButtonTouched" object:nil];
     
     
@@ -93,6 +103,13 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(imageViewTouched:) name:@"imageViewTouched" object:nil];
     
+    
+    
+    
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWasShown:) name:UIKeyboardDidShowNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillBeHidden:) name:UIKeyboardWillHideNotification object:nil];
     
     
     // Do any additional setup after loading the view, typically from a nib.
@@ -380,9 +397,46 @@
 
 
 
+
+
+- (void)addImage:(UIImage *)img{
+    UIView *imageView = [imageFactory createEZImageView:img];
+    
+    
+    
+    EZTextView *curV = currentTextView;
+    [self splitTextView: curV];
+    float insertOffset = curV.frame.size.height+curV.frame.origin.y;
+    imageView.frame = CGRectMake(0, insertOffset, 300, 200);
+
+    CGPoint newCenter = imageView.center;
+    newCenter.x = scrollViewWidth/2;
+    imageView.center = newCenter;
+    float moveDownDis = imageView.frame.size.height;
+    NSLog(@"move down %f", moveDownDis);
+    [self moveDownViews:insertOffset dis:moveDownDis];
+    [self.myViews addObject:imageView];
+    [self.scrollView addSubview:imageView];
+    [self resizeContent];
+    [self scrollAfterInsert: imageView.frame.origin.y+imageView.frame.size.height];
+    [self showViewInfo];
+}
+
+
 //  ---------- Notification Handlers ------------------
 
 -(void)imageButtonTouched:(NSNotification*)notification {
+    
+    
+    
+    imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    [self presentViewController:imagePicker animated:YES completion:nil];
+    
+    
+    
+    
+    
+    /*
     unsigned rand = arc4random_uniform(3);
     NSString *imageName = [NSString stringWithFormat:@"test%u",rand+1];
     UIImageView *imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:imageName]];
@@ -415,12 +469,19 @@
     
     //    NSLog(@"count: %lu", (unsigned long)[self.myViews count]);
         [self showViewInfo];
+     */
 }
 
 
 
 -(void)keyboardButtonTouched:(NSNotification*)notification {
     [currentTextView resignFirstResponder];
+}
+
+
+-(void)cameraButtonTouched:(NSNotification*)notification {
+    imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+    [self presentViewController:imagePicker animated:YES completion:nil];
 }
 
 
@@ -512,10 +573,85 @@
 
 
 
+-(void)keyboardWasShown:(NSNotification*)notification{
+    NSLog(@"Keyboard was shown");
+//    
+//    
+//    NSDictionary* info = [notification userInfo];
+//    
+//    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+//    
+//    
+//    
+//    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0);
+//    
+//    self.scrollView.contentInset = contentInsets;
+//    
+//    self.scrollView.scrollIndicatorInsets = contentInsets;
+//    
+//    
+//    
+//    // If active text field is hidden by keyboard, scroll it so it's visible
+//    
+//    // Your app might not need or want this behavior.
+//    
+//    CGRect aRect = self.view.frame;
+//    
+//    aRect.size.height -= kbSize.height;
+//    
+//    if (!CGRectContainsPoint(aRect, currentTextView.frame.origin) ) {
+//        
+//        [self.scrollView scrollRectToVisible:currentTextView.frame animated:YES];
+//        
+//    }
+    
+    
+//    NSValue* keyboardFrameBegin = [notification.userInfo valueForKey:UIKeyboardFrameBeginUserInfoKey];
+//    CGRect keyboardFrameBeginRect = [keyboardFrameBegin CGRectValue];
+//    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, keyboardFrameBeginRect.size.height, 0.0);
+//    CGRect aRect = self.view.frame;
+//    aRect.size.height -= kbSize.height;
+//    self.scrollView scrollRectToVisible:<#(CGRect)#> animated:NO]
+//    scrollRectToVisible
+//    self.scrollView.contentInset = contentInsets;
+}
+
+
 //
 //-(void)textViewHeightChanged:(NSNotification*)notification {
 //    [self resizeContent];
 //}
+
+
+-(void)keyboardWillBeHidden:(NSNotification*)notification{
+    NSLog(@"Keyboard will be hidden");
+//    NSValue* keyboardFrameBegin = [notification.userInfo valueForKey:UIKeyboardFrameBeginUserInfoKey];
+//    CGRect keyboardFrameBeginRect = [keyboardFrameBegin CGRectValue];
+//    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, 64, 0.0);
+//    
+//    self.scrollView.contentInset = contentInsets;
+}
+
+
+
+
+
+
+// -------------- Delegates ---------------------
+
+
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    UIImage * img = info[UIImagePickerControllerOriginalImage];
+    [self dismissViewControllerAnimated:YES completion:nil];
+    [self addImage:img];
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+
 
 
 
@@ -526,15 +662,17 @@
 - (IBAction)clearButtonTouched:(id)sender {
     NSLog(@"Clear Button Touched");
     
-    [self sortViews];
-    
 //    self.myViews = nil;
 //    [self getFirstTextView];
-//    float inset = self.scrollView.contentInset.top;
-//    float offset = self.scrollView.contentOffset.y;
-//    float frame = self.scrollView.frame.origin.y;
-//    float bound = self.scrollView.bounds.origin.y;
-//    NSLog(@"Inset: %f Offset:%f frame:%f bound:%f", inset, offset, frame, bound);
+//    
+//    [self sortViews];
+//    
+
+    float inset = self.scrollView.contentInset.top;
+    float offset = self.scrollView.contentOffset.y;
+    float frame = self.scrollView.frame.origin.y;
+    float bound = self.scrollView.bounds.origin.y;
+    NSLog(@"Inset: %f Offset:%f frame:%f bound:%f", inset, offset, frame, bound);
 }
 
 - (void)dealloc

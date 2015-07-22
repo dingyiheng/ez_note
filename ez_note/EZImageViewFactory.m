@@ -19,6 +19,13 @@
     return self;
 }
 
+
+- (EZImageView *) createEZImageView:(UIImage *)img{
+    return [[EZImageView alloc] initWithImage:nil Image:img];
+}
+
+
+
 - (EZImageView *) createEZImageViewWithURL:(NSURL *)url
 {
     if(!url){
