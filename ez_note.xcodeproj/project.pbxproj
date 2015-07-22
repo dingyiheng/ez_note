@@ -13,6 +13,7 @@
 		35D098581B5B671200550EB3 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 35D098571B5B671200550EB3 /* Images.xcassets */; };
 		35D0985B1B5B671200550EB3 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 35D098591B5B671200550EB3 /* LaunchScreen.xib */; };
 		35D098671B5B671200550EB3 /* ez_noteTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 35D098661B5B671200550EB3 /* ez_noteTests.m */; };
+		35DD10041B603C60007AFE47 /* Ezview.m in Sources */ = {isa = PBXBuildFile; fileRef = 35DD10031B603C60007AFE47 /* Ezview.m */; };
 		35FEF8D11B5D89AE00A96076 /* AudioFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 35FEF8CD1B5D89AE00A96076 /* AudioFactory.m */; };
 		35FEF8D21B5D89AE00A96076 /* AudioView.m in Sources */ = {isa = PBXBuildFile; fileRef = 35FEF8CF1B5D89AE00A96076 /* AudioView.m */; };
 		35FEF8D31B5D89AE00A96076 /* AudioView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 35FEF8D01B5D89AE00A96076 /* AudioView.xib */; };
@@ -53,6 +54,9 @@
 		35D098601B5B671200550EB3 /* ez_noteTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ez_noteTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		35D098651B5B671200550EB3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		35D098661B5B671200550EB3 /* ez_noteTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ez_noteTests.m; sourceTree = "<group>"; };
+		35DD10011B603C60007AFE47 /* EZnoteProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZnoteProtocol.h; sourceTree = "<group>"; };
+		35DD10021B603C60007AFE47 /* Ezview.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Ezview.h; sourceTree = "<group>"; };
+		35DD10031B603C60007AFE47 /* Ezview.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Ezview.m; sourceTree = "<group>"; };
 		35FEF8CC1B5D89AE00A96076 /* AudioFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioFactory.h; sourceTree = "<group>"; };
 		35FEF8CD1B5D89AE00A96076 /* AudioFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioFactory.m; sourceTree = "<group>"; };
 		35FEF8CE1B5D89AE00A96076 /* AudioView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioView.h; sourceTree = "<group>"; };
@@ -121,6 +125,9 @@
 		35D098491B5B671100550EB3 /* ez_note */ = {
 			isa = PBXGroup;
 			children = (
+				35DD10011B603C60007AFE47 /* EZnoteProtocol.h */,
+				35DD10021B603C60007AFE47 /* Ezview.h */,
+				35DD10031B603C60007AFE47 /* Ezview.m */,
 				B656AF0E1B5DB700007538B8 /* KeyBindingsViewController.h */,
 				B656AF0F1B5DB700007538B8 /* KeyBindingsViewController.m */,
 				B656AF101B5DB700007538B8 /* KeyBindingTextField.h */,
@@ -302,6 +309,7 @@
 				683E407B1B5D959A00CCDAF3 /* EZImageView.m in Sources */,
 				35FEF8DE1B5D917A00A96076 /* EZTextView.m in Sources */,
 				35FEF8D11B5D89AE00A96076 /* AudioFactory.m in Sources */,
+				35DD10041B603C60007AFE47 /* Ezview.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
