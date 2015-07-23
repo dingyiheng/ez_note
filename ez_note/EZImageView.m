@@ -20,56 +20,77 @@
 */
 
 
-- (id) initWithImage:(EZOptions*) opt Image:(UIImage*) image
+- (UIView *)viewFromNib{
+    Class class = [self class];
+    NSString *nibName = NSStringFromClass(class);
+    NSArray *nibViews = [[NSBundle mainBundle] loadNibNamed:nibName owner:self options:nil];
+    UIView *view = [nibViews objectAtIndex:0];
+    return view;
+}
+
+- (void) addsubviewFromNib
 {
-    self.width_height_ratio = 3.0/2;
-    
-    self.view_Max_Width = 300;
-    self.view_Max_Height = self.view_Max_Width / self.width_height_ratio;
-    
-    CGFloat button_Width = self.view_Max_Width;
-    CGFloat button_Height = self.view_Max_Height;
+    UIView *view = [self viewFromNib];
+    view.frame = self.bounds;
+    [self addSubview:view];
+}
+
+
+- (instancetype)initWithImage:(UIImage *) image {
     self.img = image;
     
+    self.width_height_ratio = 3.0/2;
+    
+    self.view_Max_Width = screen_width * 0.95;
+    self.view_Max_Height = self.view_Max_Width / self.width_height_ratio;
     UIImage *buttonImage = [self cropImage];
+    
+    self = [super initWithFrame: [self getViewFrame:buttonImage]];
+    
+    if(self){
+        [self addsubviewFromNib];
+//        [self.imgButton setImage:buttonImage forState:UIControlStateNormal];
+        self.imageView.image = image;
+    }
+    return self;
+}
+
+
+- (CGRect) getViewFrame:(UIImage *) buttonImage {
+    CGFloat view_Width = self.view_Max_Width;
+    CGFloat view_Height = self.view_Max_Height;
+    
+
     CGFloat img_Width = buttonImage.size.width;
     CGFloat img_Height = buttonImage.size.height;
     CGFloat img_ratio = img_Width / img_Height;
     
     // Over Size
     if(img_Width > self.view_Max_Width || img_Height > self.view_Max_Height) {
-//        button_Width = self.view_Max_Width;
+        //        button_Width = self.view_Max_Width;
         // too wide
         if (img_ratio > self.width_height_ratio)
-            button_Height = button_Width / img_ratio;
+            view_Height = view_Width / img_ratio;
         // too tall
         else {
             if (img_Width > self.view_Max_Width)
-                button_Width = self.view_Max_Width;
+                view_Width = self.view_Max_Width;
             else
-                button_Width = img_Width;
+                view_Width = img_Width;
             
-            button_Height = self.view_Max_Height;
+            view_Height = self.view_Max_Height;
         }
     }
     // too small
     else if (img_Width < self.view_Max_Width && img_Height < self.view_Max_Height) {
-        button_Width = img_Width;
-        button_Height = img_Height;
+        view_Width = img_Width;
+        view_Height = img_Height;
     }
     
-    NSLog (@"Button Width: %f  Button Height  %f", button_Width, button_Height);
-    
-    
-//    screenWidth = screenRect.size.width;    // 375
-//    self.x = (screenWidth - button_Width) / 2;
-    
-    self = [super initWithFrame:CGRectMake(0, 0, button_Width, button_Height)];
-    [self setImage:buttonImage forState:UIControlStateNormal];
-    [self addTarget:self action:@selector(imgPressed:) forControlEvents:UIControlEventTouchUpInside];
-    
-    return self;
+
+    return CGRectMake(0, 0, view_Width, view_Height);
 }
+
 
 - (UIImage *) cropImage {
     CGFloat img_Width = self.img.size.width;
@@ -107,10 +128,15 @@
     return croppedImg;
 }
 
-- (void) imgPressed:(EZImageView *) EZIV {
+
+- (IBAction)imgTouched:(id)sender {
     NSLog(@"Pressed");
     NSDictionary *info = @{@"img": self.img};
     [[NSNotificationCenter defaultCenter] postNotificationName:@"imageViewTouched" object:self userInfo:info];
+}
+
+- (id) getOutput{
+    return nil;
 }
 
 

@@ -1,14 +1,17 @@
 //
-//  Ezview.h
+//  Ezview.m
 //  try_20150719_audioView
 //
 //  Created by Yiheng Ding on 7/22/15.
 //  Copyright (c) 2015 Yiheng Ding. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import "EZnoteProtocol.h"
+#import "EZView.h"
 
-@interface Ezview : UIView<EZnoteProtocol>
+@implementation EZView
+
+-(id)getOutput{
+    return nil;
+}
 
 @end

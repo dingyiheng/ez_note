@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@protocol EZnoteProtocol <NSObject>
+@protocol EZNoteProtocol <NSObject>
 
 - (id) getOutput;
 

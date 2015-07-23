@@ -21,19 +21,18 @@
 
 
 - (EZImageView *) createEZImageView:(UIImage *)img{
-    return [[EZImageView alloc] initWithImage:nil Image:img];
+    return [[EZImageView alloc] initWithImage:img];
 }
-
 
 
 - (EZImageView *) createEZImageViewWithURL:(NSURL *)url
 {
     if(!url){
-        return [[EZImageView alloc] initWithImage:nil Image:[UIImage imageNamed:@"test1"]];
+        return [[EZImageView alloc] initWithImage:[UIImage imageNamed:@"test1"]];
     }else{
         NSData *data =[NSData dataWithContentsOfURL:url];
         UIImage *img = [UIImage imageWithData:data];
-        return [[EZImageView alloc] initWithImage:nil Image:img];
+        return [[EZImageView alloc] initWithImage:img];
     }
 }
 
