@@ -6,6 +6,8 @@
 //  Copyright (c) 2015 Fred. All rights reserved.
 //
 
+
+#import "AppDelegate.h"
 #import "ViewController.h"
 
 #import "AudioView.h"
@@ -19,6 +21,8 @@
 #import "EZTextView.h"
 
 #import "ToolBarView.h"
+
+#import "Note.h"
 
 @interface ViewController (){
     
@@ -60,13 +64,14 @@
     [super viewDidLoad];
     
     
+    NSLog(@"Context: %@", self.managedObjectContext);
+    
     imagePicker = [[UIImagePickerController alloc] init];
     imagePicker.delegate = self;
     imagePicker.allowsEditing = YES;
     
     
     self.scrollView.pagingEnabled = NO;
-//    self.scrollView.contentInset = UIEdgeInsetsMake(-100.0, 0.0, 0, 0.0);
     
     scrollViewHeight = self.view.frame.size.height;
     scrollViewWidth = self.view.frame.size.width;
@@ -122,18 +127,12 @@
     
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-
 
 
 -(void)resizeContent{
     CGSize size = CGSizeMake(scrollViewWidth, [self getContentHeight]);
     self.scrollView.contentSize = size;
-    NSLog(@"%f",self.scrollView.contentSize.height);
+    NSLog(@"Resize to %f",self.scrollView.contentSize.height);
 }
 
 - (float)getContentHeight {
@@ -152,7 +151,7 @@
     NSLog(@"%@",v);
     [self.myViews addObject:v];
     
-    v.inputAccessoryView = toolbar;
+    v.textView.inputAccessoryView = toolbar;
     v.isBottomTextView = YES;
     currentTextView = v;
     bottomTextView = v;
@@ -166,16 +165,16 @@
 
 -(void)splitTextView:(EZTextView *)v{
     
-    NSMutableAttributedString *beforeAttributedString = [[NSMutableAttributedString alloc] initWithAttributedString: v.attributedText];
-    NSMutableAttributedString *afterAttributedString = [[NSMutableAttributedString alloc] initWithAttributedString: v.attributedText];
+    NSMutableAttributedString *beforeAttributedString = [[NSMutableAttributedString alloc] initWithAttributedString: v.textView.attributedText];
+    NSMutableAttributedString *afterAttributedString = [[NSMutableAttributedString alloc] initWithAttributedString: v.textView.attributedText];
     
 //    NSLog(@"length: %lu", afterAttributedString.length);
     
    
     
-    long beforeStringEndAt = v.selectedRange.location;
-    long afterStringStartAt = v.selectedRange.location+v.selectedRange.length;
-    long stringLength = v.text.length;
+    long beforeStringEndAt = v.textView.selectedRange.location;
+    long afterStringStartAt = v.textView.selectedRange.location+v.textView.selectedRange.length;
+    long stringLength = v.textView.text.length;
     
     NSLog(@"text length: %lu", stringLength);
     
@@ -188,16 +187,16 @@
 //    NSString *topString =[v.text substringToIndex: v.selectedRange.location];
 //    NSLog(@"topStr: %@", topString);
 //    v.text = topString;
-    v.attributedText = beforeAttributedString;
+    v.textView.attributedText = beforeAttributedString;
     
     
     
     CGFloat fixedWidth = v.frame.size.width;
-    CGSize newSize = [v sizeThatFits:CGSizeMake(fixedWidth, MAXFLOAT)];
+    CGSize newSize = [v.textView sizeThatFits:CGSizeMake(fixedWidth, MAXFLOAT)];
     CGRect newFrame = v.frame;
     newFrame.size = CGSizeMake(fmaxf(newSize.width, fixedWidth), newSize.height);
     
-    v.contentSize = newSize;
+    v.textView.contentSize = newSize;
     
     
     //    float oH = v.frame.size.height;
@@ -211,24 +210,24 @@
     EZTextView *v2 = [textViewFactory createTextView];
     [self.myViews addObject:v2];
     [self.scrollView addSubview:v2];
-    if ([v.text hasPrefix:@"\n"]){
-        v.text = [v.text substringFromIndex:1];
+    if ([v.textView.text hasPrefix:@"\n"]){
+        v.textView.text = [v.textView.text substringFromIndex:1];
     }
 //    v2.text = remainingStr;
-    v2.attributedText = afterAttributedString;
+    v2.textView.attributedText = afterAttributedString;
     
     
     CGFloat fixedWidth2 = v2.frame.size.width;
-    CGSize newSize2 = [v2 sizeThatFits:CGSizeMake(fixedWidth2, MAXFLOAT)];
+    CGSize newSize2 = [v2.textView sizeThatFits:CGSizeMake(fixedWidth2, MAXFLOAT)];
     CGRect newFrame2 = v2.frame;
     newFrame2.size = CGSizeMake(fmaxf(newSize2.width, fixedWidth2), newSize2.height);
     
-    v2.contentSize = newSize;
+    v2.textView.contentSize = newSize;
     
     
     NSLog(@"v2:offset:%f", v.frame.origin.y+v.frame.size.height);
     v2.frame = CGRectMake(0,v.frame.origin.y+v.frame.size.height, fixedWidth2, newSize2.height);
-    NSLog(@"v2 height:%f", v2.contentSize.height);
+    NSLog(@"v2 height:%f", v2.textView.contentSize.height);
     
     
     //check if the second part of the splitted textview is the bottom view, if true, set extra blank for it
@@ -241,9 +240,9 @@
         v2.frame = CGRectMake(0,v2.frame.origin.y, v2.frame.size.width, v2.frame.size.height+textViewFactory.bottomBlankHeight);
     }
     [self resetBottonView];
-    v2.inputAccessoryView = toolbar;
+    v2.textView.inputAccessoryView = toolbar;
     [v2 becomeFirstResponder];
-    v2.selectedRange = NSMakeRange(0, 0);
+    v2.textView.selectedRange = NSMakeRange(0, 0);
     
     
     float moveDownDis = v2.frame.size.height;
@@ -391,12 +390,50 @@
 }
 
 
--(void)viewToDict: (NSArray *)views{
+-(NSArray *)viewToDictArray: (NSArray *)views{
+    NSMutableArray *array = [NSMutableArray arrayWithCapacity: [views count]];
+    for(EZView *v in self.myViews){
+        NSMutableDictionary *tempDict= [[NSMutableDictionary alloc]init];
+        [tempDict setObject: NSStringFromClass([v class]) forKey:@"class"];
+        [tempDict setObject:[NSNumber numberWithFloat:v.frame.size.height] forKey:@"height"];
+        [tempDict setObject:[NSNumber numberWithFloat:v.frame.size.width] forKey:@"width"];
+        [tempDict setObject:[v getOutput] forKey:@"content"];
+        [array addObject:tempDict];
+    }
+
     
+    for(NSDictionary *d in array){
+        NSLog(@"%@",d);
+    }
+    
+    return array;
 }
 
 
+-(void)getOutput{
+    NSArray *sortedViews = [self sortViews];
+//    [self viewToDict:sortedViews];
+}
 
+-(void)saveNote{
+    Note *note = nil;
+    NSManagedObjectContext *context = self.managedObjectContext;
+    note = [NSEntityDescription insertNewObjectForEntityForName:@"Note" inManagedObjectContext:context];
+    note.title = @"TestTitle";
+    NSArray *array = [self viewToDictArray:[self sortViews]];
+    NSError *error;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:array options:0 error:&error];
+    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    NSLog(@"json: %@", jsonString);
+    note.content = jsonData;
+    note.create_time = [NSDate date];
+    note.tag = [[NSSet alloc]init];
+    if([context save: &error]){
+        NSLog(@"Saved");
+    }else{
+        NSLog(@"Failed to save - error: %@", [error localizedDescription]);
+    }
+}
 
 
 - (void)addImage:(UIImage *)img{
@@ -475,7 +512,7 @@
 
 
 -(void)keyboardButtonTouched:(NSNotification*)notification {
-    [currentTextView resignFirstResponder];
+    [currentTextView.textView resignFirstResponder];
 }
 
 
@@ -541,6 +578,7 @@
 
 
 -(void)textViewHeightChanged:(NSNotification*)notification {
+    NSLog(@"Text View Height Changed");
     NSLog(@"co off%f", self.scrollView.contentOffset.y);
     [self resizeContent];
     NSNumber *deltaHeight = notification.userInfo[@"deltaHeight"];
@@ -574,62 +612,35 @@
 
 
 -(void)keyboardWasShown:(NSNotification*)notification{
+    
+    NSDictionary* info = [notification userInfo];
+    
+    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    
     NSLog(@"Keyboard was shown");
-//    
-//    
-//    NSDictionary* info = [notification userInfo];
-//    
-//    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-//    
-//    
-//    
-//    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0);
-//    
-//    self.scrollView.contentInset = contentInsets;
-//    
-//    self.scrollView.scrollIndicatorInsets = contentInsets;
-//    
-//    
-//    
-//    // If active text field is hidden by keyboard, scroll it so it's visible
-//    
-//    // Your app might not need or want this behavior.
-//    
-//    CGRect aRect = self.view.frame;
-//    
-//    aRect.size.height -= kbSize.height;
-//    
-//    if (!CGRectContainsPoint(aRect, currentTextView.frame.origin) ) {
-//        
-//        [self.scrollView scrollRectToVisible:currentTextView.frame animated:YES];
-//        
-//    }
-    
-    
-//    NSValue* keyboardFrameBegin = [notification.userInfo valueForKey:UIKeyboardFrameBeginUserInfoKey];
-//    CGRect keyboardFrameBeginRect = [keyboardFrameBegin CGRectValue];
-//    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, keyboardFrameBeginRect.size.height, 0.0);
-//    CGRect aRect = self.view.frame;
-//    aRect.size.height -= kbSize.height;
-//    self.scrollView scrollRectToVisible:<#(CGRect)#> animated:NO]
-//    scrollRectToVisible
-//    self.scrollView.contentInset = contentInsets;
+    CGPoint cursorPosition = [currentTextView.textView caretRectForPosition:currentTextView.textView.selectedTextRange.start].origin;
+    NSLog(@"cursor position: %f %f", cursorPosition.x, cursorPosition.y);
+    float currentViewOffset = currentTextView.frame.origin.y;
+    NSLog(@"current view offset:%f", currentViewOffset);
+    NSLog(@"scroll view offset:%f", self.scrollView.contentOffset.y);
+    NSLog(@"keyboard size: %f", kbSize.height);
+    NSLog(@"scroll view size: %f", scrollViewHeight);
+    NSLog(@"%f",self.scrollView.contentOffset.y - currentViewOffset + cursorPosition.y + kbSize.height);
+    if( currentViewOffset - self.scrollView.contentOffset.y + cursorPosition.y + kbSize.height > scrollViewHeight){
+        float scrollTo = self.scrollView.contentOffset.y + kbSize.height;
+        CGPoint scrollToPoint = CGPointMake(0, scrollTo);
+        [UIView animateWithDuration:.3 animations:^{
+            self.scrollView.contentOffset = scrollToPoint;
+        }];
+    }
+//    if ( self.scrollView.contentOffset.ycurrentViewOffset+)
+//    [self.scrollView scrollRectToVisible:currentTextView.textView.frame animated:YES];
+
 }
-
-
-//
-//-(void)textViewHeightChanged:(NSNotification*)notification {
-//    [self resizeContent];
-//}
 
 
 -(void)keyboardWillBeHidden:(NSNotification*)notification{
     NSLog(@"Keyboard will be hidden");
-//    NSValue* keyboardFrameBegin = [notification.userInfo valueForKey:UIKeyboardFrameBeginUserInfoKey];
-//    CGRect keyboardFrameBeginRect = [keyboardFrameBegin CGRectValue];
-//    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, 64, 0.0);
-//    
-//    self.scrollView.contentInset = contentInsets;
 }
 
 
@@ -661,6 +672,14 @@
 
 - (IBAction)clearButtonTouched:(id)sender {
     NSLog(@"Clear Button Touched");
+    [self showViewInfo];
+    
+    [self saveNote];
+    
+    
+//    NSLog(@"------------------");
+//    [self getOutput];
+//    NSLog(@"%@", currentTextView);
     
 //    self.myViews = nil;
 //    [self getFirstTextView];
@@ -668,12 +687,25 @@
 //    [self sortViews];
 //    
 
-    float inset = self.scrollView.contentInset.top;
-    float offset = self.scrollView.contentOffset.y;
-    float frame = self.scrollView.frame.origin.y;
-    float bound = self.scrollView.bounds.origin.y;
-    NSLog(@"Inset: %f Offset:%f frame:%f bound:%f", inset, offset, frame, bound);
+//    float inset = self.scrollView.contentInset.top;
+//    float offset = self.scrollView.contentOffset.y;
+//    float frame = self.scrollView.frame.origin.y;
+//    float bound = self.scrollView.bounds.origin.y;
+//    NSLog(@"Inset: %f Offset:%f frame:%f bound:%f", inset, offset, frame, bound);
 }
+
+
+
+
+
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+
+
 
 - (void)dealloc
 {

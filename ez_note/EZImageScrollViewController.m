@@ -176,8 +176,17 @@
     imageView.frame = frame;
 }
 
-- (BOOL)prefersStatusBarHidden {
-    return YES;
+//- (BOOL)prefersStatusBarHidden {
+//    return YES;
+//}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    self.navigationController.navigationBar.hidden = YES;
+}
+
+- (void)viewDidDisappear:(BOOL)animated{
+    self.navigationController.navigationBar.hidden = YES;
 }
 
 @end

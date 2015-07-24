@@ -15,5 +15,7 @@
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *clearButton;
 
+@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+
 @end
 

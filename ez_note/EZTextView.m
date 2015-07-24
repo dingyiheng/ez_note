@@ -21,36 +21,62 @@
 */
 
 
+- (id)getOutput{
+    return self.textView.text;
+}
+
+
+
+- (UIView *)viewFromNib{
+    Class class = [self class];
+    NSString *nibName = NSStringFromClass(class);
+    NSArray *nibViews = [[NSBundle mainBundle] loadNibNamed:nibName owner:self options:nil];
+    UIView *view = [nibViews objectAtIndex:0];
+    return view;
+}
+
+- (void) addsubviewFromNib
+{
+    UIView *view = [self viewFromNib];
+    view.frame = self.bounds;
+    //NSLog(@"%f %f %f %f",self.bounds.origin.x,self.bounds.origin.y,self.bounds.size.width,self.bounds.size.height);
+    
+    [self addSubview:view];
+}
+
+
 - (instancetype)initWithSettings:(NSDictionary *)settings{
     NSValue *sizeObj = settings[@"frameSize"];
     CGSize size = [sizeObj CGSizeValue];
     float width = size.width;
     float height = size.height;
     self = [super initWithFrame:CGRectMake(0, 0, width, height)];
-    self.backgroundColor = settings[@"backgroundColor"];
-    self.scrollEnabled = NO;
-    self.delegate = self;
-    self.isBottomTextView = NO;
-    bottomBlankHeight = [settings[@"bottomBlankHeight"] floatValue];
-    
-    NSString *path;
-    NSString *writingPath;
-    path = [[NSBundle mainBundle] pathForResource:@"KeyBindings" ofType:@"plist"];
-    NSArray *arrayPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES);
-    NSString *writingFolder = [arrayPaths objectAtIndex:0];
-    writingPath =[[NSString alloc] initWithString:[writingFolder stringByAppendingPathComponent:@"KeyBindings.plist"]];
-    NSError *error;
-    if (![[NSFileManager defaultManager] fileExistsAtPath:writingPath]) {
-        if([[NSFileManager defaultManager] copyItemAtPath:path  toPath:writingPath error:&error]){
+    if(self){
+        [self addsubviewFromNib];
+        self.textView.backgroundColor = settings[@"backgroundColor"];
+        self.textView.scrollEnabled = NO;
+        self.textView.delegate = self;
+        self.isBottomTextView = NO;
+        bottomBlankHeight = [settings[@"bottomBlankHeight"] floatValue];
+        
+        NSString *path;
+        NSString *writingPath;
+        path = [[NSBundle mainBundle] pathForResource:@"KeyBindings" ofType:@"plist"];
+        NSArray *arrayPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES);
+        NSString *writingFolder = [arrayPaths objectAtIndex:0];
+        writingPath =[[NSString alloc] initWithString:[writingFolder stringByAppendingPathComponent:@"KeyBindings.plist"]];
+        NSError *error;
+        if (![[NSFileManager defaultManager] fileExistsAtPath:writingPath]) {
+            if([[NSFileManager defaultManager] copyItemAtPath:path  toPath:writingPath error:&error]){
+            }else{
+                NSLog(@"Failed");
+            }
+            keyNameproperties = [NSMutableDictionary dictionaryWithContentsOfFile:path];
         }else{
-            NSLog(@"Failed");
+            keyNameproperties = [NSMutableDictionary dictionaryWithContentsOfFile:writingPath];
         }
-        keyNameproperties = [NSMutableDictionary dictionaryWithContentsOfFile:path];
-    }else{
-        keyNameproperties = [NSMutableDictionary dictionaryWithContentsOfFile:writingPath];
+        functionCharLen = (unsigned)[[keyNameproperties objectForKey:@"functional_char"] length];
     }
-    functionCharLen = (unsigned)[[keyNameproperties objectForKey:@"functional_char"] length];
-    
     return self;
 }
 
@@ -60,10 +86,9 @@
     NSLog(@"text changed");
     
     
-    
     //----------formatter part----------------
     
-    NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithAttributedString:self.attributedText];
+    NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithAttributedString:self.textView.attributedText];
     NSString *lastChars = [self getLastChars:functionCharLen+2];
     //    NSLog(@"%@",lastChars);
     FormatType formatType = FormatTypeNone;
@@ -72,11 +97,11 @@
         //        NSLog(@"YES");
         formatType = [self getFormatType:lastChars];
         formatScope = [self getFormatScope:lastChars];
-        NSRange r = self.selectedRange;
+        NSRange r = self.textView.selectedRange;
         long loc = r.location-functionCharLen-2;
         NSString *beforeString = [textView.text substringToIndex:loc];
         NSRange formatRange = [self getShouldBeFormattedRange:formatScope beforeString:beforeString];
-        NSLog(@"Format text:%@", [self.text substringWithRange:formatRange]);
+        NSLog(@"Format text:%@", [self.textView.text substringWithRange:formatRange]);
         NSString *typeName = [self getFormatTypeName:formatType];
         id value = [self getFormatTypeValue:formatType];
         NSLog(@"%@", value);
@@ -84,8 +109,8 @@
         
         [attributedText addAttribute:typeName value:value range:formatRange];
         [attributedText replaceCharactersInRange: NSMakeRange(loc, functionCharLen+2) withString:@" "];
-        self.attributedText = attributedText;
-        self.selectedRange = NSMakeRange(loc+1, 0);
+        self.textView.attributedText = attributedText;
+        self.textView.selectedRange = NSMakeRange(loc+1, 0);
     }else{
         NSLog(@"NO");
     }
@@ -131,12 +156,12 @@
 
 
 - (NSString *)getLastChars:(unsigned)length{
-    if(self.text.length < length){
-        return self.text;
+    if(self.textView.text.length < length){
+        return self.textView.text;
     }
-    NSRange r = self.selectedRange;
+    NSRange r = self.textView.selectedRange;
     long loc = r.location;
-    NSString *s = [self.text substringWithRange: NSMakeRange(loc-length, length)];
+    NSString *s = [self.textView.text substringWithRange: NSMakeRange(loc-length, length)];
     return s;
 }
 
@@ -273,13 +298,13 @@
 - (id)getFormatTypeValue:(FormatType)type{
     switch (type) {
         case FormatTypeBold:{
-            UIFontDescriptor *boldFontDescriptor = [self.font.fontDescriptor fontDescriptorWithSymbolicTraits:UIFontDescriptorTraitBold];
+            UIFontDescriptor *boldFontDescriptor = [self.textView.font.fontDescriptor fontDescriptorWithSymbolicTraits:UIFontDescriptorTraitBold];
             UIFont *boldFont = [UIFont fontWithDescriptor:boldFontDescriptor size:0];
             return boldFont;
             break;
         }
         case FormatTypeItalic:{
-            UIFontDescriptor *boldFontDescriptor = [self.font.fontDescriptor fontDescriptorWithSymbolicTraits:UIFontDescriptorTraitItalic];
+            UIFontDescriptor *boldFontDescriptor = [self.textView.font.fontDescriptor fontDescriptorWithSymbolicTraits:UIFontDescriptorTraitItalic];
             UIFont *italicFont = [UIFont fontWithDescriptor:boldFontDescriptor size:0];
             return italicFont;
             break;

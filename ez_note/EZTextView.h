@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "EZView.h"
 
 
-@interface EZTextView : UITextView <UITextViewDelegate>{
+@interface EZTextView : EZView <UITextViewDelegate>{
     NSMutableDictionary *keyNameproperties;
     unsigned functionCharLen;
 }
@@ -38,6 +39,7 @@ typedef enum {
     FormatScopeNone
 } FormatScope;
 
+@property (strong, nonatomic) IBOutlet UITextView *textView;
 
 - (instancetype)initWithSettings:(NSDictionary *)settings;
 

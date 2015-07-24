@@ -136,6 +136,7 @@
 }
 
 - (id) getOutput{
+    return @"image url";
     return nil;
 }
 

@@ -29,7 +29,13 @@
 		B656AF0D1B5DB5E4007538B8 /* KeyBindings.plist in Resources */ = {isa = PBXBuildFile; fileRef = B656AF0C1B5DB5E4007538B8 /* KeyBindings.plist */; };
 		B656AF121B5DB700007538B8 /* KeyBindingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B656AF0F1B5DB700007538B8 /* KeyBindingsViewController.m */; };
 		B656AF131B5DB700007538B8 /* KeyBindingTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = B656AF111B5DB700007538B8 /* KeyBindingTextField.m */; };
+		B65EDF9D1B60B0670043C99D /* EZTextView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B65EDF9C1B60B0670043C99D /* EZTextView.xib */; };
+		B65EDFA01B60CD1A0043C99D /* Note.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B65EDF9E1B60CD1A0043C99D /* Note.xcdatamodeld */; };
+		B65EDFB61B60D4730043C99D /* Note.m in Sources */ = {isa = PBXBuildFile; fileRef = B65EDFB51B60D4730043C99D /* Note.m */; };
+		B65EDFB91B60D4730043C99D /* Notebook.m in Sources */ = {isa = PBXBuildFile; fileRef = B65EDFB81B60D4730043C99D /* Notebook.m */; };
+		B65EDFBC1B60D4730043C99D /* Tag.m in Sources */ = {isa = PBXBuildFile; fileRef = B65EDFBB1B60D4730043C99D /* Tag.m */; };
 		B65F9CB01B5D928D00FB53E7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B65F9CAF1B5D928D00FB53E7 /* Main.storyboard */; };
+		B6E73D3E1B618D670089968E /* NoteTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B6E73D3D1B618D670089968E /* NoteTableViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -85,7 +91,18 @@
 		B656AF0F1B5DB700007538B8 /* KeyBindingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyBindingsViewController.m; sourceTree = "<group>"; };
 		B656AF101B5DB700007538B8 /* KeyBindingTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyBindingTextField.h; sourceTree = "<group>"; };
 		B656AF111B5DB700007538B8 /* KeyBindingTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyBindingTextField.m; sourceTree = "<group>"; };
+		B65EDF9C1B60B0670043C99D /* EZTextView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZTextView.xib; sourceTree = "<group>"; };
+		B65EDF9F1B60CD1A0043C99D /* Note.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Note.xcdatamodel; sourceTree = "<group>"; };
+		B65EDFB41B60D4730043C99D /* Note.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Note.h; path = ez_note/core_data/Note.h; sourceTree = "<group>"; };
+		B65EDFB51B60D4730043C99D /* Note.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Note.m; path = ez_note/core_data/Note.m; sourceTree = "<group>"; };
+		B65EDFB71B60D4730043C99D /* Notebook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Notebook.h; path = ez_note/core_data/Notebook.h; sourceTree = "<group>"; };
+		B65EDFB81B60D4730043C99D /* Notebook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Notebook.m; path = ez_note/core_data/Notebook.m; sourceTree = "<group>"; };
+		B65EDFBA1B60D4730043C99D /* Tag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Tag.h; path = ez_note/core_data/Tag.h; sourceTree = "<group>"; };
+		B65EDFBB1B60D4730043C99D /* Tag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Tag.m; path = ez_note/core_data/Tag.m; sourceTree = "<group>"; };
+		B65EDFBE1B60E7A20043C99D /* EZNote-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "EZNote-Prefix.pch"; sourceTree = "<group>"; };
 		B65F9CAF1B5D928D00FB53E7 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		B6E73D3C1B618D670089968E /* NoteTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoteTableViewController.h; sourceTree = "<group>"; };
+		B6E73D3D1B618D670089968E /* NoteTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoteTableViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,6 +144,9 @@
 		35D098491B5B671100550EB3 /* ez_note */ = {
 			isa = PBXGroup;
 			children = (
+				B65EDFBD1B60D47A0043C99D /* Core Data */,
+				35D0984E1B5B671100550EB3 /* AppDelegate.h */,
+				35D0984F1B5B671100550EB3 /* AppDelegate.m */,
 				35DD10011B603C60007AFE47 /* EZNoteProtocol.h */,
 				35DD10021B603C60007AFE47 /* EZView.h */,
 				35DD10031B603C60007AFE47 /* EZView.m */,
@@ -146,8 +166,11 @@
 				683E40781B5D959A00CCDAF3 /* EZOptions.m */,
 				683E40791B5D959A00CCDAF3 /* utilities.h */,
 				B65F9CAF1B5D928D00FB53E7 /* Main.storyboard */,
+				B6E73D3C1B618D670089968E /* NoteTableViewController.h */,
+				B6E73D3D1B618D670089968E /* NoteTableViewController.m */,
 				35FEF8DC1B5D917A00A96076 /* EZTextView.h */,
 				35FEF8DD1B5D917A00A96076 /* EZTextView.m */,
+				B65EDF9C1B60B0670043C99D /* EZTextView.xib */,
 				35FEF8D41B5D916300A96076 /* TextViewFactory.h */,
 				35FEF8D51B5D916300A96076 /* TextViewFactory.m */,
 				35FEF8D61B5D916300A96076 /* ToolBarView.h */,
@@ -158,10 +181,9 @@
 				35FEF8CE1B5D89AE00A96076 /* AudioView.h */,
 				35FEF8CF1B5D89AE00A96076 /* AudioView.m */,
 				35FEF8D01B5D89AE00A96076 /* AudioView.xib */,
-				35D0984E1B5B671100550EB3 /* AppDelegate.h */,
-				35D0984F1B5B671100550EB3 /* AppDelegate.m */,
 				35D098511B5B671200550EB3 /* ViewController.h */,
 				35D098521B5B671200550EB3 /* ViewController.m */,
+				B65EDF9E1B60CD1A0043C99D /* Note.xcdatamodeld */,
 				35D098571B5B671200550EB3 /* Images.xcassets */,
 				35D098591B5B671200550EB3 /* LaunchScreen.xib */,
 				35D0984A1B5B671100550EB3 /* Supporting Files */,
@@ -172,6 +194,7 @@
 		35D0984A1B5B671100550EB3 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				B65EDFBE1B60E7A20043C99D /* EZNote-Prefix.pch */,
 				35D0984B1B5B671100550EB3 /* Info.plist */,
 				35D0984C1B5B671100550EB3 /* main.m */,
 			);
@@ -193,6 +216,20 @@
 				35D098651B5B671200550EB3 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		B65EDFBD1B60D47A0043C99D /* Core Data */ = {
+			isa = PBXGroup;
+			children = (
+				B65EDFBA1B60D4730043C99D /* Tag.h */,
+				B65EDFBB1B60D4730043C99D /* Tag.m */,
+				B65EDFB71B60D4730043C99D /* Notebook.h */,
+				B65EDFB81B60D4730043C99D /* Notebook.m */,
+				B65EDFB41B60D4730043C99D /* Note.h */,
+				B65EDFB51B60D4730043C99D /* Note.m */,
+			);
+			name = "Core Data";
+			path = ..;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -281,6 +318,7 @@
 				B65F9CB01B5D928D00FB53E7 /* Main.storyboard in Resources */,
 				35D098581B5B671200550EB3 /* Images.xcassets in Resources */,
 				35FEF8DB1B5D916300A96076 /* ToolBarView.xib in Resources */,
+				B65EDF9D1B60B0670043C99D /* EZTextView.xib in Resources */,
 				35FEF8D31B5D89AE00A96076 /* AudioView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -300,6 +338,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				35D098531B5B671200550EB3 /* ViewController.m in Sources */,
+				B6E73D3E1B618D670089968E /* NoteTableViewController.m in Sources */,
+				B65EDFB61B60D4730043C99D /* Note.m in Sources */,
+				B65EDFB91B60D4730043C99D /* Notebook.m in Sources */,
 				B656AF121B5DB700007538B8 /* KeyBindingsViewController.m in Sources */,
 				683E407D1B5D959A00CCDAF3 /* EZOptions.m in Sources */,
 				B656AF131B5DB700007538B8 /* KeyBindingTextField.m in Sources */,
@@ -312,8 +353,10 @@
 				35FEF8D91B5D916300A96076 /* TextViewFactory.m in Sources */,
 				683E407B1B5D959A00CCDAF3 /* EZImageView.m in Sources */,
 				35FEF8DE1B5D917A00A96076 /* EZTextView.m in Sources */,
+				B65EDFBC1B60D4730043C99D /* Tag.m in Sources */,
 				35FEF8D11B5D89AE00A96076 /* AudioFactory.m in Sources */,
 				35DD10041B603C60007AFE47 /* EZView.m in Sources */,
+				B65EDFA01B60CD1A0043C99D /* Note.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -433,6 +476,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				GCC_PREFIX_HEADER = "ez_note/EZNote-Prefix.pch";
 				INFOPLIST_FILE = ez_note/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -444,6 +488,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				GCC_PREFIX_HEADER = "ez_note/EZNote-Prefix.pch";
 				INFOPLIST_FILE = ez_note/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -516,6 +561,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		B65EDF9E1B60CD1A0043C99D /* Note.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				B65EDF9F1B60CD1A0043C99D /* Note.xcdatamodel */,
+			);
+			currentVersion = B65EDF9F1B60CD1A0043C99D /* Note.xcdatamodel */;
+			path = Note.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 35D0983F1B5B671100550EB3 /* Project object */;
 }
