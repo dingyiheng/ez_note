@@ -50,12 +50,12 @@
     self = [super initWithFrame: CGRectMake(0, 0, [settings[@"width"] floatValue], [settings[@"height"] floatValue])];
     
     if(self){
+        
         [self addsubviewFromNib];
         [self.AudioButton setTitle:settings[@"title"] forState:UIControlStateNormal];
         self.AudioLabel.text = @"";
         self.progressSlider.value = 0.0f;
         recordTimeLimit = [settings[@"timeLimit"] floatValue];
-        
         
         //this background color is not subview's background color, don't mess up
         self.backgroundColor = settings[@"backgroundColor"];
@@ -97,9 +97,18 @@
 }
 
 - (void) timerResponse{
+    //time format hh:mm:ss
+    NSDateComponentsFormatter *formatter = [[NSDateComponentsFormatter alloc] init];
+    formatter.allowedUnits = NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond;
+    formatter.zeroFormattingBehavior = NSDateComponentsFormatterZeroFormattingBehaviorPad;
+    //NSString *string = [formatter stringFromTimeInterval:recorder.currentTime];
+    //NSLog(@"%@",string);
+    
     if (recorder.recording) {
         if (recorder.currentTime < recordTimeLimit) {
-            self.AudioLabel.text = [[NSString stringWithFormat:@"%.0f",recorder.currentTime] stringByAppendingString:@"s"];
+            //self.AudioLabel.text = [[NSString stringWithFormat:@"%.0f",recorder.currentTime] stringByAppendingString:@"s"];
+            self.AudioLabel.text = [formatter stringFromTimeInterval:recorder.currentTime];
+            
         }
         else{
             [self stopRecording];
@@ -107,7 +116,8 @@
         
     }
     else if (player.playing){
-        self.AudioLabel.text = [[NSString stringWithFormat:@"%.0f",player.currentTime] stringByAppendingString:@"s"];
+        //self.AudioLabel.text = [[NSString stringWithFormat:@"%.0f",player.currentTime] stringByAppendingString:@"s"];
+        self.AudioLabel.text = [formatter stringFromTimeInterval:player.currentTime];
     }
 }
 
@@ -123,6 +133,9 @@
     
     // notification
     [[NSNotificationCenter defaultCenter] postNotificationName:@"startRecording" object:self userInfo:nil];
+    
+    //hide the slider
+    [self.progressSlider setHidden:YES];
 }
 
 - (void) stopRecording{
@@ -131,13 +144,16 @@
     
     [recorder stop];
     [self.AudioButton setTitle:@"Play" forState:UIControlStateNormal];
-    self.AudioLabel.text = @"";
+    self.AudioLabel.text = @"0:00:00";
     
     // notification
     [[NSNotificationCenter defaultCenter] postNotificationName:@"stopRecording" object:self userInfo:nil];
     
     // stop response timer
     [self stopTimer:responseTimer];
+    
+    //unhide the slider
+    [self.progressSlider setHidden:NO];
 }
 
 - (void) startPlaying{
@@ -148,6 +164,7 @@
         [self.AudioButton setTitle:@"Playing" forState:UIControlStateNormal];
         
         //set up the responsetimer
+        self.AudioLabel.text = @"0:00:00";
         responseTimer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(timerResponse) userInfo:nil repeats:YES];
         
         //notification
@@ -155,7 +172,8 @@
         
         //set up the progressSlider
         self.progressSlider.maximumValue = [player duration];
-        updateTimer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(updateSlierTime) userInfo:nil repeats:YES];
+        float progress = [player duration] / 100;
+        updateTimer = [NSTimer scheduledTimerWithTimeInterval:progress target:self selector:@selector(updateSlierTime) userInfo:nil repeats:YES];
         
         
         //start play
@@ -179,7 +197,7 @@
 - (void) stopPlaying{
     [player stop];
     [self.AudioButton setTitle:@"Play" forState:UIControlStateNormal];
-    self.AudioLabel.text = @"";
+    self.AudioLabel.text = @"0:00:00";
     
     // nitification
     [[NSNotificationCenter defaultCenter] postNotificationName:@"stopPlaying" object:self userInfo:nil];
