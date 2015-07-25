@@ -17,5 +17,10 @@
 
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 
+@property BOOL isNewDocument;
+
+
+-(void)loadViewsFromJSON:(NSData *)json;
+
 @end
 

@@ -60,8 +60,47 @@
 }
 
 
+
+-(void)loadViewsFromJSON:(NSData *)json{
+    NSLog(@"Load data from json");
+    NSData *data=[NSData dataWithData:json];
+    NSError *error=nil;
+    NSArray *array = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
+    NSLog(@"array: %@", array);
+    NSLog(@"views count: %lu", [array count]);
+    
+    float offset = 0;
+    
+    for(NSDictionary *d in array){
+        NSString *classStr = d[@"class"];
+        if ([classStr  isEqualToString: @"EZTextView"]){
+            EZTextView *v = (EZTextView *)[textViewFactory createTextView];
+            v.textView.text = d[@"content"];
+            CGRect frame =  CGRectMake(0, offset, [d[@"width"] floatValue], [d[@"height"] floatValue]);
+            v.frame = frame;
+            offset += [d[@"height"] floatValue];
+            [self.scrollView addSubview: v];
+            [self.myViews addObject:v];
+        }else if ([classStr  isEqualToString: @"EZImageView"]){
+            
+        }else if ([classStr  isEqualToString: @"AudioView"]){
+            
+        }
+    }
+    
+    
+    [self showViewInfo];
+}
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    
+    
+    if(self.isNewDocument){
+        NSLog(@"New Document");
+    }
     
     
     NSLog(@"Context: %@", self.managedObjectContext);
@@ -444,8 +483,7 @@
     EZTextView *curV = currentTextView;
     [self splitTextView: curV];
     float insertOffset = curV.frame.size.height+curV.frame.origin.y;
-    imageView.frame = CGRectMake(0, insertOffset, 300, 200);
-
+    imageView.frame = CGRectMake(0, insertOffset, imageView.frame.size.width, imageView.frame.size.height);
     CGPoint newCenter = imageView.center;
     newCenter.x = scrollViewWidth/2;
     imageView.center = newCenter;

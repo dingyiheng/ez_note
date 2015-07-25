@@ -222,6 +222,18 @@
         ViewController *v = (ViewController *)segue.destinationViewController;
         v.managedObjectContext = self.managedObjectContext;
     }else if ([segue.identifier isEqualToString:@"openNote"]) {
+        
+        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+        
+        Note *note = [self.notes objectAtIndex:indexPath.row];
+        
+        NSData *jsonData = note.content;
+        
+        
+        ViewController *v = (ViewController *)segue.destinationViewController;
+        v.managedObjectContext = self.managedObjectContext;
+        [v loadViewsFromJSON:jsonData];
+        v.title = note.title;
         NSLog(@"open note");
     }
 }
