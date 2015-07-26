@@ -13,6 +13,7 @@
 @interface EZImageView : EZView
 
 @property UIImage *img;
+@property NSURL *url;
 @property CGFloat view_Max_Width;
 @property CGFloat view_Max_Height;
 @property CGFloat width_height_ratio;
@@ -26,6 +27,9 @@
 @property (strong, nonatomic) IBOutlet UIButton *imgButton;
 
 - (instancetype)initWithImage:(UIImage *) image;
+- (instancetype)initWithURL:(NSURL *) imageURL;
+- (BOOL) saveImage: (UIImage *) image;
+- (BOOL) deleteImage;
 //- (id) initWithImage:(EZOptions*) opt Image:(UIImage*) img;
 
 - (id) getOutput;

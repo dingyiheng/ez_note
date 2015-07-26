@@ -20,6 +20,8 @@
     CGFloat imgview_start_y;
     CGFloat imgview_width;
     CGFloat imgview_height;
+    
+    CGFloat zoomscale;
 }
 
 @property UIImage *img;

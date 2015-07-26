@@ -59,6 +59,8 @@
     imgview_width = screen_width;
     imgview_height = screen_height;
     
+    zoomscale = 1;
+    
     // over size
     if (img_height > screen_height || img_width > screen_width){
         // thin tall
@@ -69,7 +71,8 @@
             imgview_height = img_height;
         }
         else {
-            imgview_height = img_height * screen_width / img_width;
+            zoomscale = img_width / screen_width;
+            imgview_height = img_height / zoomscale;
             
             // wide
             if (imgview_height < screen_height) {
@@ -98,16 +101,21 @@
     
     // TODO
     sView.minimumZoomScale = 1.0;
-    sView.maximumZoomScale = 200.0;
+    sView.maximumZoomScale = zoomscale * 2.0;
     
     self.view = sView;
     
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateImageViewFrame) name:UIDeviceOrientationDidChangeNotification object: nil];
 //    printf("sView Bounds originX:%f originY:%f width:%f  height:%f\n", sView.bounds.origin.x, sView.bounds.origin.y, sView.bounds.size.width, sView.bounds.size.height);
 //    printf("sView ContentOffset x:%f  y:%f  ContentSize width %f  height:%f\n", sView.contentOffset.x, sView.contentOffset.y, sView.contentSize.width, sView.contentSize.height);
 //    printf("sView Frame originX:%f originY:%f width %f  height:%f\n", sView.frame.origin.x, sView.frame.origin.y, sView.frame.size.width, sView.frame.size.height);
 //    printf("imageView Bounds originX:%f originY:%f width:%f  height:%f\n", imageView.bounds.origin.x, imageView.bounds.origin.y, imageView.bounds.size.width, imageView.bounds.size.height);
 //    printf("imageView Frame originX:%f originY:%f width %f  height:%f\n", imageView.frame.origin.x, imageView.frame.origin.y, imageView.frame.size.width, imageView.frame.size.height);
+    
+    
+    
+    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(screenTaped:)];
+    [self.view addGestureRecognizer:tapRecognizer];
     
     
 }
@@ -176,17 +184,13 @@
     imageView.frame = frame;
 }
 
-//- (BOOL)prefersStatusBarHidden {
-//    return YES;
-//}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    self.navigationController.navigationBar.hidden = YES;
+- (BOOL)prefersStatusBarHidden {
+    return YES;
 }
 
-- (void)viewDidDisappear:(BOOL)animated{
-    self.navigationController.navigationBar.hidden = YES;
+- (void) screenTaped:(UITapGestureRecognizer *)reognizer {
+    NSLog(@"Taped");
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"scrollViewTaped" object:self userInfo:nil];
 }
 
 @end
