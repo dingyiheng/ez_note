@@ -147,6 +147,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(imageViewTouched:) name:@"imageViewTouched" object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(imageTaped:) name:@"imageTaped" object:nil];
     
     
     
@@ -614,6 +615,9 @@
     [self.navigationController pushViewController:vc animated:NO];
 }
 
+-(void)imageTaped:(NSNotification*)notification {
+    [self.navigationController popViewControllerAnimated:NO];
+}
 
 -(void)textViewHeightChanged:(NSNotification*)notification {
     NSLog(@"Text View Height Changed");

@@ -190,7 +190,7 @@
 
 - (void) screenTaped:(UITapGestureRecognizer *)reognizer {
     NSLog(@"Taped");
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"scrollViewTaped" object:self userInfo:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"imageTaped" object:self userInfo:nil];
 }
 
 @end
