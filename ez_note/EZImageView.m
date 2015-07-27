@@ -81,6 +81,10 @@
         [self addsubviewFromNib];
 //        [self.imgButton setImage:buttonImage forState:UIControlStateNormal];
         self.imageView.image = buttonImage;
+        
+        UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPress:)];
+        [self.imgButton addGestureRecognizer:longPress];
+        
     }
     return self;
 }
@@ -244,6 +248,12 @@
     NSLog(@"Pressed");
     NSDictionary *info = @{@"img": self.img};
     [[NSNotificationCenter defaultCenter] postNotificationName:@"imageViewTouched" object:self userInfo:info];
+}
+
+- (void)longPress:(UILongPressGestureRecognizer*)gesture {
+    if ( gesture.state == UIGestureRecognizerStateEnded ) {
+        NSLog(@"Long Press");
+    }
 }
 
 - (id) getOutput {
