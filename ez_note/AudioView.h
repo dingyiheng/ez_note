@@ -16,6 +16,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *AudioLabel;
 @property (weak, nonatomic) IBOutlet UISlider *progressSlider;
 
+@property NSURL *outputFileURL;
+
 - (void) addsubviewFromNib;
 - (UIView *) viewFromNib;
 - (instancetype)initWithFactorySettings:(NSDictionary *)settings;

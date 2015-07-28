@@ -14,7 +14,7 @@
 
 @interface AudioFactory : NSObject
 
-@property NSURL *outputFileURL;
+
 @property NSMutableDictionary *recordSetting;
 
 @property float width;
