@@ -26,7 +26,7 @@
 //
 
 - (id) getOutput{
-    return recorder.url;
+    return [recorder.url absoluteString];
 }
 
 - (UIView *)viewFromNib{

@@ -22,7 +22,10 @@
 
 
 - (id)getOutput{
-    return self.textView.text;
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject: self.textView.attributedText];
+    NSString *str = [NSString stringWithUTF8String:[data bytes]];
+    NSLog(@"***************************** %@",str);
+    return str;
 }
 
 

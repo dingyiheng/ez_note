@@ -23,6 +23,7 @@
 #import "ToolBarView.h"
 
 #import "Note.h"
+#import "Note_content.h"
 
 @interface ViewController (){
     
@@ -36,6 +37,8 @@
     EZImageViewFactory *imageFactory;
     
     UIImagePickerController *imagePicker;
+    
+
     
     
     TextViewFactory *textViewFactory;
@@ -52,6 +55,10 @@
 @implementation ViewController
 
 
+
+
+// ------------ Initialization -----------------
+
 - (NSMutableArray *)myViews{
     if(!_myViews)
         _myViews = [[NSMutableArray alloc] init];
@@ -59,10 +66,112 @@
     
 }
 
+-(void)loadViewsFromJSON:(NSData *)json{
+    [self loadFactories];
+    NSLog(@"Load data from json");
+    NSData *data=[NSData dataWithData:json];
+    NSError *error=nil;
+    NSArray *array = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
+    NSLog(@"array: %@", array);
+    NSLog(@"views count: %lu", [array count]);
+    
+    float offset = 0;
+    
+    for(NSDictionary *d in array){
+        NSString *classStr = d[@"class"];
+        if ([classStr  isEqualToString: @"EZTextView"]){
+            EZTextView *v = [textViewFactory createTextView];
+            v.textView.attributedText = d[@"content"];
+            CGRect frame =  CGRectMake(0, offset, [d[@"width"] floatValue], [d[@"height"] floatValue]);
+            v.frame = frame;
+            offset += [d[@"height"] floatValue];
+            [self.scrollView addSubview: v];
+            [self.myViews addObject:v];
+        }else if ([classStr  isEqualToString: @"EZImageView"]){
+            UIImage *img = [UIImage imageNamed:@"test1"];
+            EZImageView *v = [imageFactory createEZImageView:img];
+//            v.textView.text = d[@"content"];
+            CGRect frame =  CGRectMake(0, offset, [d[@"width"] floatValue], [d[@"height"] floatValue]);
+            v.frame = frame;
+            offset += [d[@"height"] floatValue];
+            [self.scrollView addSubview: v];
+            [self.myViews addObject:v];
+
+        }else if ([classStr  isEqualToString: @"AudioView"]){
+            
+        }
+    }
+    
+    
+    [self showViewInfo];
+}
+
+
+
+-(void)loadViews: (NSManagedObjectID *)noteID{
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"NoteContent"
+                                              inManagedObjectContext:self.managedObjectContext];
+    NSError *error;
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat: @"note == %@", noteID];
+    
+    [fetchRequest setPredicate:predicate];
+    [fetchRequest setEntity:entity];
+    
+    NSArray *fetchedObjects = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    for(Note_content *nc in fetchedObjects){
+        EZView *v = nc.content;
+        [self.scrollView addSubview: v];
+        [self.myViews addObject:v];
+        NSLog(@"lalala: %@",v);
+    }
+    
+    [self resizeContent];
+    
+}
+
+-(void)loadFactories{
+    scrollViewHeight = self.view.frame.size.height;
+    scrollViewWidth = self.view.frame.size.width;
+    textViewFactory = [[TextViewFactory alloc] init];
+    textViewFactory.frameSize = CGSizeMake(scrollViewWidth, scrollViewHeight-100);
+    textViewFactory.bottomBlankHeight = scrollViewHeight-100;
+    
+    audioFactory = [[AudioFactory alloc] init];
+    
+    imageFactory = [[EZImageViewFactory alloc] init];
+}
+
+
+
+- (void)viewWillAppear:(BOOL)animated{
+//    [[self.view.window.rootViewController.navigationController.navigationBar.subviews objectAtIndex:1] setBackgroundColor:[UIColor whiteColor]];
+//    [[self.navigationController.navigationBar.subviews objectAtIndex:1] setBackgroundColor:[UIColor whiteColor]];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    
+    UITapGestureRecognizer* tapRecon = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(navigationBarTap)];
+    tapRecon.numberOfTapsRequired = 1;
+    [self.navigationItem.titleView setUserInteractionEnabled:YES];
+    [self.navigationItem.titleView addGestureRecognizer:tapRecon];
+    self.navigationItem.titleView.backgroundColor = [UIColor whiteColor];
+    for (UIView *v in self.navigationController.navigationBar.subviews){
+        NSLog(@"v: %@", v);
+    }
+//    [[self.navigationController.navigationBar.subviews objectAtIndex:1] setBackgroundColor:[UIColor whiteColor]];
+//    [[self.navigationController.navigationBar.subviews objectAtIndex:1] setUserInteractionEnabled:YES];
+//    [[self.navigationController.navigationBar.subviews objectAtIndex:1] addGestureRecognizer:tapRecon];
+//    [self.navigationController.navigationBar addGestureRecognizer:tapRecon];
+    
+    
+    
+    
+    self.navigationItem.title = @"New Note";
     
     NSLog(@"Context: %@", self.managedObjectContext);
     
@@ -76,44 +185,31 @@
     scrollViewHeight = self.view.frame.size.height;
     scrollViewWidth = self.view.frame.size.width;
     
-    
     toolbar = [[ToolBarView alloc]initWithFrame:CGRectMake(0, 0, scrollViewWidth, 40)];
-    
-    textViewFactory = [[TextViewFactory alloc] init];
-    textViewFactory.frameSize = CGSizeMake(scrollViewWidth, scrollViewHeight-100);
-    textViewFactory.bottomBlankHeight = scrollViewHeight-100;
-    
-    
-    audioFactory = [[AudioFactory alloc] init];
-    
-    imageFactory = [[EZImageViewFactory alloc] init];
     
     
     isRecording = NO;
     
     
-    [self getFirstTextView];
+    if(self.isNewDocument){
+        NSLog(@"New Document");
+        [self loadFactories];
+        [self getFirstTextView];
+    }else{
+        [self loadViews:self.noteID];
+    }
+    
+    
     
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardButtonTouched:) name:@"keyboardButtonTouched" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cameraButtonTouched:) name:@"cameraButtonTouched" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(imageButtonTouched:) name:@"imageButtonTouched" object:nil];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(audioButtonTouched:) name:@"audioButtonTouched" object:nil];
-    
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textViewHeightChanged:) name:@"textViewHeightChanged" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textViewFocused:) name:@"textViewFocused" object:nil];
-    
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(imageViewTouched:) name:@"imageViewTouched" object:nil];
-    
-    
-    
-    
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWasShown:) name:UIKeyboardDidShowNotification object:nil];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillBeHidden:) name:UIKeyboardWillHideNotification object:nil];
     
     
@@ -122,10 +218,15 @@
     screenWidth = [UIScreen mainScreen].bounds.size.width;
     screenHeight = [UIScreen mainScreen].bounds.size.height;
     
-    
-    
-    
 }
+
+
+
+
+
+
+
+
 
 
 
@@ -159,7 +260,6 @@
     [self resizeContent];
     
 }
-
 
 
 
@@ -234,9 +334,6 @@
     if(v2 == [self getBottomView]){
         
         NSLog(@"new text view is bottom view");
-        //        bottomTextView.isBottomTextView = NO;
-        //        v2.isBottomTextView = YES;
-        //        bottomTextView = v2;
         v2.frame = CGRectMake(0,v2.frame.origin.y, v2.frame.size.width, v2.frame.size.height+textViewFactory.bottomBlankHeight);
     }
     [self resetBottonView];
@@ -248,26 +345,6 @@
     float moveDownDis = v2.frame.size.height;
     NSLog(@"insert: move down %f", moveDownDis);
     [self moveDownViewsExcept:v2.frame.origin.y dis:moveDownDis except:v2];
-    
-    
-//    NSLog(@"WTF:%@", bottomTextView);
-    
-    
-    //    float nH = currentTextView.frame.size.height;
-    //    CGPoint p1 = CGPointMake(0, currentTextView.frame.origin.y+currentTextView.frame.size.height);
-    //    currentContentHeight -= oH-nH;
-    //    [self moveDownViews:currentTextView.frame.origin.y dis:oH-nH];
-    //    UIImageView *iv = [self addImageViewAndReturnAt:p1];
-    //    CGPoint p2 = CGPointMake(0, iv.frame.origin.y+iv.frame.size.height);
-    //    UITextView *tv = [self addTextViewAndReturnAt:p2];
-    //    tv.text = remainingStr;
-    //
-    //    [tv becomeFirstResponder];
-    //    tv.selectedRange = NSMakeRange(0, 0);
-    //    CGPoint p3 = CGPointMake(0, iv.frame.origin.y+iv.frame.size.height-30);
-    //    self.scrollView.contentOffset = p3;
-    
-    
     
     
 }
@@ -383,7 +460,7 @@
     };
     
     NSArray * sortedMyViews = [self.myViews sortedArrayUsingComparator:sortByPosition];
-    
+    NSLog(@"SortViews ========");
     NSLog(@"%@",sortedMyViews);
     return sortedMyViews;
     
@@ -392,7 +469,7 @@
 
 -(NSArray *)viewToDictArray: (NSArray *)views{
     NSMutableArray *array = [NSMutableArray arrayWithCapacity: [views count]];
-    for(EZView *v in self.myViews){
+    for(EZView *v in views){
         NSMutableDictionary *tempDict= [[NSMutableDictionary alloc]init];
         [tempDict setObject: NSStringFromClass([v class]) forKey:@"class"];
         [tempDict setObject:[NSNumber numberWithFloat:v.frame.size.height] forKey:@"height"];
@@ -401,7 +478,7 @@
         [array addObject:tempDict];
     }
 
-    
+    NSLog(@"==============");
     for(NSDictionary *d in array){
         NSLog(@"%@",d);
     }
@@ -410,22 +487,71 @@
 }
 
 
+-(NSString *)getTextContent:(NSArray *)views{
+    NSMutableString *str = [[NSMutableString alloc] init];
+    for(EZView *v in views){
+        if([v isKindOfClass: [EZTextView class]]){
+            EZTextView *tv = (EZTextView *)v;
+            [str appendString: tv.textView.text];
+        }
+    }
+    NSLog(@"Text Content is : %@", str);
+    return str;
+}
+
+
 -(void)getOutput{
     NSArray *sortedViews = [self sortViews];
 //    [self viewToDict:sortedViews];
 }
 
+
+
+
 -(void)saveNote{
-    Note *note = nil;
+    
+    
+    
+    NSArray *sortedViews =[self sortViews];
+    
     NSManagedObjectContext *context = self.managedObjectContext;
-    note = [NSEntityDescription insertNewObjectForEntityForName:@"Note" inManagedObjectContext:context];
-    note.title = @"TestTitle";
-    NSArray *array = [self viewToDictArray:[self sortViews]];
     NSError *error;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:array options:0 error:&error];
-    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    NSLog(@"json: %@", jsonString);
-    note.content = jsonData;
+    
+    
+    Note *note = nil;
+    
+    note = [NSEntityDescription insertNewObjectForEntityForName:@"Note" inManagedObjectContext:context];
+    
+    
+    for(EZView *v in sortedViews){
+        Note_content *noteContent = nil;
+        noteContent = [NSEntityDescription insertNewObjectForEntityForName:@"NoteContent" inManagedObjectContext:context];
+        NSLog(@"what is v:%@",v);
+        noteContent.content = v;
+        noteContent.note = note;
+        if([context save: &error]){
+            NSLog(@"Content Saved");
+        }else{
+            NSLog(@"Failed to save - error: %@", [error localizedDescription]);
+        }
+    }
+    
+    
+    
+    
+    
+    
+
+    NSString *textContent = [self getTextContent:sortedViews];
+    NSLog(@"Sorted here %@", sortedViews);
+//    NSArray *array = [self viewToDictArray: sortedViews];
+    
+//    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:array options:0 error:&error];
+//    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+//    NSLog(@"json: %@", jsonString);
+    note.title = [textContent substringToIndex:10];
+//    note.content = jsonData;
+    note.text_content = textContent;
     note.create_time = [NSDate date];
     note.tag = [[NSSet alloc]init];
     if([context save: &error]){
@@ -444,8 +570,7 @@
     EZTextView *curV = currentTextView;
     [self splitTextView: curV];
     float insertOffset = curV.frame.size.height+curV.frame.origin.y;
-    imageView.frame = CGRectMake(0, insertOffset, 300, 200);
-
+    imageView.frame = CGRectMake(0, insertOffset, imageView.frame.size.width, imageView.frame.size.height);
     CGPoint newCenter = imageView.center;
     newCenter.x = scrollViewWidth/2;
     imageView.center = newCenter;
@@ -463,50 +588,8 @@
 //  ---------- Notification Handlers ------------------
 
 -(void)imageButtonTouched:(NSNotification*)notification {
-    
-    
-    
     imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
     [self presentViewController:imagePicker animated:YES completion:nil];
-    
-    
-    
-    
-    
-    /*
-    unsigned rand = arc4random_uniform(3);
-    NSString *imageName = [NSString stringWithFormat:@"test%u",rand+1];
-    UIImageView *imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:imageName]];
-    
-//    UIView *imageView = [imageFactory createEZImageViewWithURL:nil];
-    
-    
-    
-    EZTextView *curV = currentTextView;
-    [self splitTextView: curV];
-    float insertOffset = curV.frame.size.height+curV.frame.origin.y;
-    imageView.frame = CGRectMake(0, insertOffset, 300, 200);
-//    NSLog(@"insertOffset: %f", insertOffset);
-    //    imageView.center = CGPointMake(scrollViewWidth/2, insertOffset);
-    CGPoint newCenter = imageView.center;
-    newCenter.x = scrollViewWidth/2;
-    imageView.center = newCenter;
-    float moveDownDis = imageView.frame.size.height;
-    NSLog(@"move down %f", moveDownDis);
-    [self moveDownViews:insertOffset dis:moveDownDis];
-    [self.myViews addObject:imageView];
-    [self.scrollView addSubview:imageView];
-    [self resizeContent];
-    
-    
-    [self scrollAfterInsert: imageView.frame.origin.y+imageView.frame.size.height];
-//    CGPoint p3 = CGPointMake(0, imageView.frame.origin.y+imageView.frame.size.height-100);
-    
-    //    self.scrollView.contentOffset = p3;
-    
-    //    NSLog(@"count: %lu", (unsigned long)[self.myViews count]);
-        [self showViewInfo];
-     */
 }
 
 
@@ -523,16 +606,8 @@
 
 
 -(void)audioButtonTouched:(NSNotification*)notification {
-    
-    
-    //    unsigned rand = arc4random_uniform(3);
-    //    NSString *imageName = [NSString stringWithFormat:@"test%u",rand+1];
-    //    UIImageView *imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:imageName]];
-    
-    
     if(!isRecording){
         AudioView *av = [audioFactory createViewWithSettings];
-        
         EZTextView *curV = currentTextView;
         [self splitTextView: curV];
         float insertOffset = curV.frame.size.height+curV.frame.origin.y;
@@ -558,15 +633,6 @@
         [toolbar finishRecording];
         isRecording = NO;
     }
-    
-    //
-    //
-    //    AudioView *av = [audioFactory createViewWithSettings];
-    //    av.center = CGPointMake(100, 200);
-    //    self insertViewAtOffset:currentTextView offset:<#(float)#>
-    //    [self.scrollView addSubview:av];
-    //
-    //    [av startRecording];
 }
 
 
@@ -576,6 +642,9 @@
     [self.navigationController pushViewController:vc animated:NO];
 }
 
+-(void)imageTaped:(NSNotification*)notification {
+    [self.navigationController popViewControllerAnimated:NO];
+}
 
 -(void)textViewHeightChanged:(NSNotification*)notification {
     NSLog(@"Text View Height Changed");
@@ -646,6 +715,15 @@
 
 
 
+-(void)navigationBarTap{
+    NSLog(@"navigationBarTap");
+    UITextField *titleField = [[UITextField alloc]initWithFrame:CGRectMake(0, 0, 100, 30)];
+    titleField.backgroundColor = [UIColor whiteColor];
+    self.navigationItem.titleView = titleField;
+}
+
+
+
 
 
 // -------------- Delegates ---------------------
@@ -669,6 +747,12 @@
 
 
 // =============== Event Handler ==================
+//- (IBAction)titleTextFieldTouched:(id)sender {
+//    NSLog(@"Change title");
+//    self.titleTextField.enabled = YES;
+//    self.titleTextField.backgroundColor = [UIColor whiteColor];
+//    self.titleTextField.borderStyle = UITextBorderStyleLine
+//}
 
 - (IBAction)clearButtonTouched:(id)sender {
     NSLog(@"Clear Button Touched");
