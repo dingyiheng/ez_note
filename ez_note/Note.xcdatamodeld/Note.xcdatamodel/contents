@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="7701" systemVersion="14E46" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Note" representedClassName="Note" syncable="YES">
-        <attribute name="content" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
         <attribute name="create_time" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="html_content" optional="YES" attributeType="String" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
+        <attribute name="text_content" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="content" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="NoteContent" inverseName="note" inverseEntity="NoteContent" syncable="YES"/>
         <relationship name="notebook" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Notebook" inverseName="note" inverseEntity="Notebook" syncable="YES"/>
         <relationship name="tag" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Tag" inverseName="note" inverseEntity="Tag" syncable="YES"/>
     </entity>
@@ -11,13 +13,18 @@
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="note" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Note" inverseName="notebook" inverseEntity="Note" syncable="YES"/>
     </entity>
+    <entity name="NoteContent" representedClassName="Note_content" syncable="YES">
+        <attribute name="content" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <relationship name="note" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Note" inverseName="content" inverseEntity="Note" syncable="YES"/>
+    </entity>
     <entity name="Tag" representedClassName="Tag" syncable="YES">
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="note" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Note" inverseName="tag" inverseEntity="Note" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Note" positionX="-198" positionY="-100" width="128" height="118"/>
+        <element name="Note" positionX="-171" positionY="-127" width="128" height="148"/>
         <element name="Notebook" positionX="52" positionY="-162" width="128" height="28"/>
         <element name="Tag" positionX="45" positionY="18" width="128" height="73"/>
+        <element name="NoteContent" positionX="-405" positionY="-27" width="128" height="73"/>
     </elements>
 </model>

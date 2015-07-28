@@ -29,12 +29,15 @@
 		B656AF0D1B5DB5E4007538B8 /* KeyBindings.plist in Resources */ = {isa = PBXBuildFile; fileRef = B656AF0C1B5DB5E4007538B8 /* KeyBindings.plist */; };
 		B656AF121B5DB700007538B8 /* KeyBindingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B656AF0F1B5DB700007538B8 /* KeyBindingsViewController.m */; };
 		B656AF131B5DB700007538B8 /* KeyBindingTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = B656AF111B5DB700007538B8 /* KeyBindingTextField.m */; };
+		B65E3DCD1B644FC40048CE03 /* NoteInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = B65E3DCC1B644FC40048CE03 /* NoteInfoView.m */; };
+		B65E3DCF1B644FDE0048CE03 /* NoteInfoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B65E3DCE1B644FDE0048CE03 /* NoteInfoView.xib */; };
 		B65EDF9D1B60B0670043C99D /* EZTextView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B65EDF9C1B60B0670043C99D /* EZTextView.xib */; };
 		B65EDFA01B60CD1A0043C99D /* Note.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B65EDF9E1B60CD1A0043C99D /* Note.xcdatamodeld */; };
-		B65EDFB61B60D4730043C99D /* Note.m in Sources */ = {isa = PBXBuildFile; fileRef = B65EDFB51B60D4730043C99D /* Note.m */; };
-		B65EDFB91B60D4730043C99D /* Notebook.m in Sources */ = {isa = PBXBuildFile; fileRef = B65EDFB81B60D4730043C99D /* Notebook.m */; };
-		B65EDFBC1B60D4730043C99D /* Tag.m in Sources */ = {isa = PBXBuildFile; fileRef = B65EDFBB1B60D4730043C99D /* Tag.m */; };
 		B65F9CB01B5D928D00FB53E7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B65F9CAF1B5D928D00FB53E7 /* Main.storyboard */; };
+		B6977FC81B672B7100ECE035 /* Tag.m in Sources */ = {isa = PBXBuildFile; fileRef = B6977FC71B672B7100ECE035 /* Tag.m */; };
+		B6977FCB1B672B7100ECE035 /* Note.m in Sources */ = {isa = PBXBuildFile; fileRef = B6977FCA1B672B7100ECE035 /* Note.m */; };
+		B6977FCE1B672B7200ECE035 /* Notebook.m in Sources */ = {isa = PBXBuildFile; fileRef = B6977FCD1B672B7200ECE035 /* Notebook.m */; };
+		B6977FD11B672BAF00ECE035 /* Note_content.m in Sources */ = {isa = PBXBuildFile; fileRef = B6977FD01B672BAF00ECE035 /* Note_content.m */; };
 		B6E73D3E1B618D670089968E /* NoteTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B6E73D3D1B618D670089968E /* NoteTableViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -91,16 +94,21 @@
 		B656AF0F1B5DB700007538B8 /* KeyBindingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyBindingsViewController.m; sourceTree = "<group>"; };
 		B656AF101B5DB700007538B8 /* KeyBindingTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyBindingTextField.h; sourceTree = "<group>"; };
 		B656AF111B5DB700007538B8 /* KeyBindingTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyBindingTextField.m; sourceTree = "<group>"; };
+		B65E3DCB1B644FC40048CE03 /* NoteInfoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoteInfoView.h; sourceTree = "<group>"; };
+		B65E3DCC1B644FC40048CE03 /* NoteInfoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoteInfoView.m; sourceTree = "<group>"; };
+		B65E3DCE1B644FDE0048CE03 /* NoteInfoView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NoteInfoView.xib; sourceTree = "<group>"; };
 		B65EDF9C1B60B0670043C99D /* EZTextView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZTextView.xib; sourceTree = "<group>"; };
 		B65EDF9F1B60CD1A0043C99D /* Note.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Note.xcdatamodel; sourceTree = "<group>"; };
-		B65EDFB41B60D4730043C99D /* Note.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Note.h; path = ez_note/core_data/Note.h; sourceTree = "<group>"; };
-		B65EDFB51B60D4730043C99D /* Note.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Note.m; path = ez_note/core_data/Note.m; sourceTree = "<group>"; };
-		B65EDFB71B60D4730043C99D /* Notebook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Notebook.h; path = ez_note/core_data/Notebook.h; sourceTree = "<group>"; };
-		B65EDFB81B60D4730043C99D /* Notebook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Notebook.m; path = ez_note/core_data/Notebook.m; sourceTree = "<group>"; };
-		B65EDFBA1B60D4730043C99D /* Tag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Tag.h; path = ez_note/core_data/Tag.h; sourceTree = "<group>"; };
-		B65EDFBB1B60D4730043C99D /* Tag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Tag.m; path = ez_note/core_data/Tag.m; sourceTree = "<group>"; };
 		B65EDFBE1B60E7A20043C99D /* EZNote-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "EZNote-Prefix.pch"; sourceTree = "<group>"; };
 		B65F9CAF1B5D928D00FB53E7 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		B6977FC61B672B7100ECE035 /* Tag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Tag.h; path = ez_note/core_data/Tag.h; sourceTree = "<group>"; };
+		B6977FC71B672B7100ECE035 /* Tag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Tag.m; path = ez_note/core_data/Tag.m; sourceTree = "<group>"; };
+		B6977FC91B672B7100ECE035 /* Note.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Note.h; path = ez_note/core_data/Note.h; sourceTree = "<group>"; };
+		B6977FCA1B672B7100ECE035 /* Note.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Note.m; path = ez_note/core_data/Note.m; sourceTree = "<group>"; };
+		B6977FCC1B672B7200ECE035 /* Notebook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Notebook.h; path = ez_note/core_data/Notebook.h; sourceTree = "<group>"; };
+		B6977FCD1B672B7200ECE035 /* Notebook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Notebook.m; path = ez_note/core_data/Notebook.m; sourceTree = "<group>"; };
+		B6977FCF1B672BAF00ECE035 /* Note_content.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Note_content.h; path = ez_note/core_data/Note_content.h; sourceTree = "<group>"; };
+		B6977FD01B672BAF00ECE035 /* Note_content.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Note_content.m; path = ez_note/core_data/Note_content.m; sourceTree = "<group>"; };
 		B6E73D3C1B618D670089968E /* NoteTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoteTableViewController.h; sourceTree = "<group>"; };
 		B6E73D3D1B618D670089968E /* NoteTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoteTableViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -183,6 +191,9 @@
 				35FEF8D01B5D89AE00A96076 /* AudioView.xib */,
 				35D098511B5B671200550EB3 /* ViewController.h */,
 				35D098521B5B671200550EB3 /* ViewController.m */,
+				B65E3DCB1B644FC40048CE03 /* NoteInfoView.h */,
+				B65E3DCE1B644FDE0048CE03 /* NoteInfoView.xib */,
+				B65E3DCC1B644FC40048CE03 /* NoteInfoView.m */,
 				B65EDF9E1B60CD1A0043C99D /* Note.xcdatamodeld */,
 				35D098571B5B671200550EB3 /* Images.xcassets */,
 				35D098591B5B671200550EB3 /* LaunchScreen.xib */,
@@ -221,12 +232,14 @@
 		B65EDFBD1B60D47A0043C99D /* Core Data */ = {
 			isa = PBXGroup;
 			children = (
-				B65EDFBA1B60D4730043C99D /* Tag.h */,
-				B65EDFBB1B60D4730043C99D /* Tag.m */,
-				B65EDFB71B60D4730043C99D /* Notebook.h */,
-				B65EDFB81B60D4730043C99D /* Notebook.m */,
-				B65EDFB41B60D4730043C99D /* Note.h */,
-				B65EDFB51B60D4730043C99D /* Note.m */,
+				B6977FCF1B672BAF00ECE035 /* Note_content.h */,
+				B6977FD01B672BAF00ECE035 /* Note_content.m */,
+				B6977FCC1B672B7200ECE035 /* Notebook.h */,
+				B6977FCD1B672B7200ECE035 /* Notebook.m */,
+				B6977FC91B672B7100ECE035 /* Note.h */,
+				B6977FCA1B672B7100ECE035 /* Note.m */,
+				B6977FC61B672B7100ECE035 /* Tag.h */,
+				B6977FC71B672B7100ECE035 /* Tag.m */,
 			);
 			name = "Core Data";
 			path = ..;
@@ -318,6 +331,7 @@
 				B65F9CB01B5D928D00FB53E7 /* Main.storyboard in Resources */,
 				35D098581B5B671200550EB3 /* Images.xcassets in Resources */,
 				35FEF8DB1B5D916300A96076 /* ToolBarView.xib in Resources */,
+				B65E3DCF1B644FDE0048CE03 /* NoteInfoView.xib in Resources */,
 				B65EDF9D1B60B0670043C99D /* EZTextView.xib in Resources */,
 				35FEF8D31B5D89AE00A96076 /* AudioView.xib in Resources */,
 			);
@@ -339,21 +353,23 @@
 			files = (
 				35D098531B5B671200550EB3 /* ViewController.m in Sources */,
 				B6E73D3E1B618D670089968E /* NoteTableViewController.m in Sources */,
-				B65EDFB61B60D4730043C99D /* Note.m in Sources */,
-				B65EDFB91B60D4730043C99D /* Notebook.m in Sources */,
 				B656AF121B5DB700007538B8 /* KeyBindingsViewController.m in Sources */,
 				683E407D1B5D959A00CCDAF3 /* EZOptions.m in Sources */,
+				B6977FC81B672B7100ECE035 /* Tag.m in Sources */,
 				B656AF131B5DB700007538B8 /* KeyBindingTextField.m in Sources */,
 				35FEF8D21B5D89AE00A96076 /* AudioView.m in Sources */,
 				683E407A1B5D959A00CCDAF3 /* EZImageScrollViewController.m in Sources */,
 				35FEF8DA1B5D916300A96076 /* ToolBarView.m in Sources */,
 				683E407C1B5D959A00CCDAF3 /* EZImageViewFactory.m in Sources */,
 				35D098501B5B671100550EB3 /* AppDelegate.m in Sources */,
+				B6977FCB1B672B7100ECE035 /* Note.m in Sources */,
 				35D0984D1B5B671100550EB3 /* main.m in Sources */,
+				B6977FD11B672BAF00ECE035 /* Note_content.m in Sources */,
+				B65E3DCD1B644FC40048CE03 /* NoteInfoView.m in Sources */,
 				35FEF8D91B5D916300A96076 /* TextViewFactory.m in Sources */,
 				683E407B1B5D959A00CCDAF3 /* EZImageView.m in Sources */,
 				35FEF8DE1B5D917A00A96076 /* EZTextView.m in Sources */,
-				B65EDFBC1B60D4730043C99D /* Tag.m in Sources */,
+				B6977FCE1B672B7200ECE035 /* Notebook.m in Sources */,
 				35FEF8D11B5D89AE00A96076 /* AudioFactory.m in Sources */,
 				35DD10041B603C60007AFE47 /* EZView.m in Sources */,
 				B65EDFA01B60CD1A0043C99D /* Note.xcdatamodeld in Sources */,
