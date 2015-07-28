@@ -10,9 +10,13 @@
 #import "EZOptions.h"
 #import "EZView.h"
 
-@interface EZImageView : EZView
+@interface EZImageView : EZView {
+    CGFloat widthscale;
+}
 
 @property UIImage *img;
+@property UIImage *dispImage;
+@property NSURL *url;
 @property CGFloat view_Max_Width;
 @property CGFloat view_Max_Height;
 @property CGFloat width_height_ratio;
@@ -26,8 +30,12 @@
 @property (strong, nonatomic) IBOutlet UIButton *imgButton;
 
 - (instancetype)initWithImage:(UIImage *) image;
+- (instancetype)initWithURL:(NSURL *) imageURL;
+- (BOOL) saveImage;
+- (BOOL) deleteImage;
 //- (id) initWithImage:(EZOptions*) opt Image:(UIImage*) img;
-
+- (void) update;
+- (void) updateFrame;
 - (id) getOutput;
 
 @end

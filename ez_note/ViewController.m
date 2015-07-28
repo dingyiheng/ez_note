@@ -642,6 +642,9 @@
     [self.navigationController pushViewController:vc animated:NO];
 }
 
+-(void)imageTaped:(NSNotification*)notification {
+    [self.navigationController popViewControllerAnimated:NO];
+}
 
 -(void)textViewHeightChanged:(NSNotification*)notification {
     NSLog(@"Text View Height Changed");
