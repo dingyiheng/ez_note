@@ -55,6 +55,20 @@
 }
 
 - (AudioView *)createViewWithSettings{
+    //time stamp for naming the record
+    NSString *formatString = [NSDateFormatter dateFormatFromTemplate:@"yyyyMMddHHmmss" options:0 locale:[NSLocale currentLocale]];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:formatString];
+    
+    NSString *todayString = [dateFormatter stringFromDate:[NSDate date]];
+    NSLog(@"%@",todayString);
+    NSArray *pathComponents = [NSArray arrayWithObjects:
+                               [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject],
+                               todayString,
+                               nil];
+    self.outputFileURL = [NSURL fileURLWithPathComponents:pathComponents];
+    NSLog(@"%@",self.outputFileURL);
+    
     AudioView *v = [[AudioView alloc] initWithFactorySettings:self.settings];
     return v;
 }

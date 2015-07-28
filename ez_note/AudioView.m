@@ -97,6 +97,9 @@
 }
 
 - (void) timerResponse{
+    //test
+    NSLog(@"timeResponse in audio view test");
+    
     //time format hh:mm:ss
     NSDateComponentsFormatter *formatter = [[NSDateComponentsFormatter alloc] init];
     formatter.allowedUnits = NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond;
@@ -105,10 +108,11 @@
     //NSLog(@"%@",string);
     
     if (recorder.recording) {
+        NSLog(@"recording  %f  %f",recordTimeLimit,recorder.currentTime);
         if (recorder.currentTime < recordTimeLimit) {
             //self.AudioLabel.text = [[NSString stringWithFormat:@"%.0f",recorder.currentTime] stringByAppendingString:@"s"];
             self.AudioLabel.text = [formatter stringFromTimeInterval:recorder.currentTime];
-            
+            NSLog(@"%@",self.AudioLabel.text);
         }
         else{
             [self stopRecording];
@@ -134,8 +138,6 @@
     // notification
     [[NSNotificationCenter defaultCenter] postNotificationName:@"startRecording" object:self userInfo:nil];
     
-    //hide the slider
-    [self.progressSlider setHidden:YES];
 }
 
 - (void) stopRecording{
@@ -151,9 +153,6 @@
     
     // stop response timer
     [self stopTimer:responseTimer];
-    
-    //unhide the slider
-    [self.progressSlider setHidden:NO];
 }
 
 - (void) startPlaying{
