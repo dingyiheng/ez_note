@@ -45,42 +45,31 @@
 - (instancetype)initWithImage:(UIImage *) image {
     //    self.img = image;
     
-    NSLog(@"Image Oriientation: %ld", [image imageOrientation]);
+    // NSLog(@"Image Oriientation: %ld", [image imageOrientation]);
+    
+    widthscale = 0.95;
+    self.width_height_ratio = 3.0/2;
+    self.url = nil;
     
     self.img = [self fixOrientation:image];
-    if (![self saveImage:self.img]) {
-        NSLog(@"Can't save image");
+    if (![self saveImage]) {
+        NSLog(@"Can't save image  2");
     }
     
-    NSLog(@"%@", [self.url path]);
+    // NSLog(@"%@", [self.url path]);
     
-    /*
-    NSFileManager *filemgr = [NSFileManager defaultManager];
-    if( [filemgr fileExistsAtPath:[self.url path]])
-         NSLog(@"Existing");
-    else
-        NSLog(@"Not existing");
     
-    NSError * error;
-    NSData *ImageData = [NSData dataWithContentsOfURL:self.url options:NSDataReadingUncached error:&error];
-    self.img = [UIImage imageWithData:ImageData];
-    //*/
-     
-     
-    self.width_height_ratio = 3.0/2;
+//    NSLog(@"self.dispImage frame width:%f height:%f", [self getViewFrame:buttonImage].size.width, [self getViewFrame:buttonImage].size.height);
     
-    self.view_Max_Width = screen_width * 0.95;
-    self.view_Max_Height = self.view_Max_Width / self.width_height_ratio;
-    UIImage *buttonImage = [self cropImage];
+//    self = [super initWithFrame: [self getViewFrame:self.dispImage]];
     
-//    NSLog(@"buttonImage frame width:%f height:%f", [self getViewFrame:buttonImage].size.width, [self getViewFrame:buttonImage].size.height);
-    
-    self = [super initWithFrame: [self getViewFrame:buttonImage]];
+    self = [super init];
     
     if(self){
         [self addsubviewFromNib];
 //        [self.imgButton setImage:buttonImage forState:UIControlStateNormal];
-        self.imageView.image = buttonImage;
+        [self updateFrame];
+        
         
         UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPress:)];
         [self.imgButton addGestureRecognizer:longPress];
@@ -90,13 +79,13 @@
 }
 
 
-- (CGRect) getViewFrame:(UIImage *) buttonImage {
+- (CGRect) getViewFrame {
     CGFloat view_Width = self.view_Max_Width;
     CGFloat view_Height = self.view_Max_Height;
     
 
-    CGFloat img_Width = buttonImage.size.width;
-    CGFloat img_Height = buttonImage.size.height;
+    CGFloat img_Width = self.dispImage.size.width;
+    CGFloat img_Height = self.dispImage.size.height;
     CGFloat img_ratio = img_Width / img_Height;
     
     // Over Size
@@ -121,7 +110,6 @@
         view_Height = img_Height;
     }
     
-
     return CGRectMake(0, 0, view_Width, view_Height);
 }
 
@@ -248,6 +236,8 @@
     NSLog(@"Pressed");
     NSDictionary *info = @{@"img": self.img};
     [[NSNotificationCenter defaultCenter] postNotificationName:@"imageViewTouched" object:self userInfo:info];
+    
+    [self update];
 }
 
 - (void)longPress:(UILongPressGestureRecognizer*)gesture {
@@ -261,32 +251,30 @@
 }
 
 
-- (BOOL) saveImage: (UIImage *) image {
-    BOOL sucess = YES;
-    
+- (BOOL) saveImage {
     NSFileManager *filemgr = [NSFileManager defaultManager];
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSPicturesDirectory, NSUserDomainMask, YES);
-    NSString *path = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
-/*
-    NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"/MyFolder"];
     
-    if (![[NSFileManager defaultManager] fileExistsAtPath:dataPath])
-        [[NSFileManager defaultManager] createDirectoryAtPath:dataPath withIntermediateDirectories:NO attributes:nil error:&error];
- */
+    if (!self.url) {
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSPicturesDirectory, NSUserDomainMask, YES);
+        NSString *path = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
     
-    [filemgr createDirectoryAtPath:path withIntermediateDirectories:NO attributes:nil error:nil];
-    NSString *guid = [[NSUUID new] UUIDString];
-    NSString *timestamp = [NSString stringWithFormat:@"%.0f",[[NSDate date] timeIntervalSince1970] * 1e20];
-    NSString *filename = [NSString stringWithFormat:@"%@%@%@", guid, timestamp, @".png"];
-    path = [path stringByAppendingPathComponent:filename];
-    NSData *imageData = UIImagePNGRepresentation(image);
-    if(![imageData writeToFile:path atomically:YES]) {
-        sucess = NO;
+        [filemgr createDirectoryAtPath:path withIntermediateDirectories:NO attributes:nil error:nil];
+        NSString *guid = [[NSUUID new] UUIDString];
+        NSString *timestamp = [NSString stringWithFormat:@"%.0f",[[NSDate date] timeIntervalSince1970] * 1e20];
+        NSString *filename = [NSString stringWithFormat:@"%@%@%@", guid, timestamp, @".jpg"];
+        path = [path stringByAppendingPathComponent:filename];
+        path = [NSString stringWithFormat:@"file://%@", path];
+        self.url = [NSURL URLWithString:path];
     }
-    path = [NSString stringWithFormat:@"file://%@", path];
-    self.url = [NSURL URLWithString:path];
+
+//    NSData *imageData = UIImagePNGRepresentation(self.img);
+    NSData *imageData = UIImageJPEGRepresentation(self.img, 0.5f);
+    BOOL sucess = [imageData writeToURL:self.url atomically:YES];
     
-    /*
+    
+    // NSLog(@"%@", self.url);
+    
+    /* Code for enerating directory
     
     NSURL *directoryURL = <#An NSURL object that contains a reference to a directory#>;
     
@@ -333,6 +321,67 @@
     return sucess;
     
 }
+
+- (void) update {
+    // Reload image
+    /* Debugging info
+    NSFileManager *filemgr = [NSFileManager defaultManager];
+    if( [filemgr fileExistsAtPath:[self.url path]])
+        NSLog(@"Existing");
+    else
+        NSLog(@"Not existing");
+     */
+     
+    NSError * error;
+    NSData *ImageData = [NSData dataWithContentsOfURL:self.url options:NSDataReadingUncached error:&error];
+    self.img = [self fixOrientation:[UIImage imageWithData:ImageData]];
+    
+//ac    NSLog(@"Loaded image orientation after fixed %ld", self.img.imageOrientation);
+    
+    if (![self saveImage]) {
+        NSLog(@"Can't save image  1");
+    }
+    [self updateFrame];
+}
+
+- (void) updateFrame {
+    self.view_Max_Width = screen_width * widthscale;
+    self.view_Max_Height = self.view_Max_Width / self.width_height_ratio;
+    self.dispImage = [self cropImage];
+    
+    CGFloat view_Width = self.view_Max_Width;
+    CGFloat view_Height = self.view_Max_Height;
+    
+    CGFloat img_Width = self.dispImage.size.width;
+    CGFloat img_Height = self.dispImage.size.height;
+    CGFloat img_ratio = img_Width / img_Height;
+    
+    // Over Size
+    if(img_Width > self.view_Max_Width || img_Height > self.view_Max_Height) {
+        //        button_Width = self.view_Max_Width;
+        // too wide
+        if (img_ratio > self.width_height_ratio)
+            view_Height = view_Width / img_ratio;
+        // too tall
+        else {
+            if (img_Width > self.view_Max_Width)
+                view_Width = self.view_Max_Width;
+            else
+                view_Width = img_Width;
+            
+            view_Height = self.view_Max_Height;
+        }
+    }
+    // too small
+    else if (img_Width < self.view_Max_Width && img_Height < self.view_Max_Height) {
+        view_Width = img_Width;
+        view_Height = img_Height;
+    }
+    
+    self.frame = CGRectMake(0, 0, view_Width, view_Height);
+    self.imageView.image = self.dispImage;
+}
+
 
 - (BOOL) deleteImage {
     NSFileManager *filemgr = [NSFileManager defaultManager];

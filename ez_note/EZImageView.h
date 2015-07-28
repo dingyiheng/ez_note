@@ -10,9 +10,12 @@
 #import "EZOptions.h"
 #import "EZView.h"
 
-@interface EZImageView : EZView
+@interface EZImageView : EZView {
+    CGFloat widthscale;
+}
 
 @property UIImage *img;
+@property UIImage *dispImage;
 @property NSURL *url;
 @property CGFloat view_Max_Width;
 @property CGFloat view_Max_Height;
@@ -28,10 +31,11 @@
 
 - (instancetype)initWithImage:(UIImage *) image;
 - (instancetype)initWithURL:(NSURL *) imageURL;
-- (BOOL) saveImage: (UIImage *) image;
+- (BOOL) saveImage;
 - (BOOL) deleteImage;
 //- (id) initWithImage:(EZOptions*) opt Image:(UIImage*) img;
-
+- (void) update;
+- (void) updateFrame;
 - (id) getOutput;
 
 @end
