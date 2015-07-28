@@ -236,8 +236,6 @@
     NSLog(@"Pressed");
     NSDictionary *info = @{@"img": self.img};
     [[NSNotificationCenter defaultCenter] postNotificationName:@"imageViewTouched" object:self userInfo:info];
-    
-    [self update];
 }
 
 - (void)longPress:(UILongPressGestureRecognizer*)gesture {
