@@ -38,6 +38,7 @@
 		B6977FCB1B672B7100ECE035 /* Note.m in Sources */ = {isa = PBXBuildFile; fileRef = B6977FCA1B672B7100ECE035 /* Note.m */; };
 		B6977FCE1B672B7200ECE035 /* Notebook.m in Sources */ = {isa = PBXBuildFile; fileRef = B6977FCD1B672B7200ECE035 /* Notebook.m */; };
 		B6977FD11B672BAF00ECE035 /* Note_content.m in Sources */ = {isa = PBXBuildFile; fileRef = B6977FD01B672BAF00ECE035 /* Note_content.m */; };
+		B6977FD41B67749A00ECE035 /* MainSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B6977FD31B67749A00ECE035 /* MainSettingViewController.m */; };
 		B6E73D3E1B618D670089968E /* NoteTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B6E73D3D1B618D670089968E /* NoteTableViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -109,6 +110,8 @@
 		B6977FCD1B672B7200ECE035 /* Notebook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Notebook.m; path = ez_note/core_data/Notebook.m; sourceTree = "<group>"; };
 		B6977FCF1B672BAF00ECE035 /* Note_content.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Note_content.h; path = ez_note/core_data/Note_content.h; sourceTree = "<group>"; };
 		B6977FD01B672BAF00ECE035 /* Note_content.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Note_content.m; path = ez_note/core_data/Note_content.m; sourceTree = "<group>"; };
+		B6977FD21B67749A00ECE035 /* MainSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainSettingViewController.h; sourceTree = "<group>"; };
+		B6977FD31B67749A00ECE035 /* MainSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainSettingViewController.m; sourceTree = "<group>"; };
 		B6E73D3C1B618D670089968E /* NoteTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoteTableViewController.h; sourceTree = "<group>"; };
 		B6E73D3D1B618D670089968E /* NoteTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoteTableViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -176,6 +179,8 @@
 				B65F9CAF1B5D928D00FB53E7 /* Main.storyboard */,
 				B6E73D3C1B618D670089968E /* NoteTableViewController.h */,
 				B6E73D3D1B618D670089968E /* NoteTableViewController.m */,
+				B6977FD21B67749A00ECE035 /* MainSettingViewController.h */,
+				B6977FD31B67749A00ECE035 /* MainSettingViewController.m */,
 				35FEF8DC1B5D917A00A96076 /* EZTextView.h */,
 				35FEF8DD1B5D917A00A96076 /* EZTextView.m */,
 				B65EDF9C1B60B0670043C99D /* EZTextView.xib */,
@@ -369,6 +374,7 @@
 				35FEF8D91B5D916300A96076 /* TextViewFactory.m in Sources */,
 				683E407B1B5D959A00CCDAF3 /* EZImageView.m in Sources */,
 				35FEF8DE1B5D917A00A96076 /* EZTextView.m in Sources */,
+				B6977FD41B67749A00ECE035 /* MainSettingViewController.m in Sources */,
 				B6977FCE1B672B7200ECE035 /* Notebook.m in Sources */,
 				35FEF8D11B5D89AE00A96076 /* AudioFactory.m in Sources */,
 				35DD10041B603C60007AFE47 /* EZView.m in Sources */,

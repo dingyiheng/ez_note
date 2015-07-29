@@ -38,6 +38,8 @@
     
     UIImagePickerController *imagePicker;
     
+    UILabel *titleLabel;
+    
 
     
     
@@ -48,6 +50,8 @@
     float screenHeight;
     
     BOOL isRecording;
+    
+    NSArray *oldContents;
 }
 
 @end
@@ -66,6 +70,9 @@
     
 }
 
+
+
+// ********** NOT USED *********************
 -(void)loadViewsFromJSON:(NSData *)json{
     [self loadFactories];
     NSLog(@"Load data from json");
@@ -127,7 +134,7 @@
         [self.myViews addObject:v];
         NSLog(@"lalala: %@",v);
     }
-    
+    oldContents = fetchedObjects;
     [self resizeContent];
     
 }
@@ -147,6 +154,8 @@
 
 
 - (void)viewWillAppear:(BOOL)animated{
+    
+    
 //    [[self.view.window.rootViewController.navigationController.navigationBar.subviews objectAtIndex:1] setBackgroundColor:[UIColor whiteColor]];
 //    [[self.navigationController.navigationBar.subviews objectAtIndex:1] setBackgroundColor:[UIColor whiteColor]];
 }
@@ -157,9 +166,15 @@
     
     UITapGestureRecognizer* tapRecon = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(navigationBarTap)];
     tapRecon.numberOfTapsRequired = 1;
+    
+    titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, scrollViewWidth-100, 30)];
+    titleLabel.text = self.titleText;
+    titleLabel.textAlignment = NSTextAlignmentCenter;
+    titleLabel.font = [UIFont boldSystemFontOfSize:16.0f];
+    self.navigationItem.titleView = titleLabel;
+    
     [self.navigationItem.titleView setUserInteractionEnabled:YES];
     [self.navigationItem.titleView addGestureRecognizer:tapRecon];
-    self.navigationItem.titleView.backgroundColor = [UIColor whiteColor];
     for (UIView *v in self.navigationController.navigationBar.subviews){
         NSLog(@"v: %@", v);
     }
@@ -171,7 +186,7 @@
     
     
     
-    self.navigationItem.title = @"New Note";
+//    self.navigationItem.title = @"New Note";
     
     NSLog(@"Context: %@", self.managedObjectContext);
     
@@ -209,6 +224,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textViewHeightChanged:) name:@"textViewHeightChanged" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textViewFocused:) name:@"textViewFocused" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(imageViewTouched:) name:@"imageViewTouched" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(imageTaped:) name:@"imageTaped" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWasShown:) name:UIKeyboardDidShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillBeHidden:) name:UIKeyboardWillHideNotification object:nil];
     
@@ -495,13 +511,84 @@
             [str appendString: tv.textView.text];
         }
     }
+    NSString *sss;
     NSLog(@"Text Content is : %@", str);
+    return str;
+}
+
+-(NSString *)getHTMLContent:(NSArray *)views{
+    NSMutableString *str = [[NSMutableString alloc] init];
+    NSDictionary * htmlAtt = [NSDictionary dictionaryWithObjectsAndKeys: NSHTMLTextDocumentType, NSDocumentTypeDocumentAttribute, nil];
+    NSMutableAttributedString *all;
+    
+    
+    
+    NSString *audioTag = @"<audio controls><source src='%@' type='audio/x-m4a'>Your browser does not support the audio tag.</audio>";
+    
+    NSMutableArray *insertedHTML = [[NSMutableArray alloc] init];
+    for(EZView *v in views){
+        if([v isKindOfClass: [EZTextView class]]){
+            EZTextView *tv = (EZTextView *)v;
+            if(!all){
+                all = [[NSMutableAttributedString alloc] initWithAttributedString:tv.textView.attributedText];
+            }else{
+                
+                [all replaceCharactersInRange: NSMakeRange(all.length, 0) withAttributedString:tv.textView.attributedText];
+            }
+        }else if([v isKindOfClass: [AudioView class]]){
+//            NSMutableString *str = [[NSMutableString alloc] initWithString:audioTagStart];
+            NSString *markString = [NSString stringWithFormat:@"\n#w#w#w#w#w%lu\n", [insertedHTML count]];
+            [all replaceCharactersInRange: NSMakeRange(all.length, 0) withString:markString];
+            AudioView *av = (AudioView *)v;
+            NSString *html = [NSString stringWithFormat:audioTag, [av getOutput]];
+            [insertedHTML addObject:html];
+//            insertedHTML 
+
+        
+//            [str appendString: tv.textView.text];
+            
+            
+//            
+//            NSArray * exclude = [NSArray arrayWithObjects:@"doctype", @"html", @"head", @"body",@"xml",nil];
+//            NSDictionary * htmlAtt = [NSDictionary dictionaryWithObjectsAndKeys:NSHTMLTextDocumentType,NSDocumentTypeDocumentAttribute,exclude,NSExcludedElementsDocumentAttribute,nil];
+//            NSError * error;
+//            
+            
+            
+            
+            
+        }
+    }
+    
+    NSData * htmlData = [all dataFromRange:NSMakeRange(0, [all length]) documentAttributes:htmlAtt error:nil];
+    NSString * htmlString = [[NSString alloc] initWithData:htmlData encoding:NSUTF8StringEncoding];
+    
+    for(unsigned i=0; i<insertedHTML.count; i++){
+        NSString *pattern = [NSString stringWithFormat:@"<p.*(#w){5}%u.*p>", i];
+        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:NSRegularExpressionCaseInsensitive error:nil];
+        htmlString = [regex stringByReplacingMatchesInString:htmlString options:0 range:NSMakeRange(0, [htmlString length]) withTemplate:[insertedHTML objectAtIndex:i]];
+    }
+    
+    
+    
+    
+    
+    
+//    
+//    
+//    NSError *error = nil;
+//    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"<p.*(#w){5}.*p>" options:NSRegularExpressionCaseInsensitive error:&error];
+//    NSString *modifiedString = [regex stringByReplacingMatchesInString:htmlString options:0 range:NSMakeRange(0, [htmlString length]) withTemplate:@"LLLL"];
+//    
+    NSLog(@"HTML Output: %@", htmlString);
+//    NSLog(@"%@", modifiedString);
+    
     return str;
 }
 
 
 -(void)getOutput{
-    NSArray *sortedViews = [self sortViews];
+//    NSArray *sortedViews = [self sortViews];
 //    [self viewToDict:sortedViews];
 }
 
@@ -511,17 +598,22 @@
 -(void)saveNote{
     
     
-    
     NSArray *sortedViews =[self sortViews];
-    
+    [self getTextContent:sortedViews];
     NSManagedObjectContext *context = self.managedObjectContext;
     NSError *error;
     
     
+//    NSString *textContent = [self getTextContent:sortedViews];
     Note *note = nil;
-    
-    note = [NSEntityDescription insertNewObjectForEntityForName:@"Note" inManagedObjectContext:context];
-    
+    if(self.isNewDocument){
+        note = [NSEntityDescription insertNewObjectForEntityForName:@"Note" inManagedObjectContext:context];
+    }else{
+        note = (Note *)[context existingObjectWithID:self.noteID error:nil];
+        for (NSManagedObject *product in oldContents) {
+            [context deleteObject:product];
+        }
+    }
     
     for(EZView *v in sortedViews){
         Note_content *noteContent = nil;
@@ -529,29 +621,26 @@
         NSLog(@"what is v:%@",v);
         noteContent.content = v;
         noteContent.note = note;
-        if([context save: &error]){
-            NSLog(@"Content Saved");
-        }else{
-            NSLog(@"Failed to save - error: %@", [error localizedDescription]);
-        }
+//        if([context save: &error]){
+//            NSLog(@"Content Saved");
+//        }else{
+//            NSLog(@"Failed to save - error: %@", [error localizedDescription]);
+//        }
     }
     
     
-    
-    
-    
-    
 
-    NSString *textContent = [self getTextContent:sortedViews];
+
+
     NSLog(@"Sorted here %@", sortedViews);
 //    NSArray *array = [self viewToDictArray: sortedViews];
     
 //    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:array options:0 error:&error];
 //    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
 //    NSLog(@"json: %@", jsonString);
-    note.title = [textContent substringToIndex:10];
+    note.title = self.titleText;
 //    note.content = jsonData;
-    note.text_content = textContent;
+//    note.text_content = textContent;
     note.create_time = [NSDate date];
     note.tag = [[NSSet alloc]init];
     if([context save: &error]){
@@ -716,13 +805,27 @@
 
 
 -(void)navigationBarTap{
-    NSLog(@"navigationBarTap");
-    UITextField *titleField = [[UITextField alloc]initWithFrame:CGRectMake(0, 0, 100, 30)];
+//    NSLog(@"navigationBarTap");
+    UITextField *titleField = [[UITextField alloc]initWithFrame:CGRectMake(0, 0, scrollViewWidth-100, 30)];
     titleField.backgroundColor = [UIColor whiteColor];
+    titleField.borderStyle = UITextBorderStyleRoundedRect;
+    titleField.textAlignment = NSTextAlignmentCenter;
+    titleField.text = self.titleText;
+    titleField.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2];
+    titleField.delegate = self;
+    [titleField becomeFirstResponder];
     self.navigationItem.titleView = titleField;
 }
 
 
+
+- (BOOL) textFieldShouldEndEditing:(UITextField *)textField {
+    self.titleText = textField.text;
+    titleLabel.text = self.titleText;
+    self.navigationItem.titleView = titleLabel;
+//    NSLog(@"Lost Focus for content: %@", textField.text);
+    return YES;
+}
 
 
 
@@ -758,7 +861,10 @@
     NSLog(@"Clear Button Touched");
     [self showViewInfo];
     
-    [self saveNote];
+//    [self saveNote];
+    NSArray *sortedViews =[self sortViews];
+    [self getTextContent:sortedViews];
+    [self getHTMLContent:sortedViews];
     
     
 //    NSLog(@"------------------");

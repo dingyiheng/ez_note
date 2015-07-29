@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-@interface ViewController : UIViewController <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
+@interface ViewController : UIViewController <UITextFieldDelegate ,UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
 
 @property (strong, nonatomic) NSMutableArray *myViews;
@@ -22,7 +22,13 @@
 
 @property (strong, nonatomic) NSManagedObjectID *noteID;
 
-@property (strong, nonatomic) IBOutlet UITextField *titleTextField;
+//@property (strong, nonatomic) UITextField *titleField;
+
+
+@property (strong, nonatomic) NSString *titleText;
+
+
+
 
 @property BOOL isNewDocument;
 

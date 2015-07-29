@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "NoteTableViewController.h"
+#import "MainSettingViewController.h"
 
 @interface AppDelegate ()
 
@@ -34,6 +35,16 @@
     
     NoteTableViewController *noteVC = (NoteTableViewController *)navController.topViewController;
     noteVC.managedObjectContext = self.managedObjectContext;
+    
+    UINavigationController *settingNavController = tabBarController.viewControllers[1];
+    
+    
+    MainSettingViewController *mainSettingVC = (MainSettingViewController *)settingNavController.topViewController;
+    
+    
+    mainSettingVC.managedObjectContext = self.managedObjectContext;
+
+    
     
     
     

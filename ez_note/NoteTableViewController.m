@@ -101,25 +101,36 @@
 }
 */
 
-/*
+
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     // Return NO if you do not want the specified item to be editable.
     return YES;
 }
-*/
 
-/*
+
+
 // Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         // Delete the row from the data source
+        
+        Note *note = [self.notes objectAtIndex:indexPath.row];
+        [self.notes removeObjectAtIndex:indexPath.row];
+        [self.managedObjectContext deleteObject:note];
+        
+        NSError *error;
+        
+        if([self.managedObjectContext save: &error]){
+            NSLog(@"Deleted");
+        }else{
+            NSLog(@"Failed to delete - error: %@", [error localizedDescription]);
+        }
+
+        
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
+    }
 }
-*/
 
 /*
 // Override to support rearranging the table view.
@@ -234,6 +245,7 @@
         ViewController *v = (ViewController *)segue.destinationViewController;
         v.managedObjectContext = self.managedObjectContext;
         v.isNewDocument = YES;
+        v.titleText = @"New Note";
     }else if ([segue.identifier isEqualToString:@"openNote"]) {
         
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
@@ -248,7 +260,7 @@
         v.noteID = note.objectID;
 //        [v loadViews: note.objectID];
 //        [v loadViewsFromJSON:jsonData];
-        v.title = note.title;
+        v.titleText = note.title;
         NSLog(@"open note");
     }
 }
