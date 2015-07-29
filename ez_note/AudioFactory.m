@@ -15,7 +15,7 @@
 
 - (NSMutableDictionary *)settings{
     if(!settings){
-        settings = [[NSMutableDictionary alloc]initWithObjectsAndKeys:[NSNumber numberWithFloat: self.height],@"height",[NSNumber numberWithFloat: self.width] ,@"width",self.outputFileURL,@"outputFileURL",self.recordSetting,@"recordSetting",self.title,@"title",self.backgroundColor,@"backgroundColor",[NSNumber numberWithFloat:self.timeLimit],@"timeLimit" ,nil];
+        settings = [[NSMutableDictionary alloc]initWithObjectsAndKeys:[NSNumber numberWithFloat: self.height],@"height",[NSNumber numberWithFloat: self.width] ,@"width",self.recordSetting,@"recordSetting",self.title,@"title",self.backgroundColor,@"backgroundColor",[NSNumber numberWithFloat:self.timeLimit],@"timeLimit" ,nil];
         
     }
     return settings;
@@ -31,11 +31,13 @@
         self.title = @"Audio Record";
         self.timeLimit = 3600.0f;
         
+        /*
         NSArray *pathComponents = [NSArray arrayWithObjects:
                                    [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject],
                                    @"MyAudioMemo.m4a",
                                    nil];
         self.outputFileURL = [NSURL fileURLWithPathComponents:pathComponents];
+         */
         //NSLog(@"%@", self.outputFileURL);
         
         // Setup audio session
@@ -55,6 +57,7 @@
 }
 
 - (AudioView *)createViewWithSettings{
+    //create a new audio view
     AudioView *v = [[AudioView alloc] initWithFactorySettings:self.settings];
     return v;
 }

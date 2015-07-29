@@ -50,18 +50,31 @@
     self = [super initWithFrame: CGRectMake(0, 0, [settings[@"width"] floatValue], [settings[@"height"] floatValue])];
     
     if(self){
-        
         [self addsubviewFromNib];
         [self.AudioButton setTitle:settings[@"title"] forState:UIControlStateNormal];
-        self.AudioLabel.text = @"";
+        self.AudioLabel.text = @"0:00:00";
         self.progressSlider.value = 0.0f;
         recordTimeLimit = [settings[@"timeLimit"] floatValue];
+        
+        //time stamp for naming the record
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"yyyyMMddHHmmss"];
+        NSString *todayString=[dateFormatter stringFromDate:[NSDate date]];
+        
+        NSString *todayStamp = [todayString stringByAppendingString:@".m4a"];
+        NSLog(@"%@",todayStamp);
+        NSArray *pathComponents = [NSArray arrayWithObjects:
+                                   [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject],
+                                   todayStamp,
+                                   nil];
+        self.outputFileURL = [NSURL fileURLWithPathComponents:pathComponents];
+
         
         //this background color is not subview's background color, don't mess up
         self.backgroundColor = settings[@"backgroundColor"];
         
         // Initiate and prepare the recorder
-        recorder = [[AVAudioRecorder alloc] initWithURL:settings[@"outputFileURL"] settings:settings[@"recordSetting"] error:nil];
+        recorder = [[AVAudioRecorder alloc] initWithURL:self.outputFileURL settings:settings[@"recordSetting"] error:nil];
         recorder.delegate = self;
         recorder.meteringEnabled = YES;
         [recorder prepareToRecord];
@@ -97,18 +110,17 @@
 }
 
 - (void) timerResponse{
+    
     //time format hh:mm:ss
     NSDateComponentsFormatter *formatter = [[NSDateComponentsFormatter alloc] init];
     formatter.allowedUnits = NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond;
     formatter.zeroFormattingBehavior = NSDateComponentsFormatterZeroFormattingBehaviorPad;
     //NSString *string = [formatter stringFromTimeInterval:recorder.currentTime];
-    //NSLog(@"%@",string);
     
     if (recorder.recording) {
         if (recorder.currentTime < recordTimeLimit) {
             //self.AudioLabel.text = [[NSString stringWithFormat:@"%.0f",recorder.currentTime] stringByAppendingString:@"s"];
             self.AudioLabel.text = [formatter stringFromTimeInterval:recorder.currentTime];
-            
         }
         else{
             [self stopRecording];
@@ -134,8 +146,6 @@
     // notification
     [[NSNotificationCenter defaultCenter] postNotificationName:@"startRecording" object:self userInfo:nil];
     
-    //hide the slider
-    [self.progressSlider setHidden:YES];
 }
 
 - (void) stopRecording{
@@ -151,9 +161,6 @@
     
     // stop response timer
     [self stopTimer:responseTimer];
-    
-    //unhide the slider
-    [self.progressSlider setHidden:NO];
 }
 
 - (void) startPlaying{
