@@ -14,6 +14,7 @@
     float recordTimeLimit;
     NSTimer *responseTimer;
     NSTimer *updateTimer;
+    BOOL isNewAudio;
 }
 
 /*
@@ -26,7 +27,10 @@
 //
 
 - (id) getOutput{
-    return [recorder.url absoluteString];
+    if(!recorder){
+        return player.url;
+    }
+    return recorder.url;
 }
 
 - (UIView *)viewFromNib{
@@ -46,10 +50,13 @@
     [self addSubview:view];
 }
 
-- (instancetype)initWithFactorySettings:(NSDictionary *)settings{
+- (instancetype)initWithFactorySettings:(NSDictionary *)settings url:(NSURL *)url{
     self = [super initWithFrame: CGRectMake(0, 0, [settings[@"width"] floatValue], [settings[@"height"] floatValue])];
     
     if(self){
+        
+        
+        
         [self addsubviewFromNib];
         [self.AudioButton setTitle:settings[@"title"] forState:UIControlStateNormal];
         self.AudioLabel.text = @"0:00:00";
@@ -67,17 +74,35 @@
                                    [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject],
                                    todayStamp,
                                    nil];
-        self.outputFileURL = [NSURL fileURLWithPathComponents:pathComponents];
-
         
+        if(url){
+            self.outputFileURL = url;
+            [self.AudioButton setTitle:@"Play" forState:UIControlStateNormal];
+//            isNewAudio
+        }else{
+            self.outputFileURL = [NSURL fileURLWithPathComponents:pathComponents];
+            recorder = [[AVAudioRecorder alloc] initWithURL:self.outputFileURL settings:settings[@"recordSetting"] error:nil];
+            recorder.delegate = self;
+            recorder.meteringEnabled = YES;
+            
+            [recorder prepareToRecord];
+        }
+        
+        
+
+//        NSLog(@"2.%@", self.outputFileURL);
         //this background color is not subview's background color, don't mess up
         self.backgroundColor = settings[@"backgroundColor"];
         
         // Initiate and prepare the recorder
-        recorder = [[AVAudioRecorder alloc] initWithURL:self.outputFileURL settings:settings[@"recordSetting"] error:nil];
-        recorder.delegate = self;
-        recorder.meteringEnabled = YES;
-        [recorder prepareToRecord];
+//        recorder = [[AVAudioRecorder alloc] initWithURL:self.outputFileURL settings:settings[@"recordSetting"] error:nil];
+//        recorder.delegate = self;
+//        recorder.meteringEnabled = YES;
+//        
+//        [recorder prepareToRecord];
+//        }
+
+        
         
         //set up timer
         responseTimer = [[NSTimer alloc] init];
@@ -165,7 +190,13 @@
 
 - (void) startPlaying{
     if (!recorder.recording){
-        player = [[AVAudioPlayer alloc] initWithContentsOfURL:recorder.url error:nil];
+        NSError *error;
+        player = [[AVAudioPlayer alloc] initWithContentsOfURL:self.outputFileURL fileTypeHint:AVFileTypeAppleM4A error:&error];
+        if(!player){
+            NSLog(@"Error: %@",error);
+        }
+
+        
         [player setDelegate:self];
         [player prepareToPlay];
         [self.AudioButton setTitle:@"Playing" forState:UIControlStateNormal];
@@ -249,5 +280,10 @@
     [self stopTimer:updateTimer];
     [self stopTimer:responseTimer];    
 }
+
+- (void)dealloc {
+    player = nil;
+}
+
 
 @end

@@ -16,6 +16,7 @@
 @property (strong, nonatomic) NSMutableDictionary *settings;
 @property (strong, nonatomic) UIColor *backgroundColor;
 @property float bottomBlankHeight;
+@property float baseFontSize;
 @property CGSize frameSize;
 
 

@@ -15,7 +15,7 @@
 -(NSMutableDictionary *)settings{
     if(!_settings){
         NSLog(@"widthss:%f", self.frameSize.width);
-        _settings = [[NSMutableDictionary alloc]initWithObjectsAndKeys: [NSValue valueWithCGSize: self.frameSize], @"frameSize", [UIColor whiteColor], @"backgroundColor", [NSNumber numberWithFloat: self.bottomBlankHeight], @"bottomBlankHeight", nil];
+        _settings = [[NSMutableDictionary alloc]initWithObjectsAndKeys: [NSValue valueWithCGSize: self.frameSize], @"frameSize", [UIColor whiteColor], @"backgroundColor", [NSNumber numberWithFloat: self.bottomBlankHeight], @"bottomBlankHeight", [NSNumber numberWithFloat: self.baseFontSize], @"baseFontSize", nil];
     }
     return _settings;
 }
@@ -27,6 +27,12 @@
         self.frameSize = CGSizeMake(500, 300);
         self.bottomBlankHeight = 300;
         self.backgroundColor = [UIColor greenColor];
+        
+        if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ){ //ipad
+            self.baseFontSize = 20;
+        }else{
+            self.baseFontSize = 14;
+        }
         return self;
     }else{
         NSLog(@"TextView Factory not initialized.");

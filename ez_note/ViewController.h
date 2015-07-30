@@ -10,6 +10,10 @@
 @interface ViewController : UIViewController <UITextFieldDelegate ,UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
 
+//extern const int16_t EZTypeTextView;
+//extern const int16_t EZTypeAudioView;
+//extern const int16_t EZTypeImageView;
+
 @property (strong, nonatomic) NSMutableArray *myViews;
 
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
@@ -26,6 +30,8 @@
 
 
 @property (strong, nonatomic) NSString *titleText;
+
+
 
 
 

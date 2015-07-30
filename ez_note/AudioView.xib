@@ -16,33 +16,31 @@
             <rect key="frame" x="0.0" y="0.0" width="416" height="84"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ehf-j8-e26">
-                    <rect key="frame" x="24" y="27" width="72" height="30"/>
+                <button opaque="NO" contentMode="scaleAspectFit" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ehf-j8-e26">
+                    <rect key="frame" x="24" y="31" width="81" height="22"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="72" id="jHr-wa-yDz"/>
                         <constraint firstAttribute="height" constant="30" id="kSg-Px-msI"/>
                     </constraints>
-                    <state key="normal" title="Button">
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
+                    <state key="normal" title="Play"/>
                     <connections>
                         <action selector="buttonPressed:" destination="-1" eventType="touchUpInside" id="OdW-fe-bQb"/>
                     </connections>
                 </button>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XcY-Kg-yCs">
-                    <rect key="frame" x="111" y="31" width="42" height="21"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XcY-Kg-yCs">
+                    <rect key="frame" x="120" y="35" width="42" height="21"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="7tc-K2-Xt0">
-                    <rect key="frame" x="171" y="27" width="224" height="31"/>
+                <slider opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="7tc-K2-Xt0">
+                    <rect key="frame" x="180" y="31" width="215" height="31"/>
                     <connections>
                         <action selector="progressSliderMoved:" destination="-1" eventType="valueChanged" id="ajC-o0-6iC"/>
                     </connections>
                 </slider>
             </subviews>
-            <color key="backgroundColor" red="0.61108474901765275" green="1" blue="0.5351131422168216" alpha="1" colorSpace="calibratedRGB"/>
+            <color key="backgroundColor" red="0.88634126199999996" green="1" blue="0.78195445180000001" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="7tc-K2-Xt0" secondAttribute="trailing" constant="23" id="6jJ-rU-4Vp"/>
                 <constraint firstItem="Ehf-j8-e26" firstAttribute="top" secondItem="XcY-Kg-yCs" secondAttribute="top" constant="-4" id="Mls-sx-ecI"/>

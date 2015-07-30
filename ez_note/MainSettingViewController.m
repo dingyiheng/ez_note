@@ -8,14 +8,20 @@
 
 #import "MainSettingViewController.h"
 
-@interface MainSettingViewController ()
+
+@interface MainSettingViewController (){
+    
+}
 
 @end
 
 @implementation MainSettingViewController
 
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    
     // Do any additional setup after loading the view.
 }
 

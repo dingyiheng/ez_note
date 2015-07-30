@@ -20,7 +20,7 @@
 
 - (void) addsubviewFromNib;
 - (UIView *) viewFromNib;
-- (instancetype)initWithFactorySettings:(NSDictionary *)settings;
+- (instancetype)initWithFactorySettings:(NSDictionary *)settings url:(NSURL *)url;
 
 //function methods
 - (void) startRecording;

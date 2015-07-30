@@ -25,5 +25,6 @@
 @property float timeLimit;
 
 - (AudioView *)createViewWithSettings;
+- (AudioView *)createViewWithSettingsAndURL:(NSURL *)url;
 
 @end

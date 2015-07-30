@@ -8,9 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface NoteTableViewController : UITableViewController <NSFetchedResultsControllerDelegate>
+@interface NoteTableViewController : UITableViewController <NSFetchedResultsControllerDelegate, UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating>
 
 @property (strong, nonatomic) NSMutableArray *notes;
+@property (strong, nonatomic) NSMutableArray *recentNotes;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 
 @end

@@ -58,7 +58,13 @@
 
 - (AudioView *)createViewWithSettings{
     //create a new audio view
-    AudioView *v = [[AudioView alloc] initWithFactorySettings:self.settings];
+    AudioView *v = [[AudioView alloc] initWithFactorySettings:self.settings url:nil];
+    return v;
+}
+
+- (AudioView *)createViewWithSettingsAndURL:(NSURL *)url{
+    //create a new audio view
+    AudioView *v = [[AudioView alloc] initWithFactorySettings:self.settings url:url];
     return v;
 }
 

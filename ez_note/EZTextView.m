@@ -10,6 +10,7 @@
 
 @implementation EZTextView{
     float bottomBlankHeight;
+    float baseFontSize;
 }
 
 /*
@@ -22,10 +23,10 @@
 
 
 - (id)getOutput{
-    NSData *data = [NSKeyedArchiver archivedDataWithRootObject: self.textView.attributedText];
-    NSString *str = [NSString stringWithUTF8String:[data bytes]];
-    NSLog(@"***************************** %@",str);
-    return str;
+//    NSData *data = [NSKeyedArchiver archivedDataWithRootObject: self.textView.attributedText];
+//    NSString *str = [NSString stringWithUTF8String:[data bytes]];
+//    NSLog(@"***************************** %@",str);
+    return self.textView.attributedText;
 }
 
 
@@ -60,6 +61,8 @@
         self.textView.scrollEnabled = NO;
         self.textView.delegate = self;
         self.isBottomTextView = NO;
+        baseFontSize = [settings[@"baseFontSize"]floatValue];
+        self.textView.font = [UIFont systemFontOfSize: baseFontSize];
         bottomBlankHeight = [settings[@"bottomBlankHeight"] floatValue];
         
         NSString *path;
@@ -323,15 +326,15 @@
             break;
         }
         case FormatTypeH1:{
-            return [UIFont systemFontOfSize:32];
+            return [UIFont systemFontOfSize:baseFontSize*2 weight:1.0];
             break;
         }
         case FormatTypeH2:{
-            return [UIFont systemFontOfSize:24];
+            return [UIFont systemFontOfSize:baseFontSize*1.5 weight:0.5];
             break;
         }
         case FormatTypeH3:{
-            return [UIFont systemFontOfSize:18];
+            return [UIFont systemFontOfSize:baseFontSize*1.17 weight:0.2];
             break;
         }
         case FormatTypeCenter:{

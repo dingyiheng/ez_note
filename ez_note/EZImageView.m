@@ -37,8 +37,14 @@
 
 
 - (instancetype)initWithURL:(NSURL *) imageURL {
-    NSData *data =[NSData dataWithContentsOfURL:imageURL];
-    UIImage *image = [UIImage imageWithData:data];
+//    NSError *error;
+//    NSData *data =[NSData dataWithContentsOfURL:imageURL options:0 error:&error];
+//    if(!data){
+//        NSLog(@"Error: %@", error);
+//    }
+//    UIImage *image = [UIImage imageWithData:data];
+    
+    UIImage* image = [UIImage imageWithContentsOfFile:[imageURL absoluteString]];
     return [self initWithImage:image];
 }
 
@@ -250,25 +256,50 @@
 
 
 - (BOOL) saveImage {
-    NSFileManager *filemgr = [NSFileManager defaultManager];
-    
+//    NSFileManager *filemgr = [NSFileManager defaultManager];
+    BOOL sucess = YES;
     if (!self.url) {
-        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSPicturesDirectory, NSUserDomainMask, YES);
-        NSString *path = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
+        
+        
+        
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *documentsPath = [paths objectAtIndex:0]; //Get the docs directory
+        
+        
+        
+        
+//
+//        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSPicturesDirectory, NSUserDomainMask, YES);
+//        NSString *path = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
     
-        [filemgr createDirectoryAtPath:path withIntermediateDirectories:NO attributes:nil error:nil];
+//        [filemgr createDirectoryAtPath:path withIntermediateDirectories:NO attributes:nil error:nil];
         NSString *guid = [[NSUUID new] UUIDString];
         NSString *timestamp = [NSString stringWithFormat:@"%.0f",[[NSDate date] timeIntervalSince1970] * 1e20];
-        NSString *filename = [NSString stringWithFormat:@"%@%@%@", guid, timestamp, @".jpg"];
-        path = [path stringByAppendingPathComponent:filename];
-        path = [NSString stringWithFormat:@"file://%@", path];
-        self.url = [NSURL URLWithString:path];
+        
+//        NSArray *pathComponents = [NSArray arrayWithObjects:
+//                                   [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject],
+//                                   timestamp,
+//                                   nil];
+        
+        NSString *filename = [NSString stringWithFormat:@"%@%@", timestamp, @".png"];
+        
+        NSString *filePath = [documentsPath stringByAppendingPathComponent:filename]; //Add the file name
+        
+        
+        
+//        path = [path stringByAppendingPathComponent:filename];
+//        path = [NSString stringWithFormat:@"file://%@", path];
+        
+        NSData *pngData = UIImagePNGRepresentation(self.img);
+        sucess = [pngData writeToFile:filePath  atomically:YES]; //Write the file
+        if(sucess){
+            self.url = [NSURL URLWithString:filePath];
+        }
     }
 
 //    NSData *imageData = UIImagePNGRepresentation(self.img);
-    NSData *imageData = UIImageJPEGRepresentation(self.img, 0.5f);
-    BOOL sucess = [imageData writeToURL:self.url atomically:YES];
-    
+//    NSData *imageData = UIImageJPEGRepresentation(self.img, 0.5f);
+//    BOOL sucess = [imageData writeToURL:self.url atomically:YES];
     
     // NSLog(@"%@", self.url);
     
@@ -315,6 +346,8 @@
     }
     */
     
+    
+    NSLog(@"Image URL:%@", self.url);
     
     return sucess;
     

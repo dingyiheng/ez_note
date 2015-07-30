@@ -37,8 +37,11 @@
 		B6977FC81B672B7100ECE035 /* Tag.m in Sources */ = {isa = PBXBuildFile; fileRef = B6977FC71B672B7100ECE035 /* Tag.m */; };
 		B6977FCB1B672B7100ECE035 /* Note.m in Sources */ = {isa = PBXBuildFile; fileRef = B6977FCA1B672B7100ECE035 /* Note.m */; };
 		B6977FCE1B672B7200ECE035 /* Notebook.m in Sources */ = {isa = PBXBuildFile; fileRef = B6977FCD1B672B7200ECE035 /* Notebook.m */; };
-		B6977FD11B672BAF00ECE035 /* Note_content.m in Sources */ = {isa = PBXBuildFile; fileRef = B6977FD01B672BAF00ECE035 /* Note_content.m */; };
 		B6977FD41B67749A00ECE035 /* MainSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B6977FD31B67749A00ECE035 /* MainSettingViewController.m */; };
+		B6977FDA1B687C5B00ECE035 /* Note_content.m in Sources */ = {isa = PBXBuildFile; fileRef = B6977FD91B687C5B00ECE035 /* Note_content.m */; };
+		B6977FE01B68CC6000ECE035 /* NoteCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B6977FDE1B68CC6000ECE035 /* NoteCell.m */; };
+		B6977FE11B68CC6000ECE035 /* NoteCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B6977FDF1B68CC6000ECE035 /* NoteCell.xib */; };
+		B6977FE41B69120F00ECE035 /* NoteSearchResultsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B6977FE31B69120F00ECE035 /* NoteSearchResultsViewController.m */; };
 		B6E73D3E1B618D670089968E /* NoteTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B6E73D3D1B618D670089968E /* NoteTableViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -53,7 +56,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		35D098471B5B671100550EB3 /* ez_note.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ez_note.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		35D098471B5B671100550EB3 /* EZ Note.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "EZ Note.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		35D0984B1B5B671100550EB3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		35D0984C1B5B671100550EB3 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		35D0984E1B5B671100550EB3 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -108,10 +111,15 @@
 		B6977FCA1B672B7100ECE035 /* Note.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Note.m; path = ez_note/core_data/Note.m; sourceTree = "<group>"; };
 		B6977FCC1B672B7200ECE035 /* Notebook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Notebook.h; path = ez_note/core_data/Notebook.h; sourceTree = "<group>"; };
 		B6977FCD1B672B7200ECE035 /* Notebook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Notebook.m; path = ez_note/core_data/Notebook.m; sourceTree = "<group>"; };
-		B6977FCF1B672BAF00ECE035 /* Note_content.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Note_content.h; path = ez_note/core_data/Note_content.h; sourceTree = "<group>"; };
-		B6977FD01B672BAF00ECE035 /* Note_content.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Note_content.m; path = ez_note/core_data/Note_content.m; sourceTree = "<group>"; };
 		B6977FD21B67749A00ECE035 /* MainSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainSettingViewController.h; sourceTree = "<group>"; };
 		B6977FD31B67749A00ECE035 /* MainSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainSettingViewController.m; sourceTree = "<group>"; };
+		B6977FD81B687C5B00ECE035 /* Note_content.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Note_content.h; path = ez_note/core_data/Note_content.h; sourceTree = "<group>"; };
+		B6977FD91B687C5B00ECE035 /* Note_content.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Note_content.m; path = ez_note/core_data/Note_content.m; sourceTree = "<group>"; };
+		B6977FDD1B68CC6000ECE035 /* NoteCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoteCell.h; sourceTree = "<group>"; };
+		B6977FDE1B68CC6000ECE035 /* NoteCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoteCell.m; sourceTree = "<group>"; };
+		B6977FDF1B68CC6000ECE035 /* NoteCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NoteCell.xib; sourceTree = "<group>"; };
+		B6977FE21B69120F00ECE035 /* NoteSearchResultsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoteSearchResultsViewController.h; sourceTree = "<group>"; };
+		B6977FE31B69120F00ECE035 /* NoteSearchResultsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoteSearchResultsViewController.m; sourceTree = "<group>"; };
 		B6E73D3C1B618D670089968E /* NoteTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoteTableViewController.h; sourceTree = "<group>"; };
 		B6E73D3D1B618D670089968E /* NoteTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoteTableViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -146,7 +154,7 @@
 		35D098481B5B671100550EB3 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				35D098471B5B671100550EB3 /* ez_note.app */,
+				35D098471B5B671100550EB3 /* EZ Note.app */,
 				35D098601B5B671200550EB3 /* ez_noteTests.xctest */,
 			);
 			name = Products;
@@ -179,6 +187,11 @@
 				B65F9CAF1B5D928D00FB53E7 /* Main.storyboard */,
 				B6E73D3C1B618D670089968E /* NoteTableViewController.h */,
 				B6E73D3D1B618D670089968E /* NoteTableViewController.m */,
+				B6977FE21B69120F00ECE035 /* NoteSearchResultsViewController.h */,
+				B6977FE31B69120F00ECE035 /* NoteSearchResultsViewController.m */,
+				B6977FDD1B68CC6000ECE035 /* NoteCell.h */,
+				B6977FDE1B68CC6000ECE035 /* NoteCell.m */,
+				B6977FDF1B68CC6000ECE035 /* NoteCell.xib */,
 				B6977FD21B67749A00ECE035 /* MainSettingViewController.h */,
 				B6977FD31B67749A00ECE035 /* MainSettingViewController.m */,
 				35FEF8DC1B5D917A00A96076 /* EZTextView.h */,
@@ -237,8 +250,8 @@
 		B65EDFBD1B60D47A0043C99D /* Core Data */ = {
 			isa = PBXGroup;
 			children = (
-				B6977FCF1B672BAF00ECE035 /* Note_content.h */,
-				B6977FD01B672BAF00ECE035 /* Note_content.m */,
+				B6977FD81B687C5B00ECE035 /* Note_content.h */,
+				B6977FD91B687C5B00ECE035 /* Note_content.m */,
 				B6977FCC1B672B7200ECE035 /* Notebook.h */,
 				B6977FCD1B672B7200ECE035 /* Notebook.m */,
 				B6977FC91B672B7100ECE035 /* Note.h */,
@@ -267,7 +280,7 @@
 			);
 			name = ez_note;
 			productName = ez_note;
-			productReference = 35D098471B5B671100550EB3 /* ez_note.app */;
+			productReference = 35D098471B5B671100550EB3 /* EZ Note.app */;
 			productType = "com.apple.product-type.application";
 		};
 		35D0985F1B5B671200550EB3 /* ez_noteTests */ = {
@@ -335,6 +348,7 @@
 				35D0985B1B5B671200550EB3 /* LaunchScreen.xib in Resources */,
 				B65F9CB01B5D928D00FB53E7 /* Main.storyboard in Resources */,
 				35D098581B5B671200550EB3 /* Images.xcassets in Resources */,
+				B6977FE11B68CC6000ECE035 /* NoteCell.xib in Resources */,
 				35FEF8DB1B5D916300A96076 /* ToolBarView.xib in Resources */,
 				B65E3DCF1B644FDE0048CE03 /* NoteInfoView.xib in Resources */,
 				B65EDF9D1B60B0670043C99D /* EZTextView.xib in Resources */,
@@ -365,16 +379,18 @@
 				35FEF8D21B5D89AE00A96076 /* AudioView.m in Sources */,
 				683E407A1B5D959A00CCDAF3 /* EZImageScrollViewController.m in Sources */,
 				35FEF8DA1B5D916300A96076 /* ToolBarView.m in Sources */,
+				B6977FDA1B687C5B00ECE035 /* Note_content.m in Sources */,
 				683E407C1B5D959A00CCDAF3 /* EZImageViewFactory.m in Sources */,
 				35D098501B5B671100550EB3 /* AppDelegate.m in Sources */,
 				B6977FCB1B672B7100ECE035 /* Note.m in Sources */,
 				35D0984D1B5B671100550EB3 /* main.m in Sources */,
-				B6977FD11B672BAF00ECE035 /* Note_content.m in Sources */,
 				B65E3DCD1B644FC40048CE03 /* NoteInfoView.m in Sources */,
+				B6977FE41B69120F00ECE035 /* NoteSearchResultsViewController.m in Sources */,
 				35FEF8D91B5D916300A96076 /* TextViewFactory.m in Sources */,
 				683E407B1B5D959A00CCDAF3 /* EZImageView.m in Sources */,
 				35FEF8DE1B5D917A00A96076 /* EZTextView.m in Sources */,
 				B6977FD41B67749A00ECE035 /* MainSettingViewController.m in Sources */,
+				B6977FE01B68CC6000ECE035 /* NoteCell.m in Sources */,
 				B6977FCE1B672B7200ECE035 /* Notebook.m in Sources */,
 				35FEF8D11B5D89AE00A96076 /* AudioFactory.m in Sources */,
 				35DD10041B603C60007AFE47 /* EZView.m in Sources */,
@@ -502,7 +518,7 @@
 				INFOPLIST_FILE = ez_note/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "EZ Note";
 			};
 			name = Debug;
 		};
@@ -514,7 +530,7 @@
 				INFOPLIST_FILE = ez_note/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "EZ Note";
 			};
 			name = Release;
 		};
@@ -533,7 +549,7 @@
 				INFOPLIST_FILE = ez_noteTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ez_note.app/ez_note";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EZ Note.app/EZ Note";
 			};
 			name = Debug;
 		};
@@ -548,7 +564,7 @@
 				INFOPLIST_FILE = ez_noteTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ez_note.app/ez_note";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EZ Note.app/EZ Note";
 			};
 			name = Release;
 		};

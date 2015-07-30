@@ -58,7 +58,9 @@
 
 @implementation ViewController
 
-
+const int EZTypeTextView = 7;
+const int EZTypeAudioView = 42;
+const int EZTypeImageView = 1024;
 
 
 // ------------ Initialization -----------------
@@ -117,6 +119,8 @@
 
 -(void)loadViews: (NSManagedObjectID *)noteID{
     
+    [self loadFactories];
+    
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"NoteContent"
                                               inManagedObjectContext:self.managedObjectContext];
@@ -129,9 +133,35 @@
     
     NSArray *fetchedObjects = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
     for(Note_content *nc in fetchedObjects){
-        EZView *v = nc.content;
+        
+        EZView *v = nil;
+        
+        if([nc.type intValue] == EZTypeTextView){
+            EZTextView *tv = [textViewFactory createTextView];
+            tv.textView.attributedText = (NSAttributedString *)nc.content;
+            tv.textView.inputAccessoryView = toolbar;
+            v = tv;
+        }else if([nc.type intValue] == EZTypeAudioView){
+            NSURL *url = (NSURL *)nc.content;
+            v = [audioFactory createViewWithSettingsAndURL: url];
+            
+        }else if([nc.type intValue] == EZTypeImageView){
+            NSURL *url = (NSURL *)nc.content;
+            v = [imageFactory createEZImageViewWithURL: url];
+            
+        }
+        
+        
+        CGRect frame = CGRectMake([nc.x floatValue], [nc.y floatValue], [nc.width floatValue], [nc.height floatValue]);
+        v.frame = frame;
+        
+        
         [self.scrollView addSubview: v];
         [self.myViews addObject:v];
+        if([v isKindOfClass: [EZTextView class]]){
+            EZTextView *tv = (EZTextView *)v;
+            NSLog(@"TextView is: %@", tv.textView.text);
+        }
         NSLog(@"lalala: %@",v);
     }
     oldContents = fetchedObjects;
@@ -145,16 +175,18 @@
     textViewFactory = [[TextViewFactory alloc] init];
     textViewFactory.frameSize = CGSizeMake(scrollViewWidth, scrollViewHeight-100);
     textViewFactory.bottomBlankHeight = scrollViewHeight-100;
-    
     audioFactory = [[AudioFactory alloc] init];
-    
+    audioFactory.backgroundColor = [UIColor blueColor];
     imageFactory = [[EZImageViewFactory alloc] init];
 }
 
 
 
+
+
+
 - (void)viewWillAppear:(BOOL)animated{
-    
+    NSLog(@"%d", EZTypeTextView);
     
 //    [[self.view.window.rootViewController.navigationController.navigationBar.subviews objectAtIndex:1] setBackgroundColor:[UIColor whiteColor]];
 //    [[self.navigationController.navigationBar.subviews objectAtIndex:1] setBackgroundColor:[UIColor whiteColor]];
@@ -217,6 +249,7 @@
     
     
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopRecording:) name:@"stopRecording" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardButtonTouched:) name:@"keyboardButtonTouched" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cameraButtonTouched:) name:@"cameraButtonTouched" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(imageButtonTouched:) name:@"imageButtonTouched" object:nil];
@@ -511,7 +544,6 @@
             [str appendString: tv.textView.text];
         }
     }
-    NSString *sss;
     NSLog(@"Text Content is : %@", str);
     return str;
 }
@@ -524,6 +556,7 @@
     
     
     NSString *audioTag = @"<audio controls><source src='%@' type='audio/x-m4a'>Your browser does not support the audio tag.</audio>";
+    NSString *imageTag = @"<img src='%@' />";
     
     NSMutableArray *insertedHTML = [[NSMutableArray alloc] init];
     for(EZView *v in views){
@@ -536,27 +569,21 @@
                 [all replaceCharactersInRange: NSMakeRange(all.length, 0) withAttributedString:tv.textView.attributedText];
             }
         }else if([v isKindOfClass: [AudioView class]]){
-//            NSMutableString *str = [[NSMutableString alloc] initWithString:audioTagStart];
             NSString *markString = [NSString stringWithFormat:@"\n#w#w#w#w#w%lu\n", [insertedHTML count]];
             [all replaceCharactersInRange: NSMakeRange(all.length, 0) withString:markString];
-            AudioView *av = (AudioView *)v;
-            NSString *html = [NSString stringWithFormat:audioTag, [av getOutput]];
+//            AudioView *av = (AudioView *)v;
+            NSString *html = [NSString stringWithFormat:audioTag, [v getOutput]];
             [insertedHTML addObject:html];
-//            insertedHTML 
-
-        
-//            [str appendString: tv.textView.text];
-            
-            
-//            
-//            NSArray * exclude = [NSArray arrayWithObjects:@"doctype", @"html", @"head", @"body",@"xml",nil];
-//            NSDictionary * htmlAtt = [NSDictionary dictionaryWithObjectsAndKeys:NSHTMLTextDocumentType,NSDocumentTypeDocumentAttribute,exclude,NSExcludedElementsDocumentAttribute,nil];
-//            NSError * error;
-//            
-            
-            
-            
-            
+        }else if([v isKindOfClass: [EZImageView class]]){
+            NSString *markString = [NSString stringWithFormat:@"\n#w#w#w#w#w%lu\n", [insertedHTML count]];
+            EZImageView *iv = (EZImageView *)v;
+            [all replaceCharactersInRange: NSMakeRange(all.length, 0) withString:markString];
+//            [self upload:iv.img];
+//            EZImageView *av = (EZImageView *)v;
+            NSURL *imageURL = [v getOutput];
+            NSLog(@"imageStr: %@", [imageURL absoluteString]);
+            NSString *html = [NSString stringWithFormat:imageTag, [imageURL absoluteString]];
+            [insertedHTML addObject:html];
         }
     }
     
@@ -569,21 +596,55 @@
         htmlString = [regex stringByReplacingMatchesInString:htmlString options:0 range:NSMakeRange(0, [htmlString length]) withTemplate:[insertedHTML objectAtIndex:i]];
     }
     
+    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"</head>" withString:@"<link rel=\"stylesheet\" type=\"text/css\" href=\"base.css\"></head>"];
+    
+    NSString *tempStr = [NSString stringWithFormat:@"<body><header><span>EZ Note</span><span id=\"title\">%@</span></header>", self.titleText];
+    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"<body>" withString:tempStr];
     
     
+    NSString *newString = [[htmlString componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]] componentsJoinedByString:@" "];
     
+    return newString;
+}
+
+
+-(void)upload:(UIImage *)image{
+    NSData *imageData = UIImageJPEGRepresentation(image,0.2);     //change Image to NSData
     
-    
-//    
-//    
-//    NSError *error = nil;
-//    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"<p.*(#w){5}.*p>" options:NSRegularExpressionCaseInsensitive error:&error];
-//    NSString *modifiedString = [regex stringByReplacingMatchesInString:htmlString options:0 range:NSMakeRange(0, [htmlString length]) withTemplate:@"LLLL"];
-//    
-    NSLog(@"HTML Output: %@", htmlString);
-//    NSLog(@"%@", modifiedString);
-    
-    return str;
+    if (imageData != nil)
+    {
+        NSString *filenames = @"testname";      //set name here
+        NSLog(@"%@", filenames);
+        NSString *urlString = @"http://localhost:8000/upload/";
+        
+        NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+        [request setURL:[NSURL URLWithString:urlString]];
+        [request setHTTPMethod:@"POST"];
+        
+        NSString *boundary = @"---------------------------14737809831466499882746641449";
+        NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; boundary=%@",boundary];
+        [request addValue:contentType forHTTPHeaderField: @"Content-Type"];
+        
+        NSMutableData *body = [NSMutableData data];
+        
+        [body appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+        [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"filenames\"\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+        [body appendData:[filenames dataUsingEncoding:NSUTF8StringEncoding]];
+        
+        [body appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+        [body appendData:[@"Content-Disposition: form-data; name=\"userfile\"; filename=\".jpg\"\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
+        
+        [body appendData:[@"Content-Type: application/octet-stream\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
+        [body appendData:[NSData dataWithData:imageData]];
+        [body appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+        // setting the body of the post to the reqeust
+        [request setHTTPBody:body];
+        // now lets make the connection to the web
+        NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+        NSString *returnString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
+        NSLog(@"return: %@",returnString);
+        NSLog(@"finish");
+    }
 }
 
 
@@ -594,12 +655,11 @@
 
 
 
-
 -(void)saveNote{
     
     
     NSArray *sortedViews =[self sortViews];
-    [self getTextContent:sortedViews];
+    NSString *contentStr = [self getTextContent:sortedViews];
     NSManagedObjectContext *context = self.managedObjectContext;
     NSError *error;
     
@@ -619,13 +679,20 @@
         Note_content *noteContent = nil;
         noteContent = [NSEntityDescription insertNewObjectForEntityForName:@"NoteContent" inManagedObjectContext:context];
         NSLog(@"what is v:%@",v);
-        noteContent.content = v;
+        if([v isKindOfClass:[EZTextView class]]){
+            noteContent.type = [NSNumber numberWithInt: EZTypeTextView];
+        }else if([v isKindOfClass:[AudioView class]]){
+            noteContent.type = [NSNumber numberWithInt: EZTypeAudioView];
+        }else if([v isKindOfClass:[EZImageView class]]){
+            noteContent.type = [NSNumber numberWithInt: EZTypeImageView];
+        }
+        
+        noteContent.content = [v getOutput];
         noteContent.note = note;
-//        if([context save: &error]){
-//            NSLog(@"Content Saved");
-//        }else{
-//            NSLog(@"Failed to save - error: %@", [error localizedDescription]);
-//        }
+        noteContent.x = [NSNumber numberWithFloat: v.frame.origin.x];
+        noteContent.y = [NSNumber numberWithFloat: v.frame.origin.y];
+        noteContent.width = [NSNumber numberWithFloat: v.frame.size.width];
+        noteContent.height = [NSNumber numberWithFloat: v.frame.size.height];
     }
     
     
@@ -640,7 +707,7 @@
 //    NSLog(@"json: %@", jsonString);
     note.title = self.titleText;
 //    note.content = jsonData;
-//    note.text_content = textContent;
+    note.text_content = contentStr;
     note.create_time = [NSDate date];
     note.tag = [[NSSet alloc]init];
     if([context save: &error]){
@@ -692,6 +759,15 @@
     imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
     [self presentViewController:imagePicker animated:YES completion:nil];
 }
+
+-(void)stopRecording:(NSNotification*)notification {
+    [toolbar finishRecording];
+    isRecording = NO;
+}
+
+
+
+
 
 
 -(void)audioButtonTouched:(NSNotification*)notification {
@@ -812,6 +888,7 @@
     titleField.textAlignment = NSTextAlignmentCenter;
     titleField.text = self.titleText;
     titleField.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2];
+    titleField.clearButtonMode = UITextFieldViewModeWhileEditing;
     titleField.delegate = self;
     [titleField becomeFirstResponder];
     self.navigationItem.titleView = titleField;
@@ -847,6 +924,28 @@
 
 
 
+- (BOOL)sendRequest:(NSString *)title html:(NSString *)html{
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://localhost:8000/create/"]];
+    //    [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
+    [request setValue:@"application/x-www-form-urlencoded; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
+    [request setHTTPBody:[[NSString stringWithFormat:@"title=%@&html=%@",title, html] dataUsingEncoding:NSUTF8StringEncoding]];
+    [request setHTTPMethod:@"POST"];
+    NSError *error = nil;
+    NSURLResponse *response = nil;
+    NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+    NSString* newStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+//    NSString *dataString = [NSString stringEncodingForData:data encodingOptions:0 convertedString:nil usedLossyConversion:NO];
+    if (error) {
+        NSLog(@"Error:%@", error.localizedDescription);
+        return NO;
+    }
+    else {
+        NSLog(@"%@",newStr);
+        return YES;
+    }
+}
+
 
 
 // =============== Event Handler ==================
@@ -863,8 +962,39 @@
     
 //    [self saveNote];
     NSArray *sortedViews =[self sortViews];
-    [self getTextContent:sortedViews];
-    [self getHTMLContent:sortedViews];
+//    [self getTextContent:sortedViews];
+    NSString *html = [self getHTMLContent:sortedViews];
+    
+    NSString *result = (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
+                                                                           (CFStringRef)html,
+                                                                           NULL,
+                                                                           CFSTR(":/=,!$&'()*+;[]@#?"),
+                                                                           kCFStringEncodingUTF8));
+    
+    NSLog(@"html: %@",html);
+    
+    NSData *htmlData = [html dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsPath = [paths objectAtIndex:0]; //Get the docs directory
+    
+//    NSString *filename = [NSString stringWithFormat:@"%@output.html",  ];
+    
+    NSString *filePath = [documentsPath stringByAppendingPathComponent:@"output.html"]; //Add the file name
+    
+    
+    
+    //        path = [path stringByAppendingPathComponent:filename];
+    //        path = [NSString stringWithFormat:@"file://%@", path];
+    
+//    NSData *pngData = UIImagePNGRepresentation(self.img);
+    [htmlData writeToFile:filePath  atomically:YES]; //Write the file
+
+    
+    
+//    [self sendRequest:self.titleText html:result];
+    
+//    NSLog(@"LLLLLL: %@",result);
     
     
 //    NSLog(@"------------------");
@@ -884,6 +1014,11 @@
 //    NSLog(@"Inset: %f Offset:%f frame:%f bound:%f", inset, offset, frame, bound);
 }
 
+
+- (IBAction)backButtonTouched:(id)sender {
+    [self saveNote];
+    [self.navigationController popToRootViewControllerAnimated:YES];
+}
 
 
 
