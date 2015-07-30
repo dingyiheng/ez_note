@@ -163,50 +163,22 @@
 		35D098491B5B671100550EB3 /* ez_note */ = {
 			isa = PBXGroup;
 			children = (
+				B69B0AFC1B69AC4E00E69771 /* Audio */,
 				B65EDFBD1B60D47A0043C99D /* Core Data */,
+				B69B0AF81B69AC1700E69771 /* Image */,
 				35D0984E1B5B671100550EB3 /* AppDelegate.h */,
 				35D0984F1B5B671100550EB3 /* AppDelegate.m */,
 				35DD10011B603C60007AFE47 /* EZNoteProtocol.h */,
 				35DD10021B603C60007AFE47 /* EZView.h */,
 				35DD10031B603C60007AFE47 /* EZView.m */,
-				B656AF0E1B5DB700007538B8 /* KeyBindingsViewController.h */,
-				B656AF0F1B5DB700007538B8 /* KeyBindingsViewController.m */,
-				B656AF101B5DB700007538B8 /* KeyBindingTextField.h */,
-				B656AF111B5DB700007538B8 /* KeyBindingTextField.m */,
+				B69B0AFA1B69AC3200E69771 /* Settings */,
 				B656AF0C1B5DB5E4007538B8 /* KeyBindings.plist */,
-				683E40711B5D959A00CCDAF3 /* EZImageScrollViewController.h */,
-				683E40721B5D959A00CCDAF3 /* EZImageScrollViewController.m */,
-				683E40731B5D959A00CCDAF3 /* EZImageView.h */,
-				683E40741B5D959A00CCDAF3 /* EZImageView.m */,
-				6886FB461B608404000C42CD /* EZImageView.xib */,
-				683E40751B5D959A00CCDAF3 /* EZImageViewFactory.h */,
-				683E40761B5D959A00CCDAF3 /* EZImageViewFactory.m */,
-				683E40771B5D959A00CCDAF3 /* EZOptions.h */,
-				683E40781B5D959A00CCDAF3 /* EZOptions.m */,
-				683E40791B5D959A00CCDAF3 /* utilities.h */,
 				B65F9CAF1B5D928D00FB53E7 /* Main.storyboard */,
-				B6E73D3C1B618D670089968E /* NoteTableViewController.h */,
-				B6E73D3D1B618D670089968E /* NoteTableViewController.m */,
-				B6977FE21B69120F00ECE035 /* NoteSearchResultsViewController.h */,
-				B6977FE31B69120F00ECE035 /* NoteSearchResultsViewController.m */,
-				B6977FDD1B68CC6000ECE035 /* NoteCell.h */,
-				B6977FDE1B68CC6000ECE035 /* NoteCell.m */,
-				B6977FDF1B68CC6000ECE035 /* NoteCell.xib */,
-				B6977FD21B67749A00ECE035 /* MainSettingViewController.h */,
-				B6977FD31B67749A00ECE035 /* MainSettingViewController.m */,
-				35FEF8DC1B5D917A00A96076 /* EZTextView.h */,
-				35FEF8DD1B5D917A00A96076 /* EZTextView.m */,
-				B65EDF9C1B60B0670043C99D /* EZTextView.xib */,
-				35FEF8D41B5D916300A96076 /* TextViewFactory.h */,
-				35FEF8D51B5D916300A96076 /* TextViewFactory.m */,
+				B69B0AF91B69AC2300E69771 /* Note List */,
+				B69B0AFB1B69AC4200E69771 /* Text */,
 				35FEF8D61B5D916300A96076 /* ToolBarView.h */,
 				35FEF8D71B5D916300A96076 /* ToolBarView.m */,
 				35FEF8D81B5D916300A96076 /* ToolBarView.xib */,
-				35FEF8CC1B5D89AE00A96076 /* AudioFactory.h */,
-				35FEF8CD1B5D89AE00A96076 /* AudioFactory.m */,
-				35FEF8CE1B5D89AE00A96076 /* AudioView.h */,
-				35FEF8CF1B5D89AE00A96076 /* AudioView.m */,
-				35FEF8D01B5D89AE00A96076 /* AudioView.xib */,
 				35D098511B5B671200550EB3 /* ViewController.h */,
 				35D098521B5B671200550EB3 /* ViewController.m */,
 				B65E3DCB1B644FC40048CE03 /* NoteInfoView.h */,
@@ -261,6 +233,74 @@
 			);
 			name = "Core Data";
 			path = ..;
+			sourceTree = "<group>";
+		};
+		B69B0AF81B69AC1700E69771 /* Image */ = {
+			isa = PBXGroup;
+			children = (
+				683E40711B5D959A00CCDAF3 /* EZImageScrollViewController.h */,
+				683E40721B5D959A00CCDAF3 /* EZImageScrollViewController.m */,
+				683E40731B5D959A00CCDAF3 /* EZImageView.h */,
+				683E40741B5D959A00CCDAF3 /* EZImageView.m */,
+				6886FB461B608404000C42CD /* EZImageView.xib */,
+				683E40751B5D959A00CCDAF3 /* EZImageViewFactory.h */,
+				683E40761B5D959A00CCDAF3 /* EZImageViewFactory.m */,
+				683E40771B5D959A00CCDAF3 /* EZOptions.h */,
+				683E40781B5D959A00CCDAF3 /* EZOptions.m */,
+				683E40791B5D959A00CCDAF3 /* utilities.h */,
+			);
+			name = Image;
+			sourceTree = "<group>";
+		};
+		B69B0AF91B69AC2300E69771 /* Note List */ = {
+			isa = PBXGroup;
+			children = (
+				B6E73D3C1B618D670089968E /* NoteTableViewController.h */,
+				B6E73D3D1B618D670089968E /* NoteTableViewController.m */,
+				B6977FE21B69120F00ECE035 /* NoteSearchResultsViewController.h */,
+				B6977FE31B69120F00ECE035 /* NoteSearchResultsViewController.m */,
+				B6977FDD1B68CC6000ECE035 /* NoteCell.h */,
+				B6977FDE1B68CC6000ECE035 /* NoteCell.m */,
+				B6977FDF1B68CC6000ECE035 /* NoteCell.xib */,
+			);
+			name = "Note List";
+			sourceTree = "<group>";
+		};
+		B69B0AFA1B69AC3200E69771 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				B656AF0E1B5DB700007538B8 /* KeyBindingsViewController.h */,
+				B656AF0F1B5DB700007538B8 /* KeyBindingsViewController.m */,
+				B656AF101B5DB700007538B8 /* KeyBindingTextField.h */,
+				B656AF111B5DB700007538B8 /* KeyBindingTextField.m */,
+				B6977FD21B67749A00ECE035 /* MainSettingViewController.h */,
+				B6977FD31B67749A00ECE035 /* MainSettingViewController.m */,
+			);
+			name = Settings;
+			sourceTree = "<group>";
+		};
+		B69B0AFB1B69AC4200E69771 /* Text */ = {
+			isa = PBXGroup;
+			children = (
+				35FEF8DC1B5D917A00A96076 /* EZTextView.h */,
+				35FEF8DD1B5D917A00A96076 /* EZTextView.m */,
+				B65EDF9C1B60B0670043C99D /* EZTextView.xib */,
+				35FEF8D41B5D916300A96076 /* TextViewFactory.h */,
+				35FEF8D51B5D916300A96076 /* TextViewFactory.m */,
+			);
+			name = Text;
+			sourceTree = "<group>";
+		};
+		B69B0AFC1B69AC4E00E69771 /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				35FEF8CC1B5D89AE00A96076 /* AudioFactory.h */,
+				35FEF8CD1B5D89AE00A96076 /* AudioFactory.m */,
+				35FEF8CE1B5D89AE00A96076 /* AudioView.h */,
+				35FEF8CF1B5D89AE00A96076 /* AudioView.m */,
+				35FEF8D01B5D89AE00A96076 /* AudioView.xib */,
+			);
+			name = Audio;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

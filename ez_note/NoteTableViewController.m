@@ -156,7 +156,8 @@ const int RecentNoteCount = 5;
         // Delete the row from the data source
         
         Note *note = [self.notes objectAtIndex:indexPath.row];
-        [self.notes removeObjectAtIndex:indexPath.row];
+        [self.notes removeObject:note];
+        [self.recentNotes removeObject:note];
         [self.managedObjectContext deleteObject:note];
         
         NSError *error;
@@ -166,9 +167,9 @@ const int RecentNoteCount = 5;
         }else{
             NSLog(@"Failed to delete - error: %@", [error localizedDescription]);
         }
-
+        [self.tableView reloadData];
         
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+//        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     }
 }
 

@@ -273,7 +273,7 @@
 //        NSString *path = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
     
 //        [filemgr createDirectoryAtPath:path withIntermediateDirectories:NO attributes:nil error:nil];
-        NSString *guid = [[NSUUID new] UUIDString];
+//        NSString *guid = [[NSUUID new] UUIDString];
         NSString *timestamp = [NSString stringWithFormat:@"%.0f",[[NSDate date] timeIntervalSince1970] * 1e20];
         
 //        NSArray *pathComponents = [NSArray arrayWithObjects:
